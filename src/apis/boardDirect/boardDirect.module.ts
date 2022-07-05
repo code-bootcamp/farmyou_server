@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { BoardResolver } from './boards.resolver';
-import { BoardService } from './boards.service';
+import { BoardDirectResolver } from './boardDirect.resolver';
+import { BoardDirectService } from './boardDirect.service';
 
 @Module({
   // imports: [],
   // controllers: [],
-  providers: [BoardResolver, BoardService],
+  providers: [BoardDirectResolver, BoardDirectService],
 })
-export class BoardModule {}
+export class BoardDirectModule {}

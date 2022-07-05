@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class Board {
+export class BoardUgly {
   @PrimaryGeneratedColumn('increment')
   @Field(() => Int)
   number: number;

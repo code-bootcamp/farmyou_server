@@ -1,20 +1,20 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { BoardService } from './boards.service';
-import { Board } from './entities/boardDirect.entity';
-import { CreateBoardInput } from './dto/createBoardDirect.input';
+import { BoardDirectService } from './boardDirect.service';
+import { BoardDirect } from './entities/boardDirect.entity';
+import { CreateBoardDirectInput } from './dto/createBoardDirect.input';
 
 @Resolver()
-export class BoardResolver {
-  constructor(private readonly boardService: BoardService) {}
+export class BoardDirectResolver {
+  constructor(private readonly boardDirectService: BoardDirectService) {}
 
   // @Query(() => String)
   // getHello() {
   //   return this.boardService.aaa();
   // }
 
-  @Query(() => [Board])
+  @Query(() => [BoardDirect])
   fetchBoards() {
-    return this.boardService.findAll();
+    return this.boardDirectService.findAll();
   }
 
   @Mutation(() => String)
@@ -22,7 +22,7 @@ export class BoardResolver {
     @Args({ name: 'writer', nullable: true }) writer: string,
     @Args('title') title: string,
     @Args('contents') contents: string,
-    @Args('createBoardInput') createBoardInput: CreateBoardInput,
+    @Args('createBoardDirectInput') createBoardDirectInput: CreateBoardDirectInput,
   ) {
     // console.log(args);
 
@@ -30,8 +30,8 @@ export class BoardResolver {
     console.log(title);
     console.log(contents);
 
-    console.log(createBoardInput);
+    console.log(createBoardDirectInput);
 
-    return this.boardService.create();
+    return this.boardDirectService.create();
   }
 }
