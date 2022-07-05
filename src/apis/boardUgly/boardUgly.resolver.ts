@@ -1,20 +1,20 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { BoardService } from './boards.service';
-import { Board } from './entities/boardUgly.entity';
-import { CreateBoardInput } from './dto/createBoardUgly.input';
+import { BoardUglyService } from './boardUgly.service';
+import { BoardUgly } from './entities/boardUgly.entity';
+import { CreateBoardUglyInput } from './dto/createBoardUgly.input';
 
 @Resolver()
-export class BoardResolver {
-  constructor(private readonly boardService: BoardService) {}
+export class BoardUglyResolver {
+  constructor(private readonly boardUglyService: BoardUglyService) {}
 
   // @Query(() => String)
   // getHello() {
   //   return this.boardService.aaa();
   // }
 
-  @Query(() => [Board])
+  @Query(() => [BoardUgly])
   fetchBoards() {
-    return this.boardService.findAll();
+    return this.boardUglyService.findAll();
   }
 
   @Mutation(() => String)
@@ -22,7 +22,7 @@ export class BoardResolver {
     @Args({ name: 'writer', nullable: true }) writer: string,
     @Args('title') title: string,
     @Args('contents') contents: string,
-    @Args('createBoardInput') createBoardInput: CreateBoardInput,
+    @Args('createBoardUglyInput') createBoardUglyInput: CreateBoardUglyInput,
   ) {
     // console.log(args);
 
@@ -30,8 +30,8 @@ export class BoardResolver {
     console.log(title);
     console.log(contents);
 
-    console.log(createBoardInput);
+    console.log(createBoardUglyInput);
 
-    return this.boardService.create();
+    return this.boardUglyService.create();
   }
 }
