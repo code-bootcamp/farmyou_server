@@ -6,6 +6,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  CreateDateColumn
 } from 'typeorm';
 
 @Entity()
@@ -27,7 +28,7 @@ export class Response {
   writer: string;
 
   // 등록일
-  @Column()
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 

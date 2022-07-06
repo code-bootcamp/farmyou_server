@@ -7,6 +7,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  CreateDateColumn
 } from 'typeorm';
 
 @Entity()
@@ -17,23 +18,24 @@ export class ProductDirect {
   @Field(() => String)
   id: string;
 
-  // 품명
+  // 품명 (dto)
   @Column()
   @Field(() => String)
   name: string;
 
-  // 가격
+  // 가격 (dto)
   @Column()
   @Field(() => Int)
   price: number;
 
-  // 상품설명
+  // 상품설명 (dto)
   @Column()
   @Field(() => String)
   description: string;
 
+  // TODO
   // 등록날짜
-  @Column()
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
@@ -43,7 +45,7 @@ export class ProductDirect {
   quantity: number;
 
   // 판매량
-  @Column()
+  @Column({default: 0})
   @Field(() => Int)
   quantitySold: number;
 
@@ -52,7 +54,7 @@ export class ProductDirect {
   @Field(() => Boolean)
   isSoldout: boolean;
 
-  // 세부카테고리ID
+  // 세부카테고리ID (dto)
   @ManyToOne(() => CategoryDetailed)
   @Field(() => CategoryDetailed)
   categoryDetailed: CategoryDetailed;
@@ -62,7 +64,7 @@ export class ProductDirect {
   @Field(() => BoardDirect)
   boardDirect: BoardDirect;
 
-  // 직매장ID
+  // 직매장ID (dto)
   @ManyToOne(() => DirectStore)
   @Field(() => DirectStore)
   directStore: DirectStore;
