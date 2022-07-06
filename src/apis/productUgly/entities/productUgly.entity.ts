@@ -1,13 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-// import { ProductCategory } from 'src/apis/productsCategory/entities/productCategory.entity';
-// import { ProductSaleslocation } from 'src/apis/productsSaleslocation/entities/productSaleslocation.entity';
-// import { ProductTag } from 'src/apis/productTags/entities/productTag.entity';
-import { User } from 'src/apis/user/entities/user.entity';
+import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
 import {
   Column,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  CreateDateColumn
 } from 'typeorm';
 
 @Entity()
@@ -34,7 +32,7 @@ export class ProductUgly {
   description: string;
 
   // 등록날짜
-  @Column()
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 

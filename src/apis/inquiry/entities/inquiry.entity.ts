@@ -7,6 +7,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  CreateDateColumn
 } from 'typeorm';
 
 @Entity()
@@ -23,7 +24,7 @@ export class Inquiry {
   content: string;
 
   // 등록일
-  @Column()
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
