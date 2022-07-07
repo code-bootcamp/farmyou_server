@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  my_backend:
+    platform: linux/amd64
+    image: asia.grc.io/f7b3team01server/formyou:0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+		# volumes:
+    #   - ./src:/my_backend/src
+    # env_file:
+    #   - ./.env.prod
+    ports:
+      - 3000:3000
+
+
+
