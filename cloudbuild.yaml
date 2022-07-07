@@ -3,7 +3,7 @@ steps:
   - name: docker/compose:1.29.0
     args:
       - -f
-      - docker-compose.yaml
+      - docker-compose.prod.yaml
       - build
 
 # 2단계 => docker-compose -f docker-compose.prod.yaml push
