@@ -18,20 +18,22 @@ export class BoardDirectResolver {
   }
 
   @Mutation(() => String)
-  createBoard(
-    @Args({ name: 'writer', nullable: true }) writer: string,
+  createBoardDirect(
+    // @Args({ name: 'writer', nullable: true }) writer: string,
     @Args('title') title: string,
-    @Args('contents') contents: string,
-    @Args('createBoardDirectInput') createBoardDirectInput: CreateBoardDirectInput,
+    @Args('content') content: string,
+    @Args('productDirectId') productDirectId: string,
+    @Args('userId') userId: string,
+    // @Args('createBoardDirectInput') createBoardDirectInput: CreateBoardDirectInput,
   ) {
     // console.log(args);
 
-    console.log(writer);
+    // console.log(writer);
     console.log(title);
-    console.log(contents);
+    console.log(content);
 
-    console.log(createBoardDirectInput);
+    // console.log(createBoardDirectInput);
 
-    return this.boardDirectService.create();
+    return this.boardDirectService.create(title, content, productDirectId, userId);
   }
 }

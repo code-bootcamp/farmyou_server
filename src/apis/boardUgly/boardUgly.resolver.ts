@@ -18,20 +18,22 @@ export class BoardUglyResolver {
   }
 
   @Mutation(() => String)
-  createBoard(
-    @Args({ name: 'writer', nullable: true }) writer: string,
+  createBoardUgly(
+    // @Args({ name: 'writer', nullable: true }) writer: string,
     @Args('title') title: string,
-    @Args('contents') contents: string,
-    @Args('createBoardUglyInput') createBoardUglyInput: CreateBoardUglyInput,
+    @Args('content') content: string,
+    @Args('productUglyId') productUglyId: string,
+    @Args('userId') userId: string,
+    // @Args('createBoardUglyInput') createBoardUglyInput: CreateBoardUglyInput,
   ) {
     // console.log(args);
 
-    console.log(writer);
+    // console.log(writer);
     console.log(title);
-    console.log(contents);
+    console.log(content);
 
-    console.log(createBoardUglyInput);
+    // console.log(createBoardUglyInput);
 
-    return this.boardUglyService.create();
+    return this.boardUglyService.create(title, content, productUglyId, userId);
   }
 }
