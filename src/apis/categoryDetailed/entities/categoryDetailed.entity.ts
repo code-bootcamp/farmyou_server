@@ -19,5 +19,5 @@ export class CategoryDetailed {
   // 서브카테고리ID
   @ManyToOne(() => CategorySub)
   @Field(() => CategorySub)
-  categorySub: CategorySub;
+  categorySub?: CategorySub;
 }
