@@ -6,7 +6,7 @@ import { CategoryDetailedService } from './categoryDetailed.service';
 import { CategorySub } from '../categorySub/entities/categorySub.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CategoryDetailed, CategorySub])],
+  imports: [TypeOrmModule.forFeature([CategoryDetailed])],
   providers: [
     CategoryDetailedResolver, //
     CategoryDetailedService,

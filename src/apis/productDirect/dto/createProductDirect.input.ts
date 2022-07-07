@@ -16,10 +16,10 @@ export class CreateProductDirectInput {
   description: string;
 
   // 세부카테고리ID
-  @Field(() => CategoryDetailed)
-  categoryDetailed: CategoryDetailed;
+  // @Field(() => CategoryDetailed)
+  // categoryDetailed: CategoryDetailed;
 
   // 직매장ID
-  @Field(() => DirectStore)
-  directStore: DirectStore;
+//   @Field(() => DirectStore)
+//   directStore: DirectStore;
 }

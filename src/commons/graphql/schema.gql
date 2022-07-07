@@ -1,0 +1,146 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  phone: String!
+  isSeller: Boolean!
+  grade: Int!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type BoardDirect {
+  number: Int!
+  title: String!
+  writer: User!
+  content: String!
+}
+
+type CategoryMain {
+  id: String!
+  name: String!
+}
+
+type CategorySub {
+  id: String!
+  name: String!
+  categoryMain: CategoryMain!
+}
+
+type CategoryDetailed {
+  id: String!
+  name: String!
+  categorySub: CategorySub!
+}
+
+type DirectStore {
+  id: String!
+  name: String!
+  address: String!
+}
+
+type ProductDirect {
+  id: String!
+  name: String!
+  price: Int!
+  description: String!
+  createdAt: DateTime!
+  quantity: Int!
+  quantitySold: Int!
+  isSoldout: Boolean!
+  categoryDetailed: CategoryDetailed!
+  boardDirect: BoardDirect!
+  directStore: DirectStore!
+}
+
+type BoardUgly {
+  number: Int!
+  title: String!
+  writer: User!
+  content: String!
+  productUgly: ProductUgly!
+}
+
+type ProductUgly {
+  id: String!
+  name: String!
+  price: Int!
+  description: String!
+  createdAt: DateTime!
+  quantity: Int!
+  quantitySold: Int!
+  area: String!
+  isSoldout: Boolean!
+  boardUgly: BoardUgly!
+}
+
+type Inquiry {
+  id: String!
+  title: String!
+  content: String!
+  createdAt: DateTime!
+  status: Boolean!
+  user: User!
+  productDirect: ProductDirect!
+  productUgly: ProductUgly!
+}
+
+type Payment {
+  id: String!
+  amount: Int!
+  paymentComplete: Boolean!
+  user: User!
+  productDirect: ProductDirect!
+  productUgly: ProductUgly!
+}
+
+type Query {
+  fetchBoards: [Inquiry!]!
+  fetchPayments: [Payment!]!
+  fetchProducts: [ProductUgly!]!
+  fetchProduct(productId: String!): ProductUgly!
+  fetchUser: String!
+}
+
+type Mutation {
+  login(email: String!, password: String!): String!
+  createBoardDirect(title: String!, content: String!, productDirectId: String!, userId: String!): String!
+  createBoardUgly(title: String!, content: String!, productUglyId: String!, userId: String!): String!
+  uploadFile(files: [Upload!]!): [String!]!
+  createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
+  createPayment(amount: Float!, productDirectId: String, productUglyId: String): Payment!
+  createProductDirect(createProductDirectInput: CreateProductDirectInput!, quantity: Float!): ProductDirect!
+  updateProduct(productId: String!, updateProductUglyInput: UpdateProductUglyInput!): ProductUgly!
+  deleteProduct(productId: String!): Boolean!
+  createProductUgly(createProductUglyInput: CreateProductUglyInput!, quantity: Float!): ProductUgly!
+  createUser(email: String!, name: String!, password: String!, phone: String!): User!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateProductDirectInput {
+  name: String!
+  price: Int!
+  description: String!
+}
+
+input UpdateProductUglyInput {
+  name: String
+  price: Int
+  description: String
+}
+
+input CreateProductUglyInput {
+  name: String!
+  price: Int!
+  description: String!
+}
