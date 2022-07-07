@@ -14,9 +14,14 @@ import {
 @ObjectType()
 export class Inquiry {
   // 문의ID
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment')
   @Field(() => String)
   id: string;
+
+  // 제목
+  @Column()
+  @Field(() => String)
+  title: string;
 
   // 내용
   @Column()
@@ -27,6 +32,11 @@ export class Inquiry {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  // 답변상태
+  @Column()
+  @Field(() => Boolean)
+  status: boolean;
 
   // 회원
   @ManyToOne(() => User)

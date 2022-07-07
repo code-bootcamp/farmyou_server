@@ -22,7 +22,7 @@ export class ProductDirectResolver {
 
   // worked
   @Mutation(() => ProductDirect)
-  createProduct(
+  createProductDirect(
     @Args('createProductDirectInput') createProductDirectInput: CreateProductDirectInput,
     @Args('quantity') quantity: number
   ) {
