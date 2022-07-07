@@ -12,6 +12,11 @@ export class Payment {
   @Field(() => String)
   id: string;
 
+  // 액수
+  @Column()
+  @Field(() => Int)
+  amount: number;
+
   // 결제완료
   @Column({ default: false })
   @Field(() => Boolean)
