@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CategoryDetailed } from './entities/categoryDetailed.entity';
 import { CategoryDetailedService } from './categoryDetailed.service';
 
@@ -11,8 +11,9 @@ export class CategoryDetailedResolver {
   @Mutation(() => CategoryDetailed)
   createCategoryDetailed(
     @Args('name') name: string, //
-    @Args('upperCategory') upperCategory: string
+    // @Args('upperCategory') upperCategory: string
   ) {
-    return this.categoryDetailedService.create({ name, upperCategory });
+    return this.categoryDetailedService.create({ name });
+    // return this.categoryDetailedService.create({ name, upperCategory });
   }
 }

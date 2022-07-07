@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 @ObjectType()
-@InputType()
+// @InputType()
 export class DirectStore {
   // 직매장ID
   @PrimaryGeneratedColumn('uuid')
