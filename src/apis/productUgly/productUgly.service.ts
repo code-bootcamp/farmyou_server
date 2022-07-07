@@ -26,9 +26,15 @@ export class ProductUglyService {
     }
 
     async create({ createProductUglyInput, quantity }) {
+        const original = await this.productUglyRepository.findOne({
+            where: {name: createProductUglyInput.name}
+        });
+
+        const origQuantity = original.quantity;
+
         const result = await this.productUglyRepository.save({
             ...createProductUglyInput,
-            quantity: this.productUglyRepository.quantity + quantity
+            quantity: origQuantity + quantity
 
             // 하나하나 직접 나열하는 방식
             // name: createProductUglyInput.name,

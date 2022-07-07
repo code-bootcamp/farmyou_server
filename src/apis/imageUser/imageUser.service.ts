@@ -3,22 +3,22 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ImageUserService {
-  async upload({ imageUsers }) {
+  async upload({ files }) {
     // 일단 먼저 다 받기
-    const waitedImageUsers = await Promise.all(imageUsers);
-    console.log(waitedImageUsers); // [imageUser, imageUser]
+    const waitedFiles = await Promise.all(files);
+    console.log(waitedFiles); // [file, file]
 
     const storage = new Storage({
       projectId: 'codecamp-308601',
-      keyImageUsername: 'gcp-imageUser-storage.json',
-    }).bucket('codecamp-imageUser-storage');
+      keyFilename: 'gcp-file-storage.json',
+    }).bucket('codecamp-file-storage');
 
     const results = await Promise.all(
-      waitedImageUsers.map((el) => {
+      waitedFiles.map((el) => {
         return new Promise((resolve, reject) => {
           el.createReadStream()
-            .pipe(storage.imageUser(el.imageUsername).createWriteStream())
-            .on('finish', () => resolve(`codecamp-imageUser-storage/${el.imageUsername}`))
+            .pipe(storage.file(el.filename).createWriteStream())
+            .on('finish', () => resolve(`codecamp-file-storage/${el.filename}`))
             .on('error', () => reject());
         });
       }),
