@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
-import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
+import { User } from 'src/apis/user/entities/user.entity';
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -15,10 +16,10 @@ export class BoardDirect {
   @Field(() => String)
   title: string;
 
-  // 작성자
-  @Column()
-  @Field(() => String)
-  writer: string;
+  // 회원
+  @ManyToOne(() => User)
+  @Field(() => User)
+  writer: User;
 
   // 내용
   @Column()
