@@ -22,7 +22,7 @@ export class ProductUglyResolver {
 
   // worked
   @Mutation(() => ProductUgly)
-  createProduct(
+  createProductUgly(
     @Args('createProductUglyInput') createProductUglyInput: CreateProductUglyInput,
     @Args('quantity') quantity: number
   ) {
