@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { ImageUserService } from './imageUser.service';
-import { ImageUserUpload, GraphQLUpload } from 'graphql-upload';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
 export class ImageUserResolver {
@@ -9,9 +9,9 @@ export class ImageUserResolver {
   ) {}
 
   @Mutation(() => [String])
-  uploadImageUser(
-    @Args({ name: 'imageUsers', type: () => [GraphQLUpload] }) imageUsers: ImageUserUpload[], //
+  uploadFile(
+    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
   ) {
-    return this.imageUserService.upload({ imageUsers });
+    return this.imageUserService.upload({ files });
   }
 }
