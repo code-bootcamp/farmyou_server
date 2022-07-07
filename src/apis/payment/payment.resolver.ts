@@ -8,8 +8,8 @@ export class PaymentResolver {
   @Mutation(() => Payment)
   async createPayment(
     @Args('amount') amount: number, //
-    @Args({id: 'productDirectId', nullable: true}) productDirectId: string,
-    @Args({id: 'productUglyId', nullable: true}) productUglyId: string,
+    @Args({name: 'productDirectId', nullable: true}) productDirectId: string,
+    @Args({name: 'productUglyId', nullable: true}) productUglyId: string,
 
   ) {
     return await this.paymentService.create({ amount, productDirectId, productUglyId });

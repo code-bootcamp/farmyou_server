@@ -46,7 +46,7 @@ export class PaymentService {
       await queryRunner.commitTransaction();
 
       // by 지영
-      this.paymentRepository.paymentComplete = true;
+      // this.paymentRepository.paymentComplete = true;
       
       return payment;
     } catch (error) {

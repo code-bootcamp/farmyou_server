@@ -1,9 +1,10 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CategorySub } from 'src/apis/categorySub/entities/categorySub.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 @ObjectType()
+// @InputType()
 export class CategoryDetailed {
   // 세부카테고리ID
   @PrimaryGeneratedColumn('uuid')
@@ -18,5 +19,5 @@ export class CategoryDetailed {
   // 서브카테고리ID
   @ManyToOne(() => CategorySub)
   @Field(() => CategorySub)
-  categorySub: CategorySub;
+  categorySub?: CategorySub;
 }
