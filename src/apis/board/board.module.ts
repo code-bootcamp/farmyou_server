@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { BoardResolver } from './boards.resolver';
-import { BoardService } from './boards.service';
+import { BoardResolver } from './board.resolver';
+import { BoardService } from './board.service';
 
 @Module({
   // imports: [],

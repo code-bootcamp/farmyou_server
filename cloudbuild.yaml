@@ -17,7 +17,7 @@ steps:
         'set',
         'image',
         # 'deployment/', 쿠버네티스 클러스터 
-        'my-backend-sha256-1=asia.gcr.io/backend01-342301/my_backend:6.0',
+        'my-backend-sha256-1=asia.grc.io/f7b3team01server/formyou:0.1',
       ]
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
