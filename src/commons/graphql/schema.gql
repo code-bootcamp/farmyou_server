@@ -8,7 +8,8 @@ type User {
   name: String!
   phone: String!
   isSeller: Boolean!
-  grade: Int!
+  grade: String!
+  like: Float!
   createdAt: DateTime!
 }
 
@@ -120,6 +121,7 @@ type Mutation {
   deleteProduct(productId: String!): Boolean!
   createProductUgly(createProductUglyInput: CreateProductUglyInput!, quantity: Float!): ProductUgly!
   createUser(email: String!, name: String!, password: String!, phone: String!): User!
+  updateUser(email: String!, updateUserInput: UpdateUserInput!, password: String!): User!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -143,4 +145,10 @@ input CreateProductUglyInput {
   name: String!
   price: Int!
   description: String!
+}
+
+input UpdateUserInput {
+  email: String!
+  name: String!
+  phone: String!
 }
