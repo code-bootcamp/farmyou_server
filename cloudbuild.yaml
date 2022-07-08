@@ -1,24 +1,25 @@
 steps:
+# 1단계 => docker-compose -f docker-compose.prod.yaml build
   - name: docker/compose:1.29.0
     args:
       - -f
-      - docker-compose.yaml
+      - docker-compose.prod.yaml
       - build
 
+# 2단계 => docker-compose -f docker-compose.prod.yaml push
   - name: docker/compose:1.29.0
     args:
       - -f
       - docker-compose.prod.yaml
       - push
 
+# 3단계 => kubectl set image deployment/farmyoubackend farmyou-backend-sha256-1=asia.gcr.io/f7b3team01server/farmyou-backend:0.15
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
-      [
-        'set',
-        'image',
-        # 'deployment/', 쿠버네티스 클러스터 
-        'my-backend-sha256-1=asia.grc.io/f7b3team01server/formyou:0.1',
-      ]
+      - set
+      - image
+      - deployment/farmyoubackend
+      - farmyou-backend-sha256-1=asia.gcr.io/f7b3team01server/farmyou-backend:0.17
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
-      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+      - CLOUDSDK_CONTAINER_CLUSTER=farmyou-cluster-1

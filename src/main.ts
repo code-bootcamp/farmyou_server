@@ -6,7 +6,7 @@ import { AppModuleTest } from './app.moduletest';
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModuleTest);
+  const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 }
 bootstrap();
