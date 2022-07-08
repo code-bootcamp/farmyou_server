@@ -7,13 +7,15 @@ import { CreateBoardUglyInput } from './dto/createBoardUgly.input';
 export class BoardUglyResolver {
   constructor(private readonly boardUglyService: BoardUglyService) {}
 
-  // @Query(() => String)
-  // getHello() {
-  //   return this.boardService.aaa();
-  // }
+  @Query(() => BoardUgly)
+  fetchUglyBoard(
+    @Args('title') title: string
+  ) {
+    return this.boardUglyService.findOne({title});
+  }
 
   @Query(() => [BoardUgly])
-  fetchBoards() {
+  fetchUglyBoards() {
     return this.boardUglyService.findAll();
   }
 
