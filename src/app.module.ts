@@ -5,9 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
 import { BoardDirectModule } from './apis/boardDirect/boardDirect.module';
 import { BoardUglyModule } from './apis/boardUgly/boardUgly.module';
-import { CategoryDetailedModule } from './apis/categoryDetailed/categoryDetailed.module';
-import { CategoryMainModule } from './apis/categoryMain/categoryMain.module';
-import { CategorySubModule } from './apis/categorySub/categorySub.module';
+import { CategoryModule } from './apis/category/category.module';
 import { DirectStoreModule } from './apis/directStore/directStore.module';
 import { ImageDirectProductModule } from './apis/imageDirectProduct/imageDirectProduct.module';
 import { ImageUglyProductModule } from './apis/imageUglyProduct/imageUglyProduct.module';
@@ -17,19 +15,15 @@ import { PaymentMoudle } from './apis/payment/payment.module';
 import { ProductDirectModule } from './apis/productDirect/productDirect.module';
 import { ProductUglyModule } from './apis/productUgly/productUgly.module';
 import { UserModule } from './apis/user/user.module';
-// import { BoardModule } from './apis/board/board.module';
 import { AppController } from './app.controller';
 
 @Module({
   imports: [
-    // BoardModule,
     AuthModule,
     BoardDirectModule,
     BoardUglyModule,
-    // CategoryDetailedModule,
-    // CategoryMainModule,
-    // CategorySubModule,
-    // DirectStoreModule,
+    CategoryModule,
+    DirectStoreModule,
     ImageDirectProductModule,
     ImageUglyProductModule,
     ImageUserModule,
@@ -45,11 +39,11 @@ import { AppController } from './app.controller';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '172.30.192.8', //인스턴스 sql 비공개ip주소
-      // host:                   //내부에서 테스트로 돌려볼 호스트 주소
+      // host: '172.30.192.8', //인스턴스 sql 비공개ip주소
+      host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '12345678',
       database: 'farmyou_server', //인스턴스 sql ID값
       // database:               // 내부에서 테스트로 돌려볼 데이터 베이스 이름
       entities: [__dirname + '/apis/**/*.entity.*'],

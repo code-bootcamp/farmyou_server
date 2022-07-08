@@ -14,32 +14,13 @@ export class BoardDirectService {
   //   return 'Hello World!';
   // }
 
-  findAll() {
-    // 1. 데이터를 조회하는 로직 => DB에 접속해서 데이터 꺼내오기
-    const result = [
-    //   {
-    //     number: 1,
-    //     writer: '철수',
-    //     title: '제목입니다~~',
-    //     contents: '내용이에요@@@',
-    //   },
-    //   {
-    //     number: 2,
-    //     writer: '영희',
-    //     title: '영희 제목입니다~~',
-    //     contents: '영희 내용이에요@@@',
-    //   },
-    //   {
-    //     number: 3,
-    //     writer: '훈이',
-    //     title: '훈이 제목입니다~~',
-    //     contents: '훈이 내용이에요@@@',
-    //   },
-    ];
-
-    // 2. 꺼내온 결과 응답 주기
-    return result;
+  async findAll() {
+    return await this.boardDirectRepository.find();
   }
+
+  async findOne({ title }) {
+    return await this.boardDirectRepository.findOne({ where: { title: title } });
+  }  
 
   async create(title, content, productDirectId, userId) {
     // 1. 데이터를 등록하는 로직 => DB에 접속해서 데이터 저장하기
