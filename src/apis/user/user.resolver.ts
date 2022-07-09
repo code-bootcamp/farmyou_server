@@ -23,7 +23,7 @@ export class UserResolver {
     @Args('phone') phone: string,
   ) {
     const hashedPassword = await bcrypt.hash(password, 10.2);
-    console.log(hashedPassword);
+    // console.log(hashedPassword);
     return this.userService.create({ email, name, hashedPassword, phone });
   }
 
