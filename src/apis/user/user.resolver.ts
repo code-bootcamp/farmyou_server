@@ -14,6 +14,7 @@ export class UserResolver {
     private readonly userService: UserService, //
   ) {}
 
+  // 회원 생성하기
   @Mutation(() => User)
   async createUser(
     @Args('email') email: string,
@@ -26,7 +27,7 @@ export class UserResolver {
     return this.userService.create({ email, name, hashedPassword, phone });
   }
 
-  // 로그인한 유저의 정보 업데이트, 비밀번호까지
+  // 회원 정보 업데이트 하기 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => User)
   async updateUser(
@@ -34,9 +35,8 @@ export class UserResolver {
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
     @Args('password') password: string,
   ) {
-    const hashedPassword = await bcrypt.hash(password, 10)
-    return await this.userService.update({email, updateUserInput, hashedPassword})
-
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return await this.userService.update({ email, updateUserInput, hashedPassword });
   }
 
   // TODO
