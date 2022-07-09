@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService, //
+    private readonly userService: UserService,
   ) {}
 
   setRefreshToken({ user, res }) {
@@ -14,14 +17,7 @@ export class AuthService {
     );
 
     // 개발환경
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}`);
-
-    // 배포환경
-    // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com')
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `refreshToken=${refreshToken}; path=/; domain=.mybacksite.com; SameSite=None; Secure; httpOnly;`
-    // )
+    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 
   getAccessToken({ user }) {

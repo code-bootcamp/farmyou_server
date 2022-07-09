@@ -23,12 +23,16 @@ export class UserService {
 
   async update({email, updateUserInput, hashedPassword}) {
     const farmUser = await this.userRepository.findOne({where: {email: email}})
-    const newUser = {
-      ...farmUser,
-      email: email,
-      password: hashedPassword,
-      ...updateUserInput,
+    if (email) {
+      const newUser = {
+        ...farmUser,
+        email: email,
+        password: hashedPassword,
+        ...updateUserInput,
+      }
+      return await this.userRepository.save(newUser);
     }
-    return await this.userRepository.save(newUser);
+   // 왜 추가로 생성 되는지 물어보기 
   }
+
 }

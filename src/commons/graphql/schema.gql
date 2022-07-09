@@ -95,10 +95,6 @@ type Query {
   fetchDirectBoards: [BoardDirect!]!
   fetchUglyBoard(title: String!): BoardUgly!
   fetchUglyBoards: [BoardUgly!]!
-  fetchCategory(name: String!): Category!
-  fetchCategories: [Category!]!
-  fetchDirectStore(name: String!): DirectStore!
-  fetchDirectStores: [DirectStore!]!
   fetchInquiry(title: String!): Inquiry!
   fetchInquiries: [Inquiry!]!
   fetchPayments: [Payment!]!
@@ -109,10 +105,10 @@ type Query {
 
 type Mutation {
   login(email: String!, password: String!): String!
+  logout: String!
+  restroreAccessToken: String!
   createBoardDirect(title: String!, content: String!, productDirectId: String!, userId: String!): String!
   createBoardUgly(title: String!, content: String!, productUglyId: String!, userId: String!): String!
-  createCategory(name: String!): Category!
-  createDirectStore(name: String!, address: String!): DirectStore!
   uploadFile(files: [Upload!]!): [String!]!
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
   createPayment(amount: Float!, productDirectId: String, productUglyId: String): Payment!
@@ -148,7 +144,6 @@ input CreateProductUglyInput {
 }
 
 input UpdateUserInput {
-  email: String!
   name: String!
   phone: String!
 }
