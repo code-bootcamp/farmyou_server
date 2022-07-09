@@ -7,13 +7,15 @@ import { Inquiry } from './entities/inquiry.entity';
 export class InquiryResolver {
   constructor(private readonly inquiryService: InquiryService) {}
 
-  // @Query(() => String)
-  // getHello() {
-  //   return this.boardService.aaa();
-  // }
+  @Query(() => Inquiry)
+  fetchInquiry(
+    @Args('title') title: string
+  ) {
+    return this.inquiryService.findOne({title});
+  }
 
   @Query(() => [Inquiry])
-  fetchBoards() {
+  fetchInquiries() {
     return this.inquiryService.findAll();
   }
 

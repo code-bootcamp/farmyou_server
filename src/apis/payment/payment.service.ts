@@ -1,13 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
+import { User } from '../user/entities/user.entity';
 import { Payment } from './entities/payment.entity';
+import { IamportService } from "../iamport/iamport.service";
 
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+
+    private readonly iamportService: IamportService,
 
     private readonly connection: Connection,
   ) {}
@@ -33,10 +40,19 @@ export class PaymentService {
     }
   }
 
-  async create({ amount, productDirectId, productUglyId }) {
+  async create({ impUid, amount, productDirectId, productUglyId }) {
     const queryRunner = await this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
+
+    const existingPayment = await this.paymentRepository.findOne({
+      where: { impUid: impUid },
+    });
+
+    if (existingPayment !== undefined) {
+      throw new ConflictException("이미 결제 테이블에 추가된 결제건입니다");
+    }
+
     try {
       // 조회를 했을때, 바로 조회되지 않고 락이 풀릴 때 까지 대기
       const payment = await queryRunner.manager.find(Payment);
