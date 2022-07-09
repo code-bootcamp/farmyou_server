@@ -20,4 +20,19 @@ export class UserService {
 
     return await this.userRepository.save({ email, password, name, phone });
   }
+
+  async update({email, updateUserInput, hashedPassword}) {
+    const farmUser = await this.userRepository.findOne({where: {email: email}})
+    if (email) {
+      const newUser = {
+        ...farmUser,
+        email: email,
+        password: hashedPassword,
+        ...updateUserInput,
+      }
+      return await this.userRepository.save(newUser);
+    }
+   // 왜 추가로 생성 되는지 물어보기 
+  }
+
 }

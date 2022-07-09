@@ -1,14 +1,21 @@
-import { UnprocessableEntityException } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, UnauthorizedException, UnprocessableEntityException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
+import { GqlAuthAccessGuard, GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
+import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
+import { Cache } from 'cache-manager';
+import * as jwt from 'jsonwebtoken';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly userService: UserService, //
     private readonly authService: AuthService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   @Mutation(() => String)
@@ -32,5 +39,45 @@ export class AuthResolver {
 
     // 5. 일치하는 유저가 있으면?! accessToken(=JWT)을 만들어서 브라우저에 전달하기
     return this.authService.getAccessToken({ user });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(()=> String)
+  async logout(
+    @Context() context: any, //
+  ) {
+    const accessToken = context.req.headers.authorization.replace(
+      'Bearer',
+      '',
+    )
+    const refreshToken = context.req.headers.cookie.replace(
+      'refreshToken=',
+      ''
+    )
+    try {
+      jwt.verify(accessToken, 'myAccessKey');
+      jwt.verify(refreshToken, 'myRefreshKey');
+    } catch {
+      throw new UnauthorizedException()
+    }
+    await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
+      ttl: 180,
+    });
+    await this.cacheManager.set(
+      `refreshToken:${refreshToken}`,
+      'refreshToken',
+      {
+        ttl: 180,
+      },
+    );
+    return '로그아웃에 성공했습니다'
+  }
+
+  @UseGuards(GqlAuthRefreshGuard) //아무나 사용못하게 하는 기능 refreshGuard로 막음
+  @Mutation(() => String)
+  restroreAccessToken(
+    @CurrentUser() currentUser: any, //
+  ) {
+    return this.authService.getAccessToken({ user: currentUser });
   }
 }
