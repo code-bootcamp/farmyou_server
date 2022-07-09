@@ -7,12 +7,13 @@ export class PaymentResolver {
   constructor(private readonly paymentService: PaymentService) {}
   @Mutation(() => Payment)
   async createPayment(
+    @Args("impUid") impUid: string,
     @Args('amount') amount: number, //
     @Args({name: 'productDirectId', nullable: true}) productDirectId: string,
     @Args({name: 'productUglyId', nullable: true}) productUglyId: string,
 
   ) {
-    return await this.paymentService.create({ amount, productDirectId, productUglyId });
+    return await this.paymentService.create({ impUid, amount, productDirectId, productUglyId });
   }
 
   @Query(() => [Payment])

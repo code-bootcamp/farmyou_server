@@ -9,7 +9,7 @@ export class ImageUglyProductResolver {
   ) {}
 
   @Mutation(() => [String])
-  uploadFile(
+  uploadImageUgly(
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
   ) {
     return this.imageUglyProductService.upload({ files });
