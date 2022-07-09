@@ -2,14 +2,12 @@ import { Storage } from '@google-cloud/storage';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ImageDirectProductService {
+export class FileService {
   async upload({ files }) {
     // 일단 먼저 다 받기
     const waitedFiles = await Promise.all(files);
     console.log(waitedFiles); // [file, file]
 
-    // TODO: 아이디 바꾸기
-    // TODO: json 파일 넣기
     const storage = new Storage({
       projectId: 'codecamp-355721',
       keyFilename: 'gcp-file-storage.json',

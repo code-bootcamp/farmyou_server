@@ -107,12 +107,15 @@ type Query {
 }
 
 type Mutation {
+  uploadFile(files: [Upload!]!): [String!]!
   login(email: String!, password: String!): String!
   createBoardDirect(title: String!, content: String!, productDirectId: String!, userId: String!): String!
   createBoardUgly(title: String!, content: String!, productUglyId: String!, userId: String!): String!
   createCategory(name: String!): Category!
   createDirectStore(name: String!, address: String!): DirectStore!
-  uploadFile(files: [Upload!]!): [String!]!
+  uploadImageDirect(files: [Upload!]!): [String!]!
+  uploadImageUgly(files: [Upload!]!): [String!]!
+  uploadImageUser(files: [Upload!]!): [String!]!
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
   createPayment(amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(createProductDirectInput: CreateProductDirectInput!, quantity: Float!): ProductDirect!
