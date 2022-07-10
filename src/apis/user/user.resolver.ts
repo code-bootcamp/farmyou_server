@@ -46,6 +46,9 @@ export class UserResolver {
   // }
 
   // TODO
+
+  //currentUser 안에 id와 이메일이 있다
+
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => String)
   fetchUser(

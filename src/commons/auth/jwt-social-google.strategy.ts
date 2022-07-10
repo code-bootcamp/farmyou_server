@@ -5,11 +5,12 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+    const CLIENT_URL = process.env.GOOGLE_CLIENT_URL;
 
     super({
       clientID: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/login/google',
+      callbackURL: CLIENT_URL,
       scope: ['email', 'profile'],
     });
   }
@@ -22,7 +23,7 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
       email: profile.emails[0].value,
       password: '12093812093',      // 임의의 패스워드
       name: profile.displayName,
-      age: 0,                       // 임의의 나이
+      phone: '01012345678',
     };
   }
 }

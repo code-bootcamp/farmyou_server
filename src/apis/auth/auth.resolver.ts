@@ -47,13 +47,14 @@ export class AuthResolver {
     @Context() context: any, //
   ) {
     const accessToken = context.req.headers.authorization.replace(
-      'Bearer',
+      'Bearer ',
       '',
     )
     const refreshToken = context.req.headers.cookie.replace(
       'refreshToken=',
       ''
     )
+    
     try {
       jwt.verify(accessToken, 'myAccessKey');
       jwt.verify(refreshToken, 'myRefreshKey');
