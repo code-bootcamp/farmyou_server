@@ -7,6 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { UpdateUserInput } from './dto/updateUser.input';
+import { UpdateAddressUserInput } from '../addressUser/dto/updateAddressUser.input';
 
 @Resolver()
 export class UserResolver {
@@ -28,16 +29,21 @@ export class UserResolver {
   }
 
   // 회원 정보 업데이트 하기 
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => User)
-  async updateUser(
-    @Args('email') email: string,
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
-    @Args('password') password: string,
-  ) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return await this.userService.update({ email, updateUserInput, hashedPassword });
-  }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => User)
+  // async updateUser(
+  //   // @Args({name: 'email', nullable: true}) email: string,
+  //   // @Args({name: 'password', nullable: true}) password: string,
+  //   // @Args({name: 'phone', nullable: true}) phone: string,
+  //   @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  //   @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
+  //   // @Args('updateUserInput') updateUserInput: UpdateUserInput,
+
+  //   // @Args('password') password: string,
+  // ) {
+  //   const hashedPassword = await bcrypt.hash(updateUserInput.password, 10);
+  //   return await this.userService.update({ updateUserInput, updateAddressUserInput });
+  // }
 
   // TODO
   @UseGuards(GqlAuthAccessGuard)
@@ -48,5 +54,10 @@ export class UserResolver {
     console.log('fetchUser 실행 완료!!!');
     console.log('유저정보는??!!!', currentUser);
     return 'qqq';
+  }
+
+  @Query(() => [User])
+  fetchUsers() {
+    return this.userService.findAll();
   }
 }

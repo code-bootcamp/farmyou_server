@@ -17,6 +17,7 @@ import { ProductDirectModule } from './apis/productDirect/productDirect.module';
 import { ProductUglyModule } from './apis/productUgly/productUgly.module';
 import { UserModule } from './apis/user/user.module';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -52,6 +53,9 @@ import { AppController } from './app.controller';
       synchronize: true,
       logging: true,
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    })
   ],
   controllers: [AppController],
 })
