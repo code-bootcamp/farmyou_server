@@ -29,4 +29,6 @@ export class BoardDirect {
   @JoinColumn()
   @OneToOne(() => ProductDirect)
   productDirect: ProductDirect;
+
+  // 카테고리 추가??
 }

@@ -28,3 +28,71 @@ export class FileService {
     return results;
   }
 }
+// //file.service.ts
+
+
+// import { Injectable } from '@nestjs/common';
+// import { FileUpload } from 'graphql-upload';
+// import { Storage } from '@google-cloud/storage';
+
+// interface IUpload {
+//   files: FileUpload[];
+// }
+
+// @Injectable()
+// export class FileService {
+//   async upload({ files }: IUpload) {
+//     const storage = new Storage({
+//       keyFilename: process.env.STORAGE_KEY_FILENAME,
+//       projectId: process.env.STORAGE_PROJECT_ID,
+//     }).bucket(process.env.STORAGE_BUCKET);
+
+//     const waitedFiles = await Promise.all(files);
+//     const urls = await Promise.all(
+//       waitedFiles.map(
+//         (file) =>
+//           new Promise((resolve, reject) => {
+//             file
+//               .createReadStream()
+//               .pipe(storage.file(file.filename).createWriteStream())
+//               .on('finish', () =>
+//                 resolve(`${process.env.STORAGE_BUCKET}/${file.filename}`),
+//               )
+//               .on('error', (error) => reject(error));
+//           }),
+//       ),
+//     );
+//     return urls;
+//   }
+// }
+
+
+//file.service.ts
+
+
+// import { Injectable } from '@nestjs/common';
+// import { FileUpload } from 'graphql-upload';
+// import { Storage } from '@google-cloud/storage';
+
+// interface IUpload {
+//   file: FileUpload;
+// }
+
+// @Injectable()
+// export class FileService {
+//   async upload({ file }: IUpload) {
+//     const storage = new Storage({
+//       keyFilename: process.env.STORAGE_KEY_FILENAME,
+//       projectId: process.env.STORAGE_PROJECT_ID,
+//     }).bucket(process.env.STORAGE_BUCKET);
+
+//     const url = await new Promise((resolve, reject) => {
+//       file
+//         .createReadStream()
+//         .pipe(storage.file(file.filename).createWriteStream())
+//         .on('finish', () => resolve(`${process.env.STORAGE_BUCKET}/${file.filename}`))
+//         .on('error', (error) => reject(error));
+//     });
+//     return url;
+//   }
+// }

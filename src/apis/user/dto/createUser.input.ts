@@ -2,17 +2,13 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
 
 @InputType()
-export class CreateProductUglyInput {
+export class CreateUserInput {
   @Field(() => String)
-  name: string;
-
-  @Min(0)
-  @Field(() => Int)
-  price: number;
+  email: string;
 
   @Field(() => String)
-  description: string;
+  password: string;
 
   @Field(() => String)
-  area: string;
+  phone: string;
 }

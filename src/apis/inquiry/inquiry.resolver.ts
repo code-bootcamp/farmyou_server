@@ -24,6 +24,7 @@ export class InquiryResolver {
     @Args('title') title: string,
     @Args('content') content: string,
     @Args('userId') userId: string,
+    // TODO: 아래 두 개 nullable 적용?
     @Args('productDirectId') productDirectId: string,
     @Args('productUglyId') productUglyId: string,
   ) {
