@@ -15,9 +15,9 @@ export class ProductDirectResolver {
 
   @Query(() => ProductDirect)
   fetchProduct(
-    @Args('productId') productId: string, //
+    @Args('name') name: string, //
   ) {
-    return this.productDirectService.findOne({ productId });
+    return this.productDirectService.findOne({ name });
   }
 
   // worked
