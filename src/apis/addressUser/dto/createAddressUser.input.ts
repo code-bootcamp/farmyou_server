@@ -14,7 +14,7 @@ export class CreateAddressUserInput {
   @Field(() => String)
   postalCode: string;
 
-  @Field(() => User)
+  @Field(() => String)
   user: User;
 
   @Field(() => Boolean)

@@ -45,19 +45,55 @@ export class UserResolver {
   //   return await this.userService.update({ updateUserInput, updateAddressUserInput });
   // }
 
-  // TODO
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => String)
-  fetchUser(
-    @CurrentUser() currentUser: ICurrentUser, //
-  ) {
-    console.log('fetchUser 실행 완료!!!');
-    console.log('유저정보는??!!!', currentUser);
-    return 'qqq';
-  }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Query(() => User)
+  // checkValidUser(
+  //   @Args('password') password: string
+  // ) {
+  //   const loggedUserPwd = this.fetchUser()
+  // }
 
+  // 쓸모 없을 듯
   @Query(() => [User])
   fetchUsers() {
     return this.userService.findAll();
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => User)
+  fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
+    return this.userService.findLoggedIn({ currentUser });
+  }
+
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => User)
+  // async updateImage(
+  //   @Args('image') image: string,
+  //   @CurrentUser() currentUser: ICurrentUser,
+  // ) {
+  //   return this.userService.updateImage({ image, currentUser });
+  // }
+
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => User)
+  // async updateProfile(
+  //   @Args('profile') profile: string,
+  //   @CurrentUser() currentUser: ICurrentUser,
+  // ) {
+  //   return this.userService.updateProfile({ profile, currentUser });
+  // }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User)
+  async updateUser(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
+  ) {
+    return await this.userService.update({
+      email: currentUser.email,
+      updateUserInput,
+      updateAddressUserInput
+    });
   }
 }
