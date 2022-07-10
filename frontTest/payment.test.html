@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>결제페이지</title>
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- jQuery -->
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+    ></script>
+    <!-- iamport.payment.js -->
+    <script
+      type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+    ></script>
+    <script>
+      function requestPay() {
+        const amount = document.getElementById("qqq").value;
+
+        const IMP = window.IMP; // 생략 가능
+        IMP.init("imp52318572"); // Example: imp00000000
+        IMP.request_pay(
+          {
+            // param
+            pg: "html5_inicis",
+            pay_method: "card",
+            name: "맛있지만 못난 감자",
+            amount: amount,
+            buyer_email: "a@gmail.com",
+            buyer_name: "김민승",
+            buyer_tel: "010-4242-4242",
+            buyer_addr: "서울특별시 강남구 신사동",
+            buyer_postcode: "01181",
+          },
+          function (rsp) {
+            // callback
+            if (rsp.success) {
+              // // 결제 성공 시
+              console.log(rsp);
+              axios.post(
+                "http://localhost:3000/graphql",
+                {
+                  query: `
+                            mutation {
+                                createPayment(impUid: "${rsp.imp_uid}", amount:${rsp.paid_amount},    ) {
+                                    quantity
+                                }
+                            }
+                        `,
+                },
+                {
+                  headers: {
+                    Authorization:
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFhYWFAYWEuY29tIiwic3ViIjoiNjVlODE5ZTMtMjk1MS00Zjc1LTk5YTMtNjZiOTU0MTFkOTVlIiwiaWF0IjoxNjU1MTIwMzk1LCJleHAiOjE2NTUxMjM5OTV9.CEIyiq-UsqAhO8Ta-jx0HJSTYdLieTxpY64Uqj7BXZc",
+                  },
+                }
+              );
+
+              // 우리 백엔드 API에 전송하기
+
+              alert("결제에 성공했습니다!!");
+            } else {
+              // // 결제 실패 시 로직,
+              alert("결제에 실패했습니다!!");
+            }
+          }
+        );
+      }
+    </script>
+  </head>
+  <body>
+    결제할금액: <input type="text" id="qqq" />
+    <button onclick="requestPay()">결제하기</button>
+  </body>
+</html>
