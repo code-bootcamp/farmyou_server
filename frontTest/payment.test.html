@@ -30,8 +30,8 @@
             buyer_email: "a@gmail.com",
             buyer_name: "김민승",
             buyer_tel: "010-4242-4242",
-            buyer_addr: "서울특별시 강남구 신사동",
-            buyer_postcode: "01181",
+            buyer_addr: "서울특별시 구로구 디지털로 300",
+            buyer_postcode: "083379",
           },
           function (rsp) {
             // callback
@@ -43,8 +43,8 @@
                 {
                   query: `
                             mutation {
-                                createPayment(impUid: "${rsp.imp_uid}", amount:${rsp.paid_amount},    ) {
-                                    quantity
+                                createPayment(impUid: "${rsp.imp_uid}", amount:${rsp.paid_amount}, productDirectId: "${rsp.product_Directid}", productUglyId: "${rsp.product_Uglyid}"   ) {
+                                    amount
                                 }
                             }
                         `,
@@ -52,7 +52,7 @@
                 {
                   headers: {
                     Authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFhYWFAYWEuY29tIiwic3ViIjoiNjVlODE5ZTMtMjk1MS00Zjc1LTk5YTMtNjZiOTU0MTFkOTVlIiwiaWF0IjoxNjU1MTIwMzk1LCJleHAiOjE2NTUxMjM5OTV9.CEIyiq-UsqAhO8Ta-jx0HJSTYdLieTxpY64Uqj7BXZc",
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiIyZDI2ZDZiYi1kNzVlLTRjMTQtYWI3YS0xYWNjMmI2NWQ1YmIiLCJpYXQiOjE2NTc0MjU3MzcsImV4cCI6MTY1NzQyOTMzN30.E51OTJurdgWU_C_voNHfKLIjh8iYx14vabyrpbKSkOI",
                   },
                 }
               );
