@@ -28,7 +28,8 @@ export class ImageUserResolver {
   ) {}
 
   @Mutation(() => [String])
-  uploadFile(
+  // uploadFile
+  uploadImage(
     // @Args() 파일을 받기
     // 받을때는 GraphQLUpload => 사용할때는 타입스크립트 타입으로 정의 해줍니다.
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
@@ -37,8 +38,9 @@ export class ImageUserResolver {
     return this.fileService.upload({ files });
   }
 
-  @Mutation(() => [String])
-  test() {
-    return ['hello', 'world'];
-  }
+  // 코드 작동하는지 테스트 하기위해 만든것
+  // @Mutation(() => [String])
+  // test() {
+  //   return ['hello', 'world'];
+  // }
 }

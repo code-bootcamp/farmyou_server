@@ -15,7 +15,7 @@ export class AuthController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
   ) {}
-  @Get('/login/google') //현재 api의 엔드포인트
+  @Get('/users/login/google') //현재 api의 엔드포인트
   @UseGuards(AuthGuard('google')) //그래프  ql이 아니기 때문에 다이렉트로 연결합니다.
   async loginGoogle(
     @Req() req: Request & IOAuthUser, //
@@ -41,7 +41,7 @@ export class AuthController {
   }
 
   //naver 로그인
-  @Get('/login/naver') //현재 api의 엔드포인트
+  @Get('/users/login/naver') //현재 api의 엔드포인트
   @UseGuards(AuthGuard('naver')) //그래프  ql이 아니기 때문에 다이렉트로 연결합니다.
   async loginNaver(
     @Req() req: Request & IOAuthUser, //
@@ -51,7 +51,7 @@ export class AuthController {
   }
 
   //카카오 로그인
-  @Get('/login/kakao') //현재 api의 엔드포인트
+  @Get('/users/login/kakao') //현재 api의 엔드포인트
   @UseGuards(AuthGuard('kakao')) //그래프  ql이 아니기 때문에 다이렉트로 연결합니다.
   async loginKakao(
     @Req() req: Request & IOAuthUser, //

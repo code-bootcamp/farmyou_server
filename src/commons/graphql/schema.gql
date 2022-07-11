@@ -125,8 +125,7 @@ type Mutation {
   createDirectStore(name: String!, address: String!): DirectStore!
   uploadImageDirect(files: [Upload!]!): [String!]!
   uploadImageUgly(files: [Upload!]!): [String!]!
-  uploadFile(files: [Upload!]!): [String!]!
-  test: [String!]!
+  uploadImage(files: [Upload!]!): [String!]!
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(createProductDirectInput: CreateProductDirectInput!, quantity: Float!): ProductDirect!
@@ -135,6 +134,8 @@ type Mutation {
   createProductUgly(createProductUglyInput: CreateProductUglyInput!, quantity: Float!): ProductUgly!
   createUser(email: String!, name: String!, password: String!, phone: String!): User!
   updateUser(updateUserInput: UpdateUserInput!, updateAddressUserInput: UpdateAddressUserInput!): User!
+  deleteUser(email: String!): Boolean!
+  deleteLoginUser: User!
 }
 
 """The `Upload` scalar type represents a file upload."""

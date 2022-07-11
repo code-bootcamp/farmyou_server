@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -49,4 +49,8 @@ export class User {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  // 삭제기능 
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

@@ -111,4 +111,16 @@ export class UserService {
       },
     });
   }
+
+  async delete({ email }) {
+    const result = await this.userRepository.delete({ email });
+    return result.affected ? true : false;
+  }
+
+  async deleteUser({ currentUser }) {
+    const result = await this.userRepository.softDelete({
+      id: currentUser.id,
+    });
+    return result.affected ? true : false;
+  }
 }
