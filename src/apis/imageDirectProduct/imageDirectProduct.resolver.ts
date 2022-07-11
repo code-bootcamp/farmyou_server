@@ -9,7 +9,7 @@ export class ImageDirectProductResolver {
   ) {}
 
   @Mutation(() => [String])
-  uploadFile(
+  uploadImageDirect(
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
   ) {
     return this.imageDirectProductService.upload({ files });

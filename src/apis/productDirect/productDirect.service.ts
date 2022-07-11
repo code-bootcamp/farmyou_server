@@ -19,23 +19,26 @@ export class ProductDirectService {
         return await this.productDirectRepository.find();
     }
 
-    async findOne({ productId }) {
+    async findOne({ name }) {
         return await this.productDirectRepository.findOne({
-            where: { id: productId },
+            where: { name: name },
         });
     }
 
     async create({ createProductDirectInput, quantity }) {
-        const original = await this.productDirectRepository.findOne({
-            where: {name: createProductDirectInput.name}
-        });
+        // const original = await this.productDirectRepository.findOne({
+        //     where: {name: createProductDirectInput.name}
+        // });
 
-        const origQuantity = original.quantity;
+        // const origQuantity = original.quantity;
 
         const result = await this.productDirectRepository.save({
             ...createProductDirectInput,
+            category: {id: createProductDirectInput.categoryId},
+            directStore: {id: createProductDirectInput.directStoreId}
+
             // quantity: this.productDirectRepository.quantity + quantity
-            quantity: origQuantity + quantity
+            // quantity: origQuantity + quantity
 
             // 하나하나 직접 나열하는 방식
             // name: createProductDirectInput.name,

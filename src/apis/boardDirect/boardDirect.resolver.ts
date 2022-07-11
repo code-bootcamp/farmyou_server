@@ -7,13 +7,15 @@ import { CreateBoardDirectInput } from './dto/createBoardDirect.input';
 export class BoardDirectResolver {
   constructor(private readonly boardDirectService: BoardDirectService) {}
 
-  // @Query(() => String)
-  // getHello() {
-  //   return this.boardService.aaa();
-  // }
+  @Query(() => BoardDirect)
+  fetchDirectBoard(
+    @Args('title') title: string
+  ) {
+    return this.boardDirectService.findOne({title});
+  }
 
   @Query(() => [BoardDirect])
-  fetchBoards() {
+  fetchDirectBoards() {
     return this.boardDirectService.findAll();
   }
 

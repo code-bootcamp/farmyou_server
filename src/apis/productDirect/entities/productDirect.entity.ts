@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardDirect } from 'src/apis/boardDirect/entities/boardDirect.entity';
-import { CategoryDetailed } from 'src/apis/categoryDetailed/entities/categoryDetailed.entity';
+import { Category } from 'src/apis/category/entities/category.entity';
 import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
 import {
   Column,
@@ -40,7 +40,7 @@ export class ProductDirect {
   createdAt: Date;
 
   // 수량
-  @Column()
+  @Column({default: 0})
   @Field(() => Int)
   quantity: number;
 
@@ -54,15 +54,20 @@ export class ProductDirect {
   @Field(() => Boolean)
   isSoldout: boolean;
 
-  // 세부카테고리ID (dto)
-  @ManyToOne(() => CategoryDetailed)
-  @Field(() => CategoryDetailed)
-  categoryDetailed: CategoryDetailed;
+  // 카테고리ID (dto)
+  @ManyToOne(() => Category)
+  @Field(() => Category)
+  category: Category;
+
+  // // 직매장게시판번호
+  // @ManyToOne(() => BoardDirect)
+  // @Field(() => BoardDirect)
+  // boardDirect: BoardDirect;
 
   // 직매장게시판번호
-  @ManyToOne(() => BoardDirect)
-  @Field(() => BoardDirect)
-  boardDirect: BoardDirect;
+  // @ManyToOne(() => BoardDirect)
+  // @Field(() => BoardDirect)
+  // boardDirectId: BoardDirect;
 
   // 직매장ID (dto)
   @ManyToOne(() => DirectStore)

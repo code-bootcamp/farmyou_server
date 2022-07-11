@@ -10,6 +10,10 @@ export class AddressUser {
   @Field(() => String)
   id: string;
 
+  @Column({default: false})
+  @Field(() => Boolean)
+  isMain: boolean;
+
   // 주소 (도로명 주소)
   @Column()
   @Field(() => String)

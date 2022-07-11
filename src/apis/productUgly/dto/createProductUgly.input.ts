@@ -12,4 +12,7 @@ export class CreateProductUglyInput {
 
   @Field(() => String)
   description: string;
+
+  @Field(() => String)
+  area: string;
 }

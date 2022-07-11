@@ -8,7 +8,8 @@ type User {
   name: String!
   phone: String!
   isSeller: Boolean!
-  grade: Int!
+  grade: String!
+  like: Float!
   createdAt: DateTime!
 }
 
@@ -17,28 +18,9 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type BoardDirect {
-  number: Int!
-  title: String!
-  writer: User!
-  content: String!
-}
-
-type CategoryMain {
+type Category {
   id: String!
   name: String!
-}
-
-type CategorySub {
-  id: String!
-  name: String!
-  categoryMain: CategoryMain!
-}
-
-type CategoryDetailed {
-  id: String!
-  name: String!
-  categorySub: CategorySub!
 }
 
 type DirectStore {
@@ -56,9 +38,15 @@ type ProductDirect {
   quantity: Int!
   quantitySold: Int!
   isSoldout: Boolean!
-  categoryDetailed: CategoryDetailed!
-  boardDirect: BoardDirect!
+  category: Category!
   directStore: DirectStore!
+}
+
+type BoardDirect {
+  number: Int!
+  title: String!
+  writer: User!
+  content: String!
 }
 
 type BoardUgly {
@@ -95,33 +83,57 @@ type Inquiry {
 
 type Payment {
   id: String!
+  impUid: String!
   amount: Int!
-  paymentComplete: Boolean!
+  paymentComplete: PAYMENT_STATUS_ENUM!
   user: User!
   productDirect: ProductDirect!
   productUgly: ProductUgly!
 }
 
+enum PAYMENT_STATUS_ENUM {
+  PAYMENT
+  CANCEL
+}
+
 type Query {
-  fetchBoards: [Inquiry!]!
+  fetchDirectBoard(title: String!): BoardDirect!
+  fetchDirectBoards: [BoardDirect!]!
+  fetchUglyBoard(title: String!): BoardUgly!
+  fetchUglyBoards: [BoardUgly!]!
+  fetchCategory(name: String!): Category!
+  fetchCategories: [Category!]!
+  fetchDirectStore(name: String!): DirectStore!
+  fetchDirectStores: [DirectStore!]!
+  fetchInquiry(title: String!): Inquiry!
+  fetchInquiries: [Inquiry!]!
   fetchPayments: [Payment!]!
   fetchProducts: [ProductUgly!]!
   fetchProduct(productId: String!): ProductUgly!
-  fetchUser: String!
+  fetchUsers: [User!]!
+  fetchUserLoggedIn: User!
 }
 
 type Mutation {
   login(email: String!, password: String!): String!
+  logout: String!
+  restoreAccessToken: String!
   createBoardDirect(title: String!, content: String!, productDirectId: String!, userId: String!): String!
   createBoardUgly(title: String!, content: String!, productUglyId: String!, userId: String!): String!
+  createCategory(name: String!): Category!
+  createDirectStore(name: String!, address: String!): DirectStore!
+  uploadImageDirect(files: [Upload!]!): [String!]!
+  uploadImageUgly(files: [Upload!]!): [String!]!
   uploadFile(files: [Upload!]!): [String!]!
+  test: [String!]!
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
-  createPayment(amount: Float!, productDirectId: String, productUglyId: String): Payment!
+  createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(createProductDirectInput: CreateProductDirectInput!, quantity: Float!): ProductDirect!
   updateProduct(productId: String!, updateProductUglyInput: UpdateProductUglyInput!): ProductUgly!
   deleteProduct(productId: String!): Boolean!
   createProductUgly(createProductUglyInput: CreateProductUglyInput!, quantity: Float!): ProductUgly!
   createUser(email: String!, name: String!, password: String!, phone: String!): User!
+  updateUser(updateUserInput: UpdateUserInput!, updateAddressUserInput: UpdateAddressUserInput!): User!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -131,16 +143,34 @@ input CreateProductDirectInput {
   name: String!
   price: Int!
   description: String!
+  categoryId: String!
+  directStoreId: String!
 }
 
 input UpdateProductUglyInput {
   name: String
   price: Int
   description: String
+  area: String
 }
 
 input CreateProductUglyInput {
   name: String!
   price: Int!
   description: String!
+  area: String!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  phone: String
+}
+
+input UpdateAddressUserInput {
+  address: String
+  detailedAddress: String
+  postalCode: String
+  user: String
+  isMain: Boolean
 }

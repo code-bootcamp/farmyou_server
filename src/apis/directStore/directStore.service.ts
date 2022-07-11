@@ -10,6 +10,14 @@ export class DirectStoreService {
     private readonly directStoreRepository: Repository<DirectStore>,
   ) {}
 
+  async findAll() {
+    return await this.directStoreRepository.find();
+  }
+
+  async findOne({ name }) {
+    return await this.directStoreRepository.findOne({ where: { name: name } });
+  }  
+
   async create({ name, address }) {
     const result = await this.directStoreRepository.save({ name, address });
     console.log(result); // { name: "전자제품" }

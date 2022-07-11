@@ -11,16 +11,16 @@ export class ImageDirectProductService {
     // TODO: 아이디 바꾸기
     // TODO: json 파일 넣기
     const storage = new Storage({
-      projectId: 'codecamp-308601',
+      projectId: 'codecamp-355721',
       keyFilename: 'gcp-file-storage.json',
-    }).bucket('codecamp-file-storage');
+    }).bucket('pukkukim');
 
     const results = await Promise.all(
       waitedFiles.map((el) => {
         return new Promise((resolve, reject) => {
           el.createReadStream()
             .pipe(storage.file(el.filename).createWriteStream())
-            .on('finish', () => resolve(`codecamp-file-storage/${el.filename}`))
+            .on('finish', () => resolve(`pukkukim/${el.filename}`))
             .on('error', () => reject());
         });
       }),
