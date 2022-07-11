@@ -45,6 +45,21 @@ export class UserResolver {
   //   return await this.userService.update({ updateUserInput, updateAddressUserInput });
   // }
 
+//<<<<<<< dev
+  // TODO
+
+  //currentUser 안에 id와 이메일이 있다
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => String)
+  fetchUser(
+    @CurrentUser() currentUser: ICurrentUser, //
+  ) {
+    console.log('fetchUser 실행 완료!!!');
+    console.log('유저정보는??!!!', currentUser);
+    return 'qqq';
+  }
+//=======
   // @UseGuards(GqlAuthAccessGuard)
   // @Query(() => User)
   // checkValidUser(
@@ -52,6 +67,7 @@ export class UserResolver {
   // ) {
   //   const loggedUserPwd = this.fetchUser()
   // }
+//>>>>>>> dev
 
   // 쓸모 없을 듯
   @Query(() => [User])
