@@ -110,14 +110,14 @@ type Query {
   fetchPayments: [Payment!]!
   fetchProducts: [ProductUgly!]!
   fetchProduct(productId: String!): ProductUgly!
-  fetchUser: String!
   fetchUsers: [User!]!
+  fetchUserLoggedIn: User!
 }
 
 type Mutation {
   login(email: String!, password: String!): String!
   logout: String!
-  restroreAccessToken: String!
+  restoreAccessToken: String!
   createBoardDirect(title: String!, content: String!, productDirectId: String!, userId: String!): String!
   createBoardUgly(title: String!, content: String!, productUglyId: String!, userId: String!): String!
   createCategory(name: String!): Category!
@@ -133,6 +133,7 @@ type Mutation {
   deleteProduct(productId: String!): Boolean!
   createProductUgly(createProductUglyInput: CreateProductUglyInput!, quantity: Float!): ProductUgly!
   createUser(email: String!, name: String!, password: String!, phone: String!): User!
+  updateUser(updateUserInput: UpdateUserInput!, updateAddressUserInput: UpdateAddressUserInput!): User!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -158,4 +159,18 @@ input CreateProductUglyInput {
   price: Int!
   description: String!
   area: String!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  phone: String
+}
+
+input UpdateAddressUserInput {
+  address: String
+  detailedAddress: String
+  postalCode: String
+  user: String
+  isMain: Boolean
 }
