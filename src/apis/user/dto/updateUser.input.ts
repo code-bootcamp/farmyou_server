@@ -1,17 +1,8 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { InputType, PartialType, OmitType, PickType } from '@nestjs/graphql';
+import { CreateUserInput } from './createUser.input';
 
 @InputType()
-export class UpdateUserInput {
+export class UpdateUserInput extends PartialType(CreateUserInput) {}
 
-    @Field(() => String)
-    email: string;
-  
-    @Field(() => String)
-    name: string;
-
-    @Field(()=> String)
-    phone: string
-
-//   @Field(() => String)
-//   address: string;
-}
+// PickType(CreateProductInput, ["name", "price"])
+// OmitType(CreateProductInput, ["description"])

@@ -17,6 +17,7 @@ import { ProductDirectModule } from './apis/productDirect/productDirect.module';
 import { ProductUglyModule } from './apis/productUgly/productUgly.module';
 import { UserModule } from './apis/user/user.module';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -41,8 +42,8 @@ import { AppController } from './app.controller';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // host: '172.30.192.8', //인스턴스 sql 비공개ip주소
-      host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
+      host: '172.30.192.8', //인스턴스 sql 비공개ip주소
+      // host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
       password: '12345678',
@@ -52,6 +53,9 @@ import { AppController } from './app.controller';
       synchronize: true,
       logging: true,
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    })
   ],
   controllers: [AppController],
 })

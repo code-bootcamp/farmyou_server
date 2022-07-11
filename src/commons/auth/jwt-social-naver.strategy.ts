@@ -1,29 +1,32 @@
-// import { PassportStrategy } from '@nestjs/passport';
-// // import { Profile, Strategy } from 'passport-google-oauth20';
-// import 'dotenv/config';
-// import { Strategy } from 'passport-naver-v2';
+import { PassportStrategy } from '@nestjs/passport';
+// import { Profile, Strategy } from 'passport-google-oauth20';
+import 'dotenv/config';
+import { Strategy } from 'passport-naver-v2';
 
-// export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
-//     constructor() {
-//         const CLIENT_ID = process.env.NAVER_CLIENT_ID;
-//         const CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET;
+export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
+    constructor() {
+        const CLIENT_ID = process.env.NAVER_CLIENT_ID;
+        const CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET;
+        const CLIENT_URL = process.env.NAVER_CLIENT_URL;
 
-//         super({
-//             clientID: CLIENT_ID,
-//             clientSecret: CLIENT_SECRET,
-//             callbackURL: "http://localhost:3000/login/naver",
-//             scope: ['name', 'nickname', 'email', 'mobile']
-//         });
-//     }
+        super({
+            clientID: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
+            callbackURL: CLIENT_URL,
+            // scope: ['name', 'nickname', 'email', 'mobile']
+        });
+    }
 
-//     validate(accessToken, refreshToken, profile) {
-//         // console.log(profile);
-//         return {
-//             password: "1234",               // 임의의 패스워드
-//             address: "서울시 서울구 서울동",    // 임의의 주소
-//             email: profile.email,
-//             contact: profile.mobile,
-//             name: profile.name
-//         }
-//     }
-// }
+    validate(accessToken, refreshToken, profile) {
+        console.log(accessToken);
+        console.log(refreshToken);
+        console.log(profile);
+        return {
+          email: profile.email,
+          password: '12345678', //받아오는것이 없어서 임의로 정의 하는것
+          // name: profile.displayName,
+          name: profile.name,
+          phone: '01012345678',
+        };
+      }
+}

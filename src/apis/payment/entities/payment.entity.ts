@@ -1,8 +1,18 @@
-import { Int, ObjectType, Field } from '@nestjs/graphql';
+import { Int, ObjectType, Field, registerEnumType } from '@nestjs/graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+
+
+export enum PAYMENT_STATUS_ENUM {
+  PAYMENT = 'PAYMENT',
+  CANCEL = 'CANCEL',
+}
+
+registerEnumType(PAYMENT_STATUS_ENUM, {
+  name: 'PAYMENT_STATUS_ENUM',
+});
 
 @Entity()
 @ObjectType()
@@ -22,9 +32,9 @@ export class Payment {
   amount: number;
 
   // 결제완료
-  @Column({ default: false })
-  @Field(() => Boolean)
-  paymentComplete: boolean;
+  @Column({ type: 'enum', enum: PAYMENT_STATUS_ENUM })
+  @Field(() => PAYMENT_STATUS_ENUM)
+  paymentComplete: string;
 
   // 회원
   @ManyToOne(() => User)

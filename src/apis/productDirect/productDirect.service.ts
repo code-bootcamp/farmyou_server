@@ -19,9 +19,9 @@ export class ProductDirectService {
         return await this.productDirectRepository.find();
     }
 
-    async findOne({ productId }) {
+    async findOne({ name }) {
         return await this.productDirectRepository.findOne({
-            where: { id: productId },
+            where: { name: name },
         });
     }
 

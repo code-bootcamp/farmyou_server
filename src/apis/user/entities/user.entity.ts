@@ -40,7 +40,7 @@ export class User {
   @Field(() => String)
   grade: string;
 
-  // 조아유
+  // 좋아유
   @Column({ default: 0 })
   @Field(()=>Number)
   like: number

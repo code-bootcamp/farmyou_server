@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
+import { AddressUserService } from '../addressUser/addressUser.service';
 import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { BoardDirect } from '../boardDirect/entities/boardDirect.entity';
 import { BoardUgly } from '../boardUgly/entities/boardUgly.entity';
@@ -14,6 +15,7 @@ import { UserService } from './user.service';
 @Module({
   imports: [TypeOrmModule.forFeature([
     User,
+    AddressUser,
     Payment,
     ImageUser,
     Inquiry,
@@ -23,6 +25,7 @@ import { UserService } from './user.service';
     JwtAccessStrategy,
     UserResolver, //
     UserService,
+    AddressUserService
   ],
 })
 export class UserModule {}
