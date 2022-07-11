@@ -7,12 +7,12 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
     constructor() {
         const CLIENT_ID = process.env.NAVER_CLIENT_ID;
         const CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET;
-        const CLIENT_URL = process.env.NAVER_CLIENT_URL;
+        // const CLIENT_URL = process.env.NAVER_CLIENT_URL;
 
         super({
             clientID: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
-            callbackURL: CLIENT_URL,
+            callbackURL: 'http://localhost:3000/login/naver',
             // scope: ['name', 'nickname', 'email', 'mobile']
         });
     }

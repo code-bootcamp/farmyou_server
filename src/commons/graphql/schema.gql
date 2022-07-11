@@ -110,6 +110,7 @@ type Query {
   fetchPayments: [Payment!]!
   fetchProducts: [ProductUgly!]!
   fetchProduct(productId: String!): ProductUgly!
+  fetchUser: String!
   fetchUsers: [User!]!
   fetchUserLoggedIn: User!
 }
