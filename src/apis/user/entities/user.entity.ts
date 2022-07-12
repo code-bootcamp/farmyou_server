@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardDirect } from 'src/apis/boardDirect/entities/boardDirect.entity';
 import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, DeleteDateColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -53,6 +53,11 @@ export class User {
   @Field(() => Date)
   createdAt: Date;
 
+
+  // 삭제기능 
+  @DeleteDateColumn()
+  deletedAt: Date;
+
   @OneToMany(() => BoardDirect, boardDirect => boardDirect.writer)
   @Field(() => Number)
   boardDirectNum: BoardDirect[];
@@ -60,4 +65,5 @@ export class User {
   @OneToMany(() => BoardUgly, boardUgly => boardUgly.writer)
   @Field(() => Number)
   boardUglyNum: BoardUgly[];
+
 }
