@@ -34,6 +34,7 @@ export class ImageUserResolver {
     @Args('user_type') user_type: string,
     @Args('user_id') user_id: string,
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
+
   ) {
     const urls = this.uploadImageUser(files);
     return this.imageUserService.saveImage({user_type, user_id, urls});
@@ -49,4 +50,9 @@ export class ImageUserResolver {
     return this.imageUserService.upload({ files });
 
   }
+  // 코드 작동하는지 테스트 하기위해 만든것
+  // @Mutation(() => [String])
+  // test() {
+  //   return ['hello', 'world'];
+  // }
 }

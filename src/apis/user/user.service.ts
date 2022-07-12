@@ -115,11 +115,24 @@ export class UserService {
     });
   }
 
+
+  async delete({ email }) {
+    const result = await this.userRepository.delete({ email });
+    return result.affected ? true : false;
+  }
+
+  async deleteUser({ currentUser }) {
+    const result = await this.userRepository.softDelete({
+      id: currentUser.id,
+    });
+    return result.affected ? true : false;
+
   // TODO: 회원이 판매자인지 우선 확인작업 필요
   async postBoardDirect({userId, boardDirectNum}) {
     return this.userRepository.save({
       id: userId, 
       boardDirectNum
     });
+
   }
 }

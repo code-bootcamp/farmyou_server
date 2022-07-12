@@ -84,6 +84,7 @@ export class UserResolver {
 //>>>>>>> dev
 
   // 쓸모 없을 듯
+  // 관리자페이지에서 모든유저 조회할때 사용 하게 될 듯 
   @Query(() => [User])
   fetchUsers() {
     return this.userService.findAll();
@@ -158,6 +159,40 @@ export class UserResolver {
   //   return this.userService.updateProfile({ profile, currentUser });
   // }
 
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User)
+  async updateUser(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
+  ) {
+    return await this.userService.update({
+      email: currentUser.email,
+      updateUserInput,
+      updateAddressUserInput
+    });
+  }
+
+  // 관리자의 유저 삭제
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(()=> Boolean)
+  deleteUser(
+    @Args('email') email: string,
+  ) {
+    return this.userService.delete({ email })
+  }
+
+  // 로그인한 유저가 자기자신을 삭제
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User)
+  async deleteLoginUser(
+    @CurrentUser() currentUser: any, //
+  ) {
+    const result = this.userService.deleteUser({ currentUser });
+    if (result) return '로그인한 계정이 삭제되었습니다.';
+  }
+
   // @UseGuards(GqlAuthAccessGuard)
   // @Mutation(() => User)
   // async updateUser(
@@ -171,4 +206,5 @@ export class UserResolver {
   //     updateAddressUserInput
   //   });
   // }
+
 }
