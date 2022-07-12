@@ -8,16 +8,19 @@ import { ProductDirectService } from './productDirect.service';
 export class ProductDirectResolver {
   constructor(private readonly productDirectService: ProductDirectService) {}
 
+  // keeping
   @Query(() => [ProductDirect])
   fetchProducts() {
     return this.productDirectService.findAll();
   }
 
+  // ElasticSearch??
+  // contains/partial
   @Query(() => ProductDirect)
   fetchProduct(
-    @Args('name') name: string, //
+    @Args('title') title: string, //
   ) {
-    return this.productDirectService.findOne({ name });
+    return this.productDirectService.findOne({ title });
   }
 
   // worked

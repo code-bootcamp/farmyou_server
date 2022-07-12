@@ -1,12 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardDirect } from 'src/apis/boardDirect/entities/boardDirect.entity';
 import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
-import { Seller } from 'src/apis/seller/entities/seller.entity';
+import { User } from 'src/apis/user/entities/user.entity';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class User {
+export class Seller {
   // 회원ID
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
@@ -27,10 +27,20 @@ export class User {
   // @Field(() => String) 비밀번호 노출 금지!!
   password: string;
 
-  // 연락처
+  // 전화번호
   @Column()
   @Field(() => String)
   phone: string;
+
+  // 판매자등급
+  @Column({ default: "일반셀러" })
+  @Field(() => String)
+  grade: string;
+
+  // 좋아유
+  @Column({ default: 0 })
+  @Field(() => Number)
+  like: number
 
   // 회원등록날짜
   @CreateDateColumn()
@@ -38,7 +48,7 @@ export class User {
   createdAt: Date;
 
   @JoinTable()
-  @ManyToMany(() => Seller, (sellers) => sellers.users)
+  @ManyToMany(() => User, (users) => users.sellers)
   @Field(() => [Seller])
-  sellers: Seller[];
+  users: User[];
 }

@@ -8,25 +8,23 @@ import { BoardUgly } from '../boardUgly/entities/boardUgly.entity';
 import { ImageUser } from '../imageUser/entities/imageUser.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
-import { Seller } from '../seller/entities/seller.entity';
-import { User } from './entities/user.entity';
-import { UserResolver } from './user.resolver';
-import { UserService } from './user.service';
+import { Admin } from './entities/admin.entity';
+import { AdminResolver } from './admin.resolver';
+import { AdminService } from './admin.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
-    User,
+    Admin,
     AddressUser,
     Payment,
     ImageUser,
     Inquiry,
     BoardUgly,
-    BoardDirect,
-    Seller])],
+    BoardDirect])],
   providers: [
     JwtAccessStrategy,
-    UserResolver, //
-    UserService,
+    AdminResolver, //
+    AdminService,
     AddressUserService
   ],
 })

@@ -19,9 +19,11 @@ export class ProductDirectService {
         return await this.productDirectRepository.find();
     }
 
-    async findOne({ name }) {
+    // ElasticSearch??
+    // contains/partial
+    async findOne({ title }) {
         return await this.productDirectRepository.findOne({
-            where: { name: name },
+            where: { title },
         });
     }
 

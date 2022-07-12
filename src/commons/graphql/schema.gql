@@ -2,34 +2,63 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Category {
+type Seller {
   id: String!
   name: String!
-}
-
-type DirectStore {
-  id: String!
-  name: String!
-  address: String!
-}
-
-type ProductDirect {
-  id: String!
-  name: String!
-  price: Int!
-  description: String!
+  email: String!
+  phone: String!
+  grade: String!
+  like: Float!
   createdAt: DateTime!
-  quantity: Int!
-  quantitySold: Int!
-  isSoldout: Boolean!
-  category: String!
-  directStore: String!
+  users: [Seller!]!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  createdAt: DateTime!
+  sellers: [Seller!]!
+}
+
+type DirectStore {
+  id: String!
+  name: String!
+  admin: Admin!
+}
+
+type Admin {
+  id: String!
+  email: String!
+  createdAt: DateTime!
+  directStore: String!
+}
+
+type Category {
+  id: String!
+  name: String!
+}
+
+type ProductDirect {
+  id: String!
+  title: String!
+  content: String!
+  price: Int!
+  createdAt: DateTime!
+  quantity: Int!
+  quantitySold: Int!
+  isSoldout: Boolean!
+  category: String!
+  directStoreId: String!
+  customerId: String!
+  adminId: String!
+}
 
 type BoardDirect {
   number: Int!
@@ -41,15 +70,15 @@ type BoardDirect {
 
 type ProductUgly {
   id: String!
-  name: String!
+  title: String!
+  content: String!
   price: Int!
-  description: String!
   createdAt: DateTime!
   quantity: Int!
   quantitySold: Int!
-  area: String!
-  isSoldout: Boolean!
-  boardUgly: BoardUgly!
+  origin: String!
+  customerId: String!
+  sellerId: String!
 }
 
 type BoardUgly {
@@ -61,17 +90,11 @@ type BoardUgly {
   createdAt: DateTime!
 }
 
-type User {
+type ImageUser {
   id: String!
-  email: String!
-  name: String!
-  phone: String!
-  isSeller: Boolean!
-  grade: String!
-  like: Float!
-  createdAt: DateTime!
-  boardDirectNum: Float!
-  boardUglyNum: Float!
+  url: String!
+  seller: String!
+  user: String!
 }
 
 type Inquiry {
@@ -117,7 +140,7 @@ type Query {
   fetchProduct(productId: String!): ProductUgly!
   fetchUsers: [User!]!
   fetchUserLoggedIn: User!
-  checkIfLogged(password: String!): Boolean!
+  checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
 }
 
 type Mutation {
@@ -128,18 +151,20 @@ type Mutation {
   createBoardDirect(title: String!, content: String!, productDirectId: String!, userId: String!): String!
   createBoardUgly(title: String!, content: String!, productUglyId: String!, userId: String!): String!
   createCategory(name: String!): Category!
-  createDirectStore(name: String!, address: String!): DirectStore!
+  createDirectStore(name: String!): DirectStore!
   uploadImageDirect(files: [Upload!]!): [String!]!
   uploadImageUgly(files: [Upload!]!): [String!]!
+  uploadImage(user_type: String!, user_id: String!, files: [Upload!]!): [ImageUser!]!
   uploadImageUser(files: [Upload!]!): [String!]!
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(createProductDirectInput: CreateProductDirectInput!, quantity: Float!): ProductDirect!
-  updateProduct(productId: String!, updateProductUglyInput: UpdateProductUglyInput!): ProductUgly!
+  updateProduct(productId: String!, updateProductDirectInput: UpdateProductDirectInput!): ProductDirect!
   deleteProduct(productId: String!): Boolean!
-  createProductUgly(createProductUglyInput: CreateProductUglyInput!, quantity: Float!): ProductUgly!
-  createUser(email: String!, name: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, isSeller: Boolean!): User!
+  createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!
+  createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!): User!
   updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
+  likeYou(sellerId: String!): String!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -153,18 +178,12 @@ input CreateProductDirectInput {
   directStoreId: String!
 }
 
-input UpdateProductUglyInput {
+input UpdateProductDirectInput {
   name: String
   price: Int
   description: String
-  area: String
-}
-
-input CreateProductUglyInput {
-  name: String!
-  price: Int!
-  description: String!
-  area: String!
+  categoryName: String
+  directStoreId: String
 }
 
 input CreateAddressUserInput {

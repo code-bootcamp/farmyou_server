@@ -12,6 +12,7 @@ import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { CreateAddressUserInput } from '../addressUser/dto/createAddressUser.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Seller } from '../seller/entities/seller.entity';
 
 @Resolver()
 export class UserResolver {
@@ -19,22 +20,24 @@ export class UserResolver {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
+    @InjectRepository(Seller)
+    private readonly sellerRepository: Repository<Seller>,
+
     private readonly userService: UserService, //
   ) {}
 
   // 회원 생성하기
   @Mutation(() => User)
   async createUser(
-    @Args('email') email: string,
     @Args('name') name: string,
+    @Args('email') email: string,
     @Args('password') password: string,
     @Args('phone') phone: string,
     @Args('addressUser') addressUser: CreateAddressUserInput,
-    @Args('isSeller') isSeller: boolean
   ) {
     const hashedPassword = await bcrypt.hash(password, 10.2);
     // console.log(hashedPassword);
-    return this.userService.create({ email, name, hashedPassword, phone, addressUser, isSeller });
+    return this.userService.create({ name, email, hashedPassword, phone, addressUser });
   }
 
   // 회원 정보 업데이트 하기 
@@ -78,26 +81,49 @@ export class UserResolver {
     return this.userService.findLoggedIn({ currentUser });
   }
 
+  // PasswordCheckModal
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => Boolean)
-  async checkIfLogged(
+  async checkIfLoggedUser(
     @CurrentUser() currentUser: ICurrentUser,
-    @Args('password') password: string
+    @Args('passwordFirst') passwordFirst: string,
+    @Args('passwordSecond') passwordSecond: string
   ) {
     // const correctPassword = currentUser.password;
     // console.log(currentUser);
-    const passwordOwner = await this.userRepository.findOne({id: currentUser.id});
-    const correctPassword = passwordOwner.password;
-
-    // console.log(passwordOwner);
-    // console.log(correctPassword);
-    // console.log(await bcrypt.hash(password, 10));
-
-    const same = bcrypt.compare(password, correctPassword);
-
-    return same;
+    if (passwordFirst === passwordSecond) {
+      const passwordOwner = await this.userRepository.findOne({id: currentUser.id});
+      const correctPassword = passwordOwner.password;
+  
+      // console.log(passwordOwner);
+      // console.log(correctPassword);
+      // console.log(await bcrypt.hash(password, 10));
+  
+      const same = bcrypt.compare(passwordFirst, correctPassword);
+  
+      return same;
+    } else {
+      return false;
+    }
   }
 
+  @Mutation(() => String)
+  async likeYou(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('sellerId') sellerId: string
+  ) {
+    const likedSeller = await this.sellerRepository.findOne({id: sellerId});
+    const thisUser = await this.userRepository.findOne({id: currentUser.id});
+    if (!likedSeller.users.includes(thisUser)) {
+      likedSeller.users.push(thisUser);
+      likedSeller.like++;
+    }
+    if (!thisUser.sellers.includes(likedSeller)) {
+      thisUser.sellers.push(likedSeller);
+    }
+
+    return "좋아유~";
+  }
   // @UseGuards(GqlAuthAccessGuard)
   // @Mutation(() => User)
   // async updateImage(
