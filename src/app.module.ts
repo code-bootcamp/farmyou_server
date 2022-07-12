@@ -7,7 +7,7 @@ import { BoardDirectModule } from './apis/boardDirect/boardDirect.module';
 import { BoardUglyModule } from './apis/boardUgly/boardUgly.module';
 import { CategoryModule } from './apis/category/category.module';
 import { DirectStoreModule } from './apis/directStore/directStore.module';
-import { FileModule } from './apis/file/file.module';
+import { FileModule } from './trash/file/file.module';
 import { ImageDirectProductModule } from './apis/imageDirectProduct/imageDirectProduct.module';
 import { ImageUglyProductModule } from './apis/imageUglyProduct/imageUglyProduct.module';
 import { ImageUserModule } from './apis/imageUser/imageUser.module';

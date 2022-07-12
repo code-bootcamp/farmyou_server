@@ -22,9 +22,8 @@ export class DirectStoreResolver {
 
   @Mutation(() => DirectStore)
   createDirectStore(
-    @Args('name') name: string, //
-    @Args('address') address: string
+    @Args('name') name: string
   ) {
-    return this.directStoreService.create({ name, address });
+    return this.directStoreService.create({ name });
   }
 }

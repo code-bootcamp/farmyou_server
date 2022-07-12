@@ -20,24 +20,36 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { ImageUserService } from './imageUser.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import { ImageUser } from './entities/imageUser.entity';
 
 @Resolver()
 export class ImageUserResolver {
   constructor(
-    private readonly fileService: ImageUserService, //
+    private readonly imageUserService: ImageUserService, //
   ) {}
 
-  @Mutation(() => [String])
-  // uploadFile
+  // 근데 이걸 어떻게 실행할 지???
+  @Mutation(() => [ImageUser])
   uploadImage(
-    // @Args() 파일을 받기
-    // 받을때는 GraphQLUpload => 사용할때는 타입스크립트 타입으로 정의 해줍니다.
-    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
+    @Args('user_type') user_type: string,
+    @Args('user_id') user_id: string,
+    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
+
   ) {
-    console.log(files)
-    return this.fileService.upload({ files });
+    const urls = this.uploadImageUser(files);
+    return this.imageUserService.saveImage({user_type, user_id, urls});
   }
 
+  @Mutation(() => [String])
+  uploadImageUser(
+    // @Args('user_type') user_type: string,
+    // @Args('user_id') user_id: string,
+    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
+  ) {
+    // return this.imageUserService.upload({ user_type, user_id, files });
+    return this.imageUserService.upload({ files });
+
+  }
   // 코드 작동하는지 테스트 하기위해 만든것
   // @Mutation(() => [String])
   // test() {

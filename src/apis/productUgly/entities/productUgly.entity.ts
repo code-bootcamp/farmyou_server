@@ -1,5 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
+import { Seller } from 'src/apis/seller/entities/seller.entity';
+import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   Entity,
@@ -16,20 +18,20 @@ export class ProductUgly {
   @Field(() => String)
   id: string;
 
-  // 품명
+  // 제목
   @Column()
   @Field(() => String)
-  name: string;
+  title: string;
+
+  // 내용
+  @Column()
+  @Field(() => String)
+  content: string;
 
   // 가격
   @Column()
   @Field(() => Int)
   price: number;
-
-  // 상품설명
-  @Column()
-  @Field(() => String)
-  description: string;
 
   // 등록날짜
   @CreateDateColumn()
@@ -49,15 +51,15 @@ export class ProductUgly {
   // 생산지
   @Column()
   @Field(() => String)
-  area: string;
+  origin: string;
 
-  // 품절여부
-  @Column({ default: false })
-  @Field(() => Boolean)
-  isSoldout: boolean;
+  // 구매자ID
+  @ManyToOne(() => User)
+  @Field(() => String)
+  customerId: User;
 
-  // 못난이게시판번호
-  @ManyToOne(() => BoardUgly)
-  @Field(() => BoardUgly)
-  boardUgly: BoardUgly;
+  // 판매자ID
+  @ManyToOne(() => Seller)
+  @Field(() => String)
+  sellerId: Seller;
 }

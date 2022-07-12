@@ -25,16 +25,14 @@ export class ProductUglyService {
         });
     }
 
-    async create({ createProductUglyInput, quantity }) {
-        const original = await this.productUglyRepository.findOne({
-            where: {name: createProductUglyInput.name}
-        });
-
-        const origQuantity = original.quantity;
-
+    async create({ title, content, price, quantity, origin, sellerId }) {
         const result = await this.productUglyRepository.save({
-            ...createProductUglyInput,
-            quantity: origQuantity + quantity
+            title,
+            content,
+            price,
+            quantity,
+            origin,
+            sellerId
 
             // 하나하나 직접 나열하는 방식
             // name: createProductUglyInput.name,
@@ -56,24 +54,6 @@ export class ProductUglyService {
         };
 
         return await this.productUglyRepository.save(newProductUgly);
-    }
-
-    async checkSoldout({ productId }) {
-        const product = await this.productUglyRepository.findOne({
-            where: { id: productId },
-        });
-
-        if (product.isSoldout) {
-            throw new UnprocessableEntityException(
-                '이미 판매 완료된 상품입니다.',
-            );
-        }
-        // if (product.isSoldout) {
-        //   throw new HttpException(
-        //     '이미 판매 완료된 상품입니다.',
-        //     HttpStatus.UNPROCESSABLE_ENTITY,
-        //   );
-        // }
     }
 
     async delete({ productId }) {

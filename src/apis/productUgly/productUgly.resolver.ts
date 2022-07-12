@@ -20,27 +20,39 @@ export class ProductUglyResolver {
     return this.productUglyService.findOne({ productId });
   }
 
-  // worked
+  // @Mutation(() => ProductUgly)
+  // createProductUgly(
+  //   @Args('createProductUglyInput') createProductUglyInput: CreateProductUglyInput,
+  //   @Args('quantity') quantity: number
+  // ) {
+  //   return this.productUglyService.create({ createProductUglyInput, quantity });
+  // }
+
   @Mutation(() => ProductUgly)
   createProductUgly(
-    @Args('createProductUglyInput') createProductUglyInput: CreateProductUglyInput,
-    @Args('quantity') quantity: number
+    @Args('title') title: string,
+    @Args('content') content: string,
+    @Args('price') price: number,
+    @Args('quantity') quantity: number,
+    @Args('origin') origin: string,
+    @Args('sellerId') sellerId: string,
   ) {
-    return this.productUglyService.create({ createProductUglyInput, quantity });
+    return this.productUglyService.create({ title, content, price, quantity, origin, sellerId });
   }
 
-  @Mutation(() => ProductUgly)
-  async updateProduct(
-    @Args('productId') productId: string,
-    @Args('updateProductUglyInput') updateProductUglyInput: UpdateProductUglyInput,
-  ) {
-    // 판매 완료가 되었는지 확인해보기
-    await this.productUglyService.checkSoldout({ productId });
+  // @Mutation(() => ProductUgly)
+  // async updateProduct(
+  //   @Args('productId') productId: string,
+  //   @Args('updateProductUglyInput') updateProductUglyInput: UpdateProductUglyInput,
+  // ) {
+  //   // 판매 완료가 되었는지 확인해보기
+  //   await this.productUglyService.checkSoldout({ productId });
 
-    // 수정하기
-    return await this.productUglyService.update({ productId, updateProductUglyInput });
-  }
+  //   // 수정하기
+  //   return await this.productUglyService.update({ productId, updateProductUglyInput });
+  // }
 
+  // 수량이 0개 되었을 때
   @Mutation(() => Boolean)
   deleteProduct(
     @Args('productId') productId: string, //
