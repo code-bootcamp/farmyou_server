@@ -102,61 +102,6 @@ export class UserService {
     return this.userRepository.save(loggedUser);
   }
 
-  // async update({
-  //   email,
-  //   updateUserInput,
-  //   updateAddressUserInput
-  // }) {
-  //   const user = await this.userRepository.findOne({
-  //     email: email,
-  //   });
-
-  //   const newUser: User = {
-  //     ...user,
-  //     ...updateUserInput,
-  //   };
-
-  //   const address = await this.addressUserRepository.findOne({
-  //     user: {email: email}
-  //   });
-
-  //   const newAddress: AddressUser = {
-  //     ...address,
-  //     ...updateAddressUserInput
-  //   }
-
-  //   if (updateUserInput.email) {
-  //     newUser.email = updateUserInput.email;
-  //   }
-
-  //   if (updateUserInput.password) {
-  //     const hashedPassword = await bcrypt.hash(updateUserInput.password, 10);
-  //     newUser.password = hashedPassword;
-  //   }
-
-  //   if (updateUserInput.phone) {
-  //     newUser.phone = updateUserInput.phone;
-  //   }
-
-  //   if (updateAddressUserInput.address) {
-  //     newAddress.address = updateAddressUserInput.address;
-  //   }
-
-  //   if (updateAddressUserInput.detailedAddress) {
-  //     newAddress.detailedAddress = updateAddressUserInput.detailedAddress;
-  //   }
-
-  //   if (updateAddressUserInput.postalCode) {
-  //     newAddress.postalCode = updateAddressUserInput.postalCode;
-  //   }
-
-  //   // isMain 어떻게 처리할 지
-
-  //   await this.addressUserRepository.save(newAddress);
-
-  //   return await this.userRepository.save(newUser);
-  // }
-
   async findLoggedIn({ currentUser }) {
     return await this.userRepository.findOne({
       where: {
@@ -164,6 +109,7 @@ export class UserService {
       },
     });
   }
+
 
   async delete({ email }) {
     const result = await this.userRepository.delete({ email });
@@ -175,5 +121,13 @@ export class UserService {
       id: currentUser.id,
     });
     return result.affected ? true : false;
+
+  // TODO: 회원이 판매자인지 우선 확인작업 필요
+  async postBoardDirect({userId, boardDirectNum}) {
+    return this.userRepository.save({
+      id: userId, 
+      boardDirectNum
+    });
+
   }
 }
