@@ -56,7 +56,7 @@ export class ProductDirect {
 
   // 카테고리ID (dto)
   @ManyToOne(() => Category)
-  @Field(() => Category)
+  @Field(() => String)
   category: Category;
 
   // // 직매장게시판번호
@@ -71,6 +71,6 @@ export class ProductDirect {
 
   // 직매장ID (dto)
   @ManyToOne(() => DirectStore)
-  @Field(() => DirectStore)
+  @Field(() => String)
   directStore: DirectStore;
 }

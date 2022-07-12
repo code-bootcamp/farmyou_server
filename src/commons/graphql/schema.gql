@@ -2,22 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: String!
-  email: String!
-  name: String!
-  phone: String!
-  isSeller: Boolean!
-  grade: String!
-  like: Float!
-  createdAt: DateTime!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type Category {
   id: String!
   name: String!
@@ -38,23 +22,21 @@ type ProductDirect {
   quantity: Int!
   quantitySold: Int!
   isSoldout: Boolean!
-  category: Category!
-  directStore: DirectStore!
+  category: String!
+  directStore: String!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type BoardDirect {
   number: Int!
   title: String!
   writer: User!
   content: String!
-}
-
-type BoardUgly {
-  number: Int!
-  title: String!
-  writer: User!
-  content: String!
-  productUgly: ProductUgly!
+  createdAt: DateTime!
 }
 
 type ProductUgly {
@@ -68,6 +50,28 @@ type ProductUgly {
   area: String!
   isSoldout: Boolean!
   boardUgly: BoardUgly!
+}
+
+type BoardUgly {
+  number: Int!
+  title: String!
+  writer: User!
+  content: String!
+  productUgly: ProductUgly!
+  createdAt: DateTime!
+}
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  phone: String!
+  isSeller: Boolean!
+  grade: String!
+  like: Float!
+  createdAt: DateTime!
+  boardDirectNum: Float!
+  boardUglyNum: Float!
 }
 
 type Inquiry {
@@ -99,6 +103,7 @@ enum PAYMENT_STATUS_ENUM {
 type Query {
   fetchDirectBoard(title: String!): BoardDirect!
   fetchDirectBoards: [BoardDirect!]!
+  fetchBoardsByDateAsc(searchedTitle: String!, page: Float): [BoardDirect!]!
   fetchUglyBoard(title: String!): BoardUgly!
   fetchUglyBoards: [BoardUgly!]!
   fetchCategory(name: String!): Category!
@@ -144,7 +149,7 @@ input CreateProductDirectInput {
   name: String!
   price: Int!
   description: String!
-  categoryId: String!
+  categoryName: String!
   directStoreId: String!
 }
 

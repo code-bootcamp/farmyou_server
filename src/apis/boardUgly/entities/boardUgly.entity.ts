@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -30,4 +30,9 @@ export class BoardUgly {
   @ManyToOne(() => ProductUgly)
   @Field(() => ProductUgly)
   productUgly: ProductUgly;
+
+  // 등록날짜
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }

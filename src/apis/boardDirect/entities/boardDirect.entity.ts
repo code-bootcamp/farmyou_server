@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { User } from 'src/apis/user/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, CreateDateColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -30,5 +30,8 @@ export class BoardDirect {
   @OneToOne(() => ProductDirect)
   productDirect: ProductDirect;
 
-  // 카테고리 추가??
+  // 등록날짜
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }

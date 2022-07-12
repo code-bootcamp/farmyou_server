@@ -34,8 +34,8 @@ export class ProductDirectService {
 
         const result = await this.productDirectRepository.save({
             ...createProductDirectInput,
-            category: {id: createProductDirectInput.categoryId},
-            directStore: {id: createProductDirectInput.directStoreId}
+            // category: {name: createProductDirectInput.categoryName},
+            // directStore: {id: createProductDirectInput.directStoreId}
 
             // quantity: this.productDirectRepository.quantity + quantity
             // quantity: origQuantity + quantity
@@ -45,6 +45,7 @@ export class ProductDirectService {
             // description: createProductDirectInput.description,
             // price: createProductDirectInput.price,
         });
+
         return result;
     }
 
