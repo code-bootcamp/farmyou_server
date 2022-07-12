@@ -1,3 +1,22 @@
+// import { Args, Mutation, Resolver } from '@nestjs/graphql';
+// import { ImageUserService } from './imageUser.service';
+// import { FileUpload, GraphQLUpload } from 'graphql-upload';
+
+// @Resolver()
+// export class ImageUserResolver {
+//   constructor(
+//     private readonly imageUserService: ImageUserService, //
+//   ) {}
+
+//   @Mutation(() => [String])
+//   uploadImageUser(
+//     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
+//   ) {
+//     return this.imageUserService.upload({ files });
+//   }
+// }
+
+// 승원 설정 파일
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { ImageUserService } from './imageUser.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
@@ -28,5 +47,6 @@ export class ImageUserResolver {
   ) {
     // return this.imageUserService.upload({ user_type, user_id, files });
     return this.imageUserService.upload({ files });
+
   }
 }

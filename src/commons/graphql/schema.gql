@@ -144,7 +144,6 @@ type Query {
 }
 
 type Mutation {
-  uploadFile(files: [Upload!]!): [String!]!
   login(email: String!, password: String!): String!
   logout: String!
   restoreAccessToken: String!
@@ -154,8 +153,13 @@ type Mutation {
   createDirectStore(name: String!): DirectStore!
   uploadImageDirect(files: [Upload!]!): [String!]!
   uploadImageUgly(files: [Upload!]!): [String!]!
+<<<<<<< HEAD
   uploadImage(user_type: String!, user_id: String!, files: [Upload!]!): [ImageUser!]!
   uploadImageUser(files: [Upload!]!): [String!]!
+=======
+  uploadFile(files: [Upload!]!): [String!]!
+  test: [String!]!
+>>>>>>> 1868c21b189a3a29dea74d9fc920e49c5204aca7
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(createProductDirectInput: CreateProductDirectInput!, quantity: Float!): ProductDirect!

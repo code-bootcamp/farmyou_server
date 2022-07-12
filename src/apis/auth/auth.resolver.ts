@@ -136,17 +136,14 @@ export class AuthResolver {
     // console.log("refresh is ", context.req.headers.cookie);
     // console.log("=============================================================");
     const accessToken = context.req.headers.authorization.replace(
-      "Bearer ",
-      ""
-    );
-    // console.log("access token is", accessToken);
-
+      'Bearer ',
+      '',
+    )
     const refreshToken = context.req.headers.cookie.replace(
-      "refreshToken=",
-      ""
-    );
-    // console.log("refresh token is", refreshToken);
-
+      'refreshToken=',
+      ''
+    )
+    
     try {
       jwt.verify(accessToken, "myAccessKey");
       jwt.verify(refreshToken, "myRefreshKey");
