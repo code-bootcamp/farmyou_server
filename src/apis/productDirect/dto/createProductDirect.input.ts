@@ -17,7 +17,7 @@ export class CreateProductDirectInput {
 
   // 카테고리ID
   @Field(() => String)
-  categoryId: Category;
+  categoryName: Category;
 
   // 직매장ID
   @Field(() => String)

@@ -1,5 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { BoardDirect } from 'src/apis/boardDirect/entities/boardDirect.entity';
+import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -34,19 +36,28 @@ export class User {
   @Field(() => Boolean)
   isSeller: boolean;
 
-  // 회원등급
-  // 좋아요 받은 횟수를 기록하는 field를 따로 넣어야 하는 지??
+  // 판매자에만 해당 (아래의 like 횟수에 따라 등급 판별됨)
+  // 판매자등급
   @Column({ default: "일반셀러" })
   @Field(() => String)
   grade: string;
 
+  // 판매자에만 해당
   // 좋아유
   @Column({ default: 0 })
-  @Field(()=>Number)
+  @Field(() => Number)
   like: number
 
   // 회원등록날짜
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  @OneToMany(() => BoardDirect, boardDirect => boardDirect.writer)
+  @Field(() => Number)
+  boardDirectNum: BoardDirect[];
+
+  @OneToMany(() => BoardUgly, boardUgly => boardUgly.writer)
+  @Field(() => Number)
+  boardUglyNum: BoardUgly[];
 }
