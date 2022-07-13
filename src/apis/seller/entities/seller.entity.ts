@@ -36,7 +36,7 @@ export class Seller {
   grade: string;
 
   // 좋아유
-  @Column({ default: 0 })
+  @Column()
   @Field(() => Number)
   like: number
 
@@ -45,8 +45,7 @@ export class Seller {
   @Field(() => Date)
   createdAt: Date;
 
-  @JoinTable()
   @ManyToMany(() => User, (users) => users.sellers)
-  @Field(() => [Seller])
+  @Field(() => [User])
   users: User[];
 }

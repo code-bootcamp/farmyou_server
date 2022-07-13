@@ -5,6 +5,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from '../admin/entities/admin.entity';
+import { Category } from '../category/entities/category.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
 import { ProductDirect } from './entities/productDirect.entity';
 
@@ -27,19 +28,25 @@ export class ProductDirectService {
 
     // ElasticSearch??
     // contains/partial
-    async findOne({ title }) {
-        return await this.productDirectRepository.findOne({
-            where: { title },
-        });
+    // async findOne({ title }) {
+    //     return await this.productDirectRepository.findOne({
+    //         where: { title },
+    //     });
+    // }
+
+    async find({directStoreId}) {
+        return await this.productDirectRepository.find({where: {directStoreId}});
     }
 
+    // TODO
     async create({ title, content, price, quantity, category, directStoreId, adminId }) {
         // const adminId = currentUser.id;
 
-        const theAdmin = await this.adminRepository.findOne({id: adminId});
+        const theAdmin = await this.adminRepository.findOne({where: {id: adminId}});
 
-        const theStore = await this.directStoreRepository.findOne({id: directStoreId});
+        const theStore = await this.directStoreRepository.findOne({where: {id: directStoreId}, relations: ['admin']});
         console.log(theStore);
+        console.log(theStore.admin);
 
         const storeAdmin = theStore.admin.id;
 
@@ -49,8 +56,9 @@ export class ProductDirectService {
                 content,
                 price,
                 quantity,
-                category: {id: category},
-                directStoreId: {id: directStoreId}
+                category: {name: category},
+                directStoreId,
+                adminId
     
                 // 하나하나 직접 나열하는 방식
                 // name: createProductUglyInput.name,
