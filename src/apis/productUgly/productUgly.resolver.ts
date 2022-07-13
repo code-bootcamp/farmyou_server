@@ -10,12 +10,12 @@ export class ProductUglyResolver {
   constructor(private readonly productUglyService: ProductUglyService) {}
 
   @Query(() => [ProductUgly])
-  fetchProducts() {
+  fetchUglyProducts() {
     return this.productUglyService.findAll();
   }
 
   @Query(() => ProductUgly)
-  fetchProduct(
+  fetchUglyProduct(
     @Args('productId') productId: string, //
   ) {
     return this.productUglyService.findOne({ productId });
@@ -56,7 +56,7 @@ export class ProductUglyResolver {
 
   // 수량이 0개 되었을 때
   @Mutation(() => Boolean)
-  deleteProduct(
+  deleteProductUgly(
     @Args('productId') productId: string, //
   ) {
     return this.productUglyService.delete({ productId });
