@@ -19,9 +19,11 @@ export class ProductDirectService {
         return await this.productDirectRepository.find();
     }
 
-    async findOne({ name }) {
+    // ElasticSearch??
+    // contains/partial
+    async findOne({ title }) {
         return await this.productDirectRepository.findOne({
-            where: { name: name },
+            where: { title },
         });
     }
 
@@ -34,8 +36,8 @@ export class ProductDirectService {
 
         const result = await this.productDirectRepository.save({
             ...createProductDirectInput,
-            category: {id: createProductDirectInput.categoryId},
-            directStore: {id: createProductDirectInput.directStoreId}
+            // category: {name: createProductDirectInput.categoryName},
+            // directStore: {id: createProductDirectInput.directStoreId}
 
             // quantity: this.productDirectRepository.quantity + quantity
             // quantity: origQuantity + quantity
@@ -45,6 +47,7 @@ export class ProductDirectService {
             // description: createProductDirectInput.description,
             // price: createProductDirectInput.price,
         });
+
         return result;
     }
 

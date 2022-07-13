@@ -1,6 +1,7 @@
-import { PassportStrategy } from '@nestjs/passport';
-import {Strategy} from 'passport-kakao';
-import 'dotenv/config';
+// import { PassportStrategy } from '@nestjs/passport';
+// import {Strategy} from 'passport-kakao';
+// import 'dotenv/config';
+
 
 export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     constructor() {
@@ -15,15 +16,24 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         });
     }
 
-    validate(accessToken, refreshToken, profile) {
-        console.log(accessToken);
-        console.log(refreshToken);
-        console.log(profile);
-        return {
-          email: profile._json.kakao_account.email,
-          password: '12345678', //받아오는것이 없어서 임의로 정의 하는것
-          name: profile.displayName,
-          phone: '01012345678'
-        };
-      }
-}
+
+//         super({
+//             clientID: CLIENT_ID,
+//             clientSecret: CLIENT_SECRET,
+//             callbackURL: 'http://localhost:3000/users/login/kakao',
+//         });
+//     }
+// }
+
+//     validate(accessToken, refreshToken, profile) {
+//         console.log(accessToken);
+//         console.log(refreshToken);
+//         console.log(profile);
+//         return {
+//           email: profile._json.kakao_account.email,
+//           password: '12345678', //받아오는것이 없어서 임의로 정의 하는것
+//           name: profile.displayName,
+//           phone: '01012345678'
+//         };
+//       }
+// }
