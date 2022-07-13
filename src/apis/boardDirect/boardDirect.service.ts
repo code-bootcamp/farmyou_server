@@ -43,7 +43,7 @@ export class BoardDirectService {
       // const userTheWriter = this.userRepository.findOne({id: userId});
       const boardDirectNum = await result.number;
       
-      await this.userService.postBoardDirect({userId, boardDirectNum});
+      // await this.userService.postBoardDirect({userId, boardDirectNum});
 
       return result.title;
     }
