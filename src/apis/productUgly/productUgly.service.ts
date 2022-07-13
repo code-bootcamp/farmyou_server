@@ -2,10 +2,12 @@ import {
     HttpException,
     HttpStatus,
     Injectable,
+    NotFoundException,
     UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Seller } from '../seller/entities/seller.entity';
 import { ProductUgly } from './entities/productUgly.entity';
 
 @Injectable()
@@ -13,6 +15,9 @@ export class ProductUglyService {
     constructor(
         @InjectRepository(ProductUgly)
         private readonly productUglyRepository: Repository<ProductUgly>,
+
+        @InjectRepository(Seller)
+        private readonly sellerRepository: Repository<Seller>,
     ) {}
 
     async findAll() {
@@ -25,21 +30,29 @@ export class ProductUglyService {
         });
     }
 
-    async create({ title, content, price, quantity, origin, sellerId }) {
-        const result = await this.productUglyRepository.save({
-            title,
-            content,
-            price,
-            quantity,
-            origin,
-            sellerId
+    async create({ title, content, price, quantity, origin, currentUser }) {
+        const sellerId = currentUser.id;
 
-            // 하나하나 직접 나열하는 방식
-            // name: createProductUglyInput.name,
-            // description: createProductUglyInput.description,
-            // price: createProductUglyInput.price,
-        });
-        return result;
+        const theSeller = this.sellerRepository.findOne({id: sellerId});
+
+        if (theSeller) {
+            const result = await this.productUglyRepository.save({
+                title,
+                content,
+                price,
+                quantity,
+                origin,
+                sellerId
+    
+                // 하나하나 직접 나열하는 방식
+                // name: createProductUglyInput.name,
+                // description: createProductUglyInput.description,
+                // price: createProductUglyInput.price,
+            });
+            return result;
+        } else {
+            throw new NotFoundException("로그인 된 계정은 판매자 계정이 아닙니다.");
+        }
     }
 
     async update({ productId, updateProductUglyInput }) {
