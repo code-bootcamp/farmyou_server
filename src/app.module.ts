@@ -3,11 +3,8 @@ import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
-import { BoardDirectModule } from './apis/boardDirect/boardDirect.module';
-import { BoardUglyModule } from './apis/boardUgly/boardUgly.module';
 import { CategoryModule } from './apis/category/category.module';
 import { DirectStoreModule } from './apis/directStore/directStore.module';
-import { FileModule } from './trash/file/file.module';
 import { ImageDirectProductModule } from './apis/imageDirectProduct/imageDirectProduct.module';
 import { ImageUglyProductModule } from './apis/imageUglyProduct/imageUglyProduct.module';
 import { ImageUserModule } from './apis/imageUser/imageUser.module';
@@ -20,13 +17,13 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
+import { Seller } from './apis/seller/entities/seller.entity';
+import { SellerModule } from './apis/seller/seller.module';
 
 @Module({
   imports: [
-    FileModule,
+    SellerModule,
     AuthModule,
-    BoardDirectModule,
-    BoardUglyModule,
     CategoryModule,
     DirectStoreModule,
     ImageDirectProductModule,
@@ -44,8 +41,8 @@ import { RedisClientOptions } from 'redis';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // host: '172.30.192.8', //인스턴스 sql 비공개ip주소
-      host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
+      host: '172.30.192.8', //인스턴스 sql 비공개ip주소
+      // host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
       // password: '12345678',

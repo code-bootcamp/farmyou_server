@@ -1,6 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { BoardDirect } from 'src/apis/boardDirect/entities/boardDirect.entity';
-import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, JoinTable, ManyToMany } from 'typeorm';
 
