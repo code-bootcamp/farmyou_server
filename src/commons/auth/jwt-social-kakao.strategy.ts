@@ -3,10 +3,19 @@
 // import 'dotenv/config';
 
 
-// export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
-//     constructor() {
-//         const CLIENT_ID = process.env.KAKAO_CLIENT_ID;
-//         const CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
+export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
+    constructor() {
+        const CLIENT_ID = process.env.KAKAO_CLIENT_ID;
+        const CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
+        // const CLIENT_URL = process.env.KAKAO_CLIENT_URL;
+
+        super({
+            clientID: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
+            callbackURL: 'http://localhost:3000/login/kakao',
+        });
+    }
+
 
 //         super({
 //             clientID: CLIENT_ID,

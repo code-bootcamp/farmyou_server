@@ -5,6 +5,8 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+    // const CLIENT_URL = process.env.GOOGLE_CLIENT_URL;
+
 
     super({
       clientID: CLIENT_ID,
