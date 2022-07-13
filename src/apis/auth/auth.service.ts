@@ -38,7 +38,8 @@ export class AuthService {
         email: req.user.email,
         hashedPassword,
         name: req.user.name,
-        phone: req.user.phone
+        phone: req.user.phone,
+        addressUser: null
       });
     }
     //3. 로그인

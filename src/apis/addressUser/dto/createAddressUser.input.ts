@@ -13,10 +13,4 @@ export class CreateAddressUserInput {
 
   @Field(() => String)
   postalCode: string;
-
-  @Field(() => String)
-  user: User;
-
-  @Field(() => Boolean)
-  isMain: boolean;
 }

@@ -2,10 +2,12 @@ import {
     HttpException,
     HttpStatus,
     Injectable,
+    NotFoundException,
     UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Seller } from '../seller/entities/seller.entity';
 import { ProductUgly } from './entities/productUgly.entity';
 
 @Injectable()
@@ -13,6 +15,9 @@ export class ProductUglyService {
     constructor(
         @InjectRepository(ProductUgly)
         private readonly productUglyRepository: Repository<ProductUgly>,
+
+        @InjectRepository(Seller)
+        private readonly sellerRepository: Repository<Seller>,
     ) {}
 
     async findAll() {
@@ -25,23 +30,29 @@ export class ProductUglyService {
         });
     }
 
-    async create({ createProductUglyInput, quantity }) {
-        const original = await this.productUglyRepository.findOne({
-            where: {name: createProductUglyInput.name}
-        });
+    async create({ title, content, price, quantity, origin, currentUser }) {
+        const sellerId = currentUser.id;
 
-        const origQuantity = original.quantity;
+        const theSeller = this.sellerRepository.findOne({id: sellerId});
 
-        const result = await this.productUglyRepository.save({
-            ...createProductUglyInput,
-            quantity: origQuantity + quantity
-
-            // 하나하나 직접 나열하는 방식
-            // name: createProductUglyInput.name,
-            // description: createProductUglyInput.description,
-            // price: createProductUglyInput.price,
-        });
-        return result;
+        if (theSeller) {
+            const result = await this.productUglyRepository.save({
+                title,
+                content,
+                price,
+                quantity,
+                origin,
+                sellerId
+    
+                // 하나하나 직접 나열하는 방식
+                // name: createProductUglyInput.name,
+                // description: createProductUglyInput.description,
+                // price: createProductUglyInput.price,
+            });
+            return result;
+        } else {
+            throw new NotFoundException("로그인 된 계정은 판매자 계정이 아닙니다.");
+        }
     }
 
     async update({ productId, updateProductUglyInput }) {
@@ -56,24 +67,6 @@ export class ProductUglyService {
         };
 
         return await this.productUglyRepository.save(newProductUgly);
-    }
-
-    async checkSoldout({ productId }) {
-        const product = await this.productUglyRepository.findOne({
-            where: { id: productId },
-        });
-
-        if (product.isSoldout) {
-            throw new UnprocessableEntityException(
-                '이미 판매 완료된 상품입니다.',
-            );
-        }
-        // if (product.isSoldout) {
-        //   throw new HttpException(
-        //     '이미 판매 완료된 상품입니다.',
-        //     HttpStatus.UNPROCESSABLE_ENTITY,
-        //   );
-        // }
     }
 
     async delete({ productId }) {

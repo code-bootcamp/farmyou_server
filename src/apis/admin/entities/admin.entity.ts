@@ -1,22 +1,17 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardDirect } from 'src/apis/boardDirect/entities/boardDirect.entity';
 import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
+import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
 import { Seller } from 'src/apis/seller/entities/seller.entity';
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, JoinTable, ManyToMany } from 'typeorm';
-
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, JoinTable, ManyToMany, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class User {
+export class Admin {
   // 회원ID
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
-
-  // 이름
-  @Column()
-  @Field(() => String)
-  name: string;
 
   // 이메일
   @Column()
@@ -28,18 +23,13 @@ export class User {
   // @Field(() => String) 비밀번호 노출 금지!!
   password: string;
 
-  // 연락처
-  @Column()
-  @Field(() => String)
-  phone: string;
-
-  // 회원등록날짜
+  // 등록날짜
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @JoinTable()
-  @ManyToMany(() => Seller, (sellers) => sellers.users)
-  @Field(() => [Seller])
-  sellers: Seller[];
+  @JoinColumn()
+  @OneToOne(() => DirectStore)
+  @Field(() => String)
+  directStore: DirectStore;
 }

@@ -27,11 +27,16 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async create({ email, hashedPassword: password, name, phone, addressUser, isSeller }) {
+  async create({ name, email, hashedPassword: password, phone, addressUser }) {
     const user = await this.userRepository.findOne({ email });
     if (user) throw new ConflictException('이미 등록된 이메일 입니다.');
 
-    const thisUser = await this.userRepository.save({ email, password, name, phone, isSeller });
+    const thisUser = await this.userRepository.save({
+      name,
+      email,
+      password,
+      phone
+    });
 
     console.log(thisUser);
 
@@ -40,7 +45,7 @@ export class UserService {
       addressUser.detailedAddress,
       addressUser.postalCode,
       thisUser.id,
-      true
+      true    // isMain set to "true" since this is the first address of the user
     )
 
     // return await this.userRepository.save({ email, password, name, phone });
@@ -110,11 +115,23 @@ export class UserService {
     });
   }
 
-  // TODO: 회원이 판매자인지 우선 확인작업 필요
-  async postBoardDirect({userId, boardDirectNum}) {
-    return this.userRepository.save({
-      id: userId, 
-      boardDirectNum
+
+  async delete({ email }) {
+    const result = await this.userRepository.delete({ email });
+    return result.affected ? true : false;
+  }
+
+  async deleteUser({ currentUser }) {
+    const result = await this.userRepository.softDelete({
+      id: currentUser.id,
     });
+    return result.affected ? true : false;
+
+  // // TODO: 회원이 판매자인지 우선 확인작업 필요
+  // async postBoardDirect({userId, boardDirectNum}) {
+  //   return this.userRepository.save({
+  //     id: userId, 
+  //     boardDirectNum
+  //   });
   }
 }
