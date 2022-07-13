@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Admin } from 'src/apis/admin/entities/admin.entity';
-import { BoardDirect } from 'src/apis/boardDirect/entities/boardDirect.entity';
 import { Category } from 'src/apis/category/entities/category.entity';
 import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
 import { Seller } from 'src/apis/seller/entities/seller.entity';

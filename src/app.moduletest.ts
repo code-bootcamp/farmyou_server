@@ -3,8 +3,6 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
-import { BoardDirectModule } from './apis/boardDirect/boardDirect.module';
-import { BoardUglyModule } from './apis/boardUgly/boardUgly.module';
 import { ImageDirectProductModule } from './apis/imageDirectProduct/imageDirectProduct.module';
 import { ImageUglyProductModule } from './apis/imageUglyProduct/imageUglyProduct.module';
 import { ImageUserModule } from './apis/imageUser/imageUser.module';
@@ -18,8 +16,6 @@ import { AppController } from './app.controller';
 @Module({
   imports: [
     AuthModule,
-    BoardDirectModule,
-    BoardUglyModule,
     ImageDirectProductModule,
     ImageUglyProductModule,
     ImageUserModule,

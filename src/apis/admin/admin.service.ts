@@ -20,6 +20,10 @@ export class AdminService {
     return await this.adminRepository.findOne({ directStore: {id:  directStoreId} });
   }
 
+  async findOneByEmail({email}) {
+    return await this.adminRepository.findOne({ email });
+  }
+
   // async findAll() {
   //   return await this.adminRepository.find();
   // }
