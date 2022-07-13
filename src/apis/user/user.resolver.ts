@@ -132,4 +132,19 @@ export class UserResolver {
     const result = this.userService.deleteUser({ currentUser });
     if (result) return '로그인한 계정이 삭제되었습니다.';
   }
+  
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => User)
+  // async updateUser(
+  //   @CurrentUser() currentUser: ICurrentUser,
+  //   @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  //   @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
+  // ) {
+  //   return await this.userService.update({
+  //     email: currentUser.email,
+  //     updateUserInput,
+  //     updateAddressUserInput
+  //   });
+  // }
+
 }
