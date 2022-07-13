@@ -2,18 +2,19 @@
 // import {Strategy} from 'passport-kakao';
 // import 'dotenv/config';
 
+
 // export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
 //     constructor() {
 //         const CLIENT_ID = process.env.KAKAO_CLIENT_ID;
 //         const CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
-//         const CLIENT_URL = process.env.KAKAO_CLIENT_URL;
 
 //         super({
 //             clientID: CLIENT_ID,
 //             clientSecret: CLIENT_SECRET,
-//             callbackURL: CLIENT_URL,
+//             callbackURL: 'http://localhost:3000/users/login/kakao',
 //         });
 //     }
+// }
 
 //     validate(accessToken, refreshToken, profile) {
 //         console.log(accessToken);

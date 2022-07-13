@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ------------------------------------------------------
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
@@ -197,3 +198,5 @@ input UpdateAddressUserInput {
   detailedAddress: String
   postalCode: String
 }
+=======
+>>>>>>> afa4fa83e13eb7f591d1130637bc64cc68aafad6

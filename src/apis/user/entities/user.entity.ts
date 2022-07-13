@@ -4,6 +4,7 @@ import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
 import { Seller } from 'src/apis/seller/entities/seller.entity';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, JoinTable, ManyToMany } from 'typeorm';
 
+
 @Entity()
 @ObjectType()
 export class User {
