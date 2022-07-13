@@ -20,8 +20,11 @@ export class ProductUglyService {
         private readonly sellerRepository: Repository<Seller>,
     ) {}
 
+    // 성란느님 덕분
     async findAll() {
-        return await this.productUglyRepository.find();
+        return await this.productUglyRepository.find({
+            relations: ['seller']
+        });
     }
 
     async findOne({ productId }) {
@@ -33,7 +36,7 @@ export class ProductUglyService {
     async create({ title, content, price, quantity, origin, sellerId }) {
         const theSeller = await this.sellerRepository.findOne({id: sellerId});
 
-        console.log(theSeller);
+        // console.log(theSeller);
 
         if (theSeller) {
             const result = await this.productUglyRepository.save({
@@ -42,13 +45,14 @@ export class ProductUglyService {
                 price,
                 quantity,
                 origin,
-                seller: {id: theSeller.id}
+                seller: theSeller
     
                 // 하나하나 직접 나열하는 방식
                 // name: createProductUglyInput.name,
                 // description: createProductUglyInput.description,
                 // price: createProductUglyInput.price,
             });
+            console.log(result.seller);
             return result;
         } else {
             throw new NotFoundException("로그인 된 계정은 판매자 계정이 아닙니다.");

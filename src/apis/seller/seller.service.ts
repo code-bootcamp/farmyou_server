@@ -23,7 +23,14 @@ export class SellerService {
     const seller = await this.sellerRepository.findOne({ email });
     if (seller) throw new ConflictException('이미 등록된 이메일 입니다.');
 
-    const thisSeller = await this.sellerRepository.save({ email, password, name, phone });
+    const thisSeller = await this.sellerRepository.save({
+      email, 
+      password, 
+      name, 
+      phone,
+      like: 0,
+      users: []
+     });
 
     // return await this.sellerRepository.save({ email, password, name, phone });
     return thisSeller;
