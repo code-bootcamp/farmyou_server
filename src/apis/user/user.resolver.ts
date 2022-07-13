@@ -6,7 +6,6 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
-import { UpdateUserInput } from './dto/updateUser.input';
 import { UpdateAddressUserInput } from '../addressUser/dto/updateAddressUser.input';
 import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { CreateAddressUserInput } from '../addressUser/dto/createAddressUser.input';
@@ -49,20 +48,9 @@ export class UserResolver {
     @Args({name: 'password', nullable: true}) password: string,
     @Args({name: 'phone', nullable: true}) phone: string,
     @Args({name: 'newAddress', nullable: true}) newAddress: UpdateAddressUserInput
-    // @Args('updateUserInput') updateUserInput: UpdateUserInput,
-    // @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
-    // @Args('updateUserInput') updateUserInput: UpdateUserInput,
-
-    // @Args('password') password: string,
   ) {
-    // const hashedPassword = await bcrypt.hash(password, 10);
     return await this.userService.update({ currentUser, email, password, phone, newAddress });
   }
-
-//<<<<<<< dev
-  // TODO
-
-  //currentUser 안에 id와 이메일이 있다
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => String)
@@ -73,17 +61,7 @@ export class UserResolver {
     console.log('유저정보는??!!!', currentUser);
     return 'qqq';
   }
-//=======
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Query(() => User)
-  // checkValidUser(
-  //   @Args('password') password: string
-  // ) {
-  //   const loggedUserPwd = this.fetchUser()
-  // }
-//>>>>>>> dev
 
-  // 쓸모 없을 듯
   // 관리자페이지에서 모든유저 조회할때 사용 하게 될 듯 
   @Query(() => [User])
   fetchUsers() {
@@ -106,15 +84,9 @@ export class UserResolver {
     @Args('passwordFirst') passwordFirst: string,
     @Args('passwordSecond') passwordSecond: string
   ) {
-    // const correctPassword = currentUser.password;
-    // console.log(currentUser);
     if (passwordFirst === passwordSecond) {
       const passwordOwner = await this.userRepository.findOne({id: currentUser.id});
       const correctPassword = passwordOwner.password;
-  
-      // console.log(passwordOwner);
-      // console.log(correctPassword);
-      // console.log(await bcrypt.hash(password, 10));
   
       const same = bcrypt.compare(passwordFirst, correctPassword);
   
@@ -141,38 +113,6 @@ export class UserResolver {
 
     return "좋아유~";
   }
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => User)
-  // async updateImage(
-  //   @Args('image') image: string,
-  //   @CurrentUser() currentUser: ICurrentUser,
-  // ) {
-  //   return this.userService.updateImage({ image, currentUser });
-  // }
-
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => User)
-  // async updateProfile(
-  //   @Args('profile') profile: string,
-  //   @CurrentUser() currentUser: ICurrentUser,
-  // ) {
-  //   return this.userService.updateProfile({ profile, currentUser });
-  // }
-
-
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => User)
-  // async updateUser(
-  //   @CurrentUser() currentUser: ICurrentUser,
-  //   @Args('updateUserInput') updateUserInput: UpdateUserInput,
-  //   @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
-  // ) {
-  //   return await this.userService.update({
-  //     email: currentUser.email,
-  //     updateUserInput,
-  //     updateAddressUserInput
-  //   });
-  // }
 
   // 관리자의 유저 삭제
   @UseGuards(GqlAuthAccessGuard)
@@ -192,7 +132,7 @@ export class UserResolver {
     const result = this.userService.deleteUser({ currentUser });
     if (result) return '로그인한 계정이 삭제되었습니다.';
   }
-
+  
   // @UseGuards(GqlAuthAccessGuard)
   // @Mutation(() => User)
   // async updateUser(

@@ -1,7 +1,6 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
-import { Seller } from 'src/apis/seller/entities/seller.entity';
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, JoinTable, ManyToMany, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -28,6 +27,10 @@ export class Admin {
 
   @JoinColumn()
   @OneToOne(() => DirectStore)
-  @Field(() => String)
-  directStore: DirectStore;
+  @Field(() => DirectStore)
+  directStore?: DirectStore;
+
+  @Column({default: false})
+  @Field(() => Boolean)
+  isWebMaster: Boolean;
 }

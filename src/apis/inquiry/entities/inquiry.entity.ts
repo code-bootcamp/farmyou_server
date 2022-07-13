@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';

@@ -31,10 +31,9 @@ export class ProductUglyService {
     }
 
     async create({ title, content, price, quantity, origin, sellerId }) {
-        // console.log(currentUser);
-        // const sellerId = currentUser.id;
+        const theSeller = await this.sellerRepository.findOne({id: sellerId});
 
-        const theSeller = this.sellerRepository.findOne({id: sellerId});
+        console.log(theSeller);
 
         if (theSeller) {
             const result = await this.productUglyRepository.save({
@@ -43,7 +42,7 @@ export class ProductUglyService {
                 price,
                 quantity,
                 origin,
-                sellerId
+                seller: {id: theSeller.id}
     
                 // 하나하나 직접 나열하는 방식
                 // name: createProductUglyInput.name,
@@ -71,23 +70,7 @@ export class ProductUglyService {
     }
 
     async delete({ productId }) {
-        // // 1. 실제 삭제
         const result = await this.productUglyRepository.delete({ id: productId });
         return result.affected ? true : false;
-
-        // // 2. 소프트 삭제(직접 구현) - isDeleted
-        // await this.productRepository.update({ id: productId }, { isDeleted: true });
-
-        // // 3. 소프트 삭제(직접 구현) - deletedAt
-        // this.productRepository.update({ id: productId }, { deletedAt: new Date() });
-
-        // // 4. 소프트 삭제(TypeORM 제공) - softRemove
-        // this.productRepository.softRemove({ id: productId }); // id로만 삭제 가능
-
-        // 5. 소프트 삭제(TypeORM 제공) - softDelete
-        // const result = await this.productUglyRepository.softDelete({
-        //     id: productId,
-        // });
-        // return result.affected ? true : false;
     }
 }

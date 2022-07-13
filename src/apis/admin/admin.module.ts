@@ -9,6 +9,8 @@ import { Payment } from '../payment/entities/payment.entity';
 import { Admin } from './entities/admin.entity';
 import { AdminResolver } from './admin.resolver';
 import { AdminService } from './admin.service';
+import { Seller } from '../seller/entities/seller.entity';
+import { DirectStore } from '../directStore/entities/directStore.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
@@ -17,6 +19,8 @@ import { AdminService } from './admin.service';
     Payment,
     ImageUser,
     Inquiry,
+    Seller,
+    DirectStore
   ])],
   providers: [
     JwtAccessStrategy,
@@ -25,4 +29,4 @@ import { AdminService } from './admin.service';
     AddressUserService
   ],
 })
-export class UserModule {}
+export class AdminModule {}

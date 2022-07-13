@@ -20,7 +20,6 @@ export class CategoryService {
 
   async create({ name }) {
     const result = await this.categoryRepository.save({ name });
-    console.log(result); // { name: "전자제품" }
 
     return result;
   }
