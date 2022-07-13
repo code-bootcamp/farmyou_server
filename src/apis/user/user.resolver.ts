@@ -187,7 +187,7 @@ export class UserResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => User)
   async deleteLoginUser(
-    @CurrentUser() currentUser: any, //
+    @CurrentUser() currentUser: ICurrentUser, //
   ) {
     const result = this.userService.deleteUser({ currentUser });
     if (result) return '로그인한 계정이 삭제되었습니다.';
