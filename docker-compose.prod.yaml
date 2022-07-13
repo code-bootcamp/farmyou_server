@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   my_backend:
-    image: asia.gcr.io/f7b3team01server/farmyou-backend:0.22
+    image: asia.gcr.io/f7b3team01server/farmyou-backend:0.23
     platform: linux/x86_64
     build:
       context: .
