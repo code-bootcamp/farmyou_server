@@ -10,8 +10,6 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService, //
     private readonly userService: UserService,
-    private readonly sellerService: SellerService,
-    private readonly adminService: AdminService,
   ) {}
 
   setRefreshToken({ user, res }) {

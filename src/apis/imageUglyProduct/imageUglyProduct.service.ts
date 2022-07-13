@@ -24,7 +24,8 @@ export class ImageUglyProductService {
             .on('error', () => reject());
         });
       }),
-    ); // await Promise.all([Promise, Promise])
+    );
+    // await Promise.all([Promise, Promise])
     // const results = ["폴더명/파일명", "폴더명/파일명"]
 
     return results;

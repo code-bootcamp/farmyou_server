@@ -28,8 +28,6 @@ export class InquiryResolver {
     @Args('productDirectId') productDirectId: string,
     @Args('productUglyId') productUglyId: string,
   ) {
-    // console.log(content);
-
     return this.inquiryService.create(title, content, userId, productDirectId, productUglyId);
   }
 }

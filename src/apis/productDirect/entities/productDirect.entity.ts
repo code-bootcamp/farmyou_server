@@ -2,7 +2,6 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Admin } from 'src/apis/admin/entities/admin.entity';
 import { Category } from 'src/apis/category/entities/category.entity';
 import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
-import { Seller } from 'src/apis/seller/entities/seller.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -65,10 +64,10 @@ export class ProductDirect {
   @Field(() => String)
   directStoreId: DirectStore;
 
-  // 구매자ID
+  // TODO: 구매자ID 배열로 바꾸기 
   @ManyToOne(() => User)
   @Field(() => String)
-  customerId: User;
+  userId: User;
 
   // 관리자ID
   @ManyToOne(() => Admin)

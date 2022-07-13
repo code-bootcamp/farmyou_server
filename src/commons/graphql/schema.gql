@@ -37,7 +37,8 @@ type Admin {
   id: String!
   email: String!
   createdAt: DateTime!
-  directStore: String!
+  directStore: DirectStore!
+  isWebMaster: Boolean!
 }
 
 type Category {
@@ -56,7 +57,7 @@ type ProductDirect {
   isSoldout: Boolean!
   category: String!
   directStoreId: String!
-  customerId: String!
+  userId: String!
   adminId: String!
 }
 
@@ -69,8 +70,8 @@ type ProductUgly {
   quantity: Int!
   quantitySold: Int!
   origin: String!
-  customerId: String!
-  sellerId: String!
+  userId: String!
+  seller: Seller!
 }
 
 type ImageUser {
@@ -107,6 +108,8 @@ enum PAYMENT_STATUS_ENUM {
 }
 
 type Query {
+  fetchAdminOfTheStore(directStoreId: String!): Admin!
+  fetchAdminLoggedIn: Admin!
   fetchSellers: [Seller!]!
   fetchSellerLoggedIn: Seller!
   checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
@@ -128,6 +131,7 @@ type Query {
 }
 
 type Mutation {
+  createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean): Admin!
   createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
   updateSeller(email: String, password: String, phone: String): Seller!
   login(email: String!, password: String!, userType: String!): String!
@@ -141,7 +145,7 @@ type Mutation {
   uploadImageUser(files: [Upload!]!): [String!]!
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
-  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, category: String!, directStoreId: Float!): ProductDirect!
+  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, category: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
