@@ -127,12 +127,11 @@ export class UserService {
     });
     return result.affected ? true : false;
 
-  // TODO: 회원이 판매자인지 우선 확인작업 필요
-  async postBoardDirect({userId, boardDirectNum}) {
-    return this.userRepository.save({
-      id: userId, 
-      boardDirectNum
-    });
-
+  // // TODO: 회원이 판매자인지 우선 확인작업 필요
+  // async postBoardDirect({userId, boardDirectNum}) {
+  //   return this.userRepository.save({
+  //     id: userId, 
+  //     boardDirectNum
+  //   });
   }
 }

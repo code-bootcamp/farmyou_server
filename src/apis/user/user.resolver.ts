@@ -160,19 +160,19 @@ export class UserResolver {
   // }
 
 
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => User)
-  async updateUser(
-    @CurrentUser() currentUser: ICurrentUser,
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
-    @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
-  ) {
-    return await this.userService.update({
-      email: currentUser.email,
-      updateUserInput,
-      updateAddressUserInput
-    });
-  }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => User)
+  // async updateUser(
+  //   @CurrentUser() currentUser: ICurrentUser,
+  //   @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  //   @Args('updateAddressUserInput') updateAddressUserInput: UpdateAddressUserInput,
+  // ) {
+  //   return await this.userService.update({
+  //     email: currentUser.email,
+  //     updateUserInput,
+  //     updateAddressUserInput
+  //   });
+  // }
 
   // 관리자의 유저 삭제
   @UseGuards(GqlAuthAccessGuard)
