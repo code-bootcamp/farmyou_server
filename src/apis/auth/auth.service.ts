@@ -7,21 +7,55 @@ import { AdminService } from '../admin/admin.service';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private readonly jwtService: JwtService, //
-        private readonly userService: UserService,
-        private readonly sellerService: SellerService,
-        private readonly adminService: AdminService,
-    ) {}
 
-    setRefreshToken({ user, res }) {
-        const refreshToken = this.jwtService.sign(
-            { email: user.email, sub: user.id },
-            { secret: 'myRefreshKey', expiresIn: '2w' },
-        );
+  constructor(
+    private readonly jwtService: JwtService, //
+    private readonly userService: UserService,
+  ) {}
 
-        // 개발환경
-        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+  setRefreshToken({ user, res }) {
+    const refreshToken = this.jwtService.sign(
+      { email: user.email, sub: user.id },
+      { secret: 'myRefreshKey', expiresIn: '2w' },
+    );
+
+    // 개발환경
+    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    // cros 오류
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+    );
+    res.setHeader(
+      'Set-Cookie',
+      `refreshToken=${refreshToken}; path=/; domain=.garbi.shop; SameSite=None; Secure; httpOnly;`,
+    );
+  }
+
+  getAccessToken({ user }) {
+    return this.jwtService.sign(
+      { email: user.email, sub: user.id },
+      { secret: 'myAccessKey', expiresIn: '1h' },
+    );
+  }
+  
+  //소셜 로그인
+  async loginSocial(req, res) {
+    let user = await this.userService.findOne({ email: req.user.email });
+
+    const hashedPassword = await bcrypt.hash(req.user.password, 10); // 비밀번호 숨겨서 보내기
+    // 2. 회원가입
+    if (!user) {
+      user = await this.userService.create({
+        email: req.user.email,
+        hashedPassword,
+        name: req.user.name,
+        phone: req.user.phone,
+        addressUser: null
+      });
     }
 
     getAccessToken({ user }) {

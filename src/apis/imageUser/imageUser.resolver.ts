@@ -3,6 +3,9 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { ImageUserService } from './imageUser.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { ImageUser } from './entities/imageUser.entity';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
 
 @Resolver()
 export class ImageUserResolver {

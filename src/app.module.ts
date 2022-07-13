@@ -40,6 +40,10 @@ import { AdminModule } from './apis/admin/admin.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({req, res}) => ({req, res}),
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -47,7 +51,6 @@ import { AdminModule } from './apis/admin/admin.module';
       // host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
-      // password: '12345678',
       password: 'root',
       database: 'farmyou_server', //인스턴스 sql ID값
       // database:               // 내부에서 테스트로 돌려볼 데이터 베이스 이름
