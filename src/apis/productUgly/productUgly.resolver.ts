@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { CreateProductUglyInput } from './dto/createProductUgly.input';
 import { UpdateProductUglyInput } from './dto/updateProductUgly.input';
 import { ProductUgly } from './entities/productUgly.entity';
@@ -35,9 +36,10 @@ export class ProductUglyResolver {
     @Args('price') price: number,
     @Args('quantity') quantity: number,
     @Args('origin') origin: string,
-    @Args('sellerId') sellerId: string,
+    // @Args('sellerId') sellerId: string,
+    @CurrentUser() currentUser: ICurrentUser
   ) {
-    return this.productUglyService.create({ title, content, price, quantity, origin, sellerId });
+    return this.productUglyService.create({ title, content, price, quantity, origin, currentUser });
   }
 
   // @Mutation(() => ProductUgly)
