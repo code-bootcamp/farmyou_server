@@ -1,5 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
@@ -7,7 +7,7 @@ import { BoardDirectModule } from './apis/boardDirect/boardDirect.module';
 import { BoardUglyModule } from './apis/boardUgly/boardUgly.module';
 import { CategoryModule } from './apis/category/category.module';
 import { DirectStoreModule } from './apis/directStore/directStore.module';
-import { FileModule } from './apis/file/file.module';
+import { FileModule } from './trash/file/file.module';
 import { ImageDirectProductModule } from './apis/imageDirectProduct/imageDirectProduct.module';
 import { ImageUglyProductModule } from './apis/imageUglyProduct/imageUglyProduct.module';
 import { ImageUserModule } from './apis/imageUser/imageUser.module';
@@ -18,6 +18,8 @@ import { ProductUglyModule } from './apis/productUgly/productUgly.module';
 import { UserModule } from './apis/user/user.module';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
+import * as redisStore from 'cache-manager-redis-store';
+import { RedisClientOptions } from 'redis';
 
 @Module({
   imports: [
@@ -42,10 +44,11 @@ import { ConfigModule } from '@nestjs/config';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '172.30.192.8', //인스턴스 sql 비공개ip주소
-      // host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
+      // host: '172.30.192.8', //인스턴스 sql 비공개ip주소
+      host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
+      // password: '12345678',
       password: 'root',
       database: 'farmyou_server', //인스턴스 sql ID값
       // database:               // 내부에서 테스트로 돌려볼 데이터 베이스 이름
@@ -55,7 +58,12 @@ import { ConfigModule } from '@nestjs/config';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-    })
+    }),
+    // CacheModule.register<RedisClientOptions>({
+    //   store: redisStore,
+    //   url: 'redis://my-redis:6379',
+    //   isGlobal: true,
+    // }),
   ],
   controllers: [AppController],
 })

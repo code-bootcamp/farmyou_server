@@ -9,19 +9,19 @@ export class AddressUserResolver {
   constructor(private readonly addressUserService: AddressUserService) {}
 
   @Query(() => AddressUser)
-  fetchUserAddress(
+  fetchAddress(
     @Args('addressId') addressId: string
   ) {
     return this.addressUserService.findOne({addressId});
   }
 
   @Query(() => [AddressUser])
-  fetchUserAddresses() {
+  fetchAddresses() {
     return this.addressUserService.findAll();
   }
 
   @Mutation(() => String)
-  createAddressUser(
+  createAddress(
     // @Args({ name: 'writer', nullable: true }) writer: string,
     @Args('address') address: string,
     @Args('detailedAddress') detailedAddress: string,
@@ -34,12 +34,12 @@ export class AddressUserResolver {
   }
 
   @Mutation(() => Boolean)
-  deleteAddressUser(@Args("id") id: string) {
+  deleteAddress(@Args("id") id: string) {
     return this.addressUserService.delete({id});
   }
 
   @Mutation(() => AddressUser)
-  async updateProduct(
+  async updateAddress(
     @Args("addressId") addressId: string,
     @Args("updateAddressUserInput") updateAddressUserInput: UpdateAddressUserInput,
     // imageUrl added

@@ -1,6 +1,7 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Admin } from 'src/apis/admin/entities/admin.entity';
 // import { User } from 'src/apis/user/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -16,8 +17,13 @@ export class DirectStore {
   @Field(() => String)
   name: string;
 
-  // 직매장주소
-  @Column()
-  @Field(() => String)
-  address: string;
+  @JoinColumn()
+  @OneToOne(() => Admin)
+  @Field(() => Admin)
+  admin: Admin;
+
+  // 직매장주소 -- 필요없음
+  // @Column()
+  // @Field(() => String)
+  // address: string;
 }

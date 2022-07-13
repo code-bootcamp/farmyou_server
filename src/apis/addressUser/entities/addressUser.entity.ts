@@ -10,11 +10,7 @@ export class AddressUser {
   @Field(() => String)
   id: string;
 
-  @Column({default: false})
-  @Field(() => Boolean)
-  isMain: boolean;
-
-  // 주소 (도로명 주소)
+  // 기본주소 (도로명 주소)
   @Column()
   @Field(() => String)
   address: string;
@@ -29,7 +25,12 @@ export class AddressUser {
   @Field(() => String)
   postalCode: string;
 
+  @Column({default: false})
+  @Field(() => Boolean)
+  isMain: boolean;
+
   // 회원
+  // NEW!: 구매자에 한함
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;

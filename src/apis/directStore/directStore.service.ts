@@ -18,8 +18,8 @@ export class DirectStoreService {
     return await this.directStoreRepository.findOne({ where: { name: name } });
   }  
 
-  async create({ name, address }) {
-    const result = await this.directStoreRepository.save({ name, address });
+  async create({ name }) {
+    const result = await this.directStoreRepository.save({ name });
     console.log(result); // { name: "전자제품" }
 
     return result;
