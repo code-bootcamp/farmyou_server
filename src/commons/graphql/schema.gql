@@ -117,8 +117,10 @@ type Query {
   fetchInquiry(title: String!): Inquiry!
   fetchInquiries: [Inquiry!]!
   fetchPayments: [Payment!]!
-  fetchProducts: [ProductUgly!]!
-  fetchProduct(productId: String!): ProductUgly!
+  fetchDirectProducts: [ProductDirect!]!
+  fetchDirectProduct(title: String!): ProductDirect!
+  fetchUglyProducts: [ProductUgly!]!
+  fetchUglyProduct(productId: String!): ProductUgly!
   fetchUser: String!
   fetchUsers: [User!]!
   fetchUserLoggedIn: User!
@@ -140,8 +142,9 @@ type Mutation {
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, category: String!, directStoreId: Float!): ProductDirect!
-  deleteProduct(productId: String!): Boolean!
+  deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!
+  deleteProductUgly(productId: String!): Boolean!
   createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!): User!
   updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
   likeYou(sellerId: String!): String!
