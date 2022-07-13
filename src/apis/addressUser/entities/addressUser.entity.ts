@@ -30,7 +30,6 @@ export class AddressUser {
   isMain: boolean;
 
   // 회원
-  // NEW!: 구매자에 한함
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;

@@ -20,7 +20,6 @@ export class DirectStoreService {
 
   async create({ name }) {
     const result = await this.directStoreRepository.save({ name });
-    console.log(result); // { name: "전자제품" }
 
     return result;
   }

@@ -55,10 +55,10 @@ export class ProductUgly {
   // 구매자ID
   @ManyToOne(() => User)
   @Field(() => String)
-  customerId: User;
+  userId: User;
 
   // 판매자ID
   @ManyToOne(() => Seller)
-  @Field(() => String)
-  sellerId: Seller;
+  @Field(() => Seller)
+  seller: Seller;
 }

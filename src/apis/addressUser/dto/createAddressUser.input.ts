@@ -1,7 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
-import { Min } from 'class-validator';
-// import { CategorySubSubInput } from 'src/apis/categoriesSubSub/dto/categorySubSub.input';
-import { User } from 'src/apis/user/entities/user.entity';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateAddressUserInput {

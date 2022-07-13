@@ -3,7 +3,6 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
-// @InputType()
 export class Category {
   // 메인카테고리ID
   @PrimaryGeneratedColumn('uuid')
