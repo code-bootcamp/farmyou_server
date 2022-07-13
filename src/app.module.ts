@@ -48,7 +48,8 @@ import { RedisClientOptions } from 'redis';
       // host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
-      password: '12345678',
+      // password: '12345678',
+      password: 'root',
       database: 'farmyou_server', //인스턴스 sql ID값
       // database:               // 내부에서 테스트로 돌려볼 데이터 베이스 이름
       entities: [__dirname + '/apis/**/*.entity.*'],
