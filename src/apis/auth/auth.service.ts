@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
+import { SellerService } from '../seller/seller.service';
+import { AdminService } from '../admin/admin.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService, //
     private readonly userService: UserService,
+    private readonly sellerService: SellerService,
+    private readonly adminService: AdminService,
   ) {}
 
   setRefreshToken({ user, res }) {

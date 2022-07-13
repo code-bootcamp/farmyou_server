@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Admin } from '../admin/entities/admin.entity';
+import { DirectStore } from '../directStore/entities/directStore.entity';
 import { ProductDirect } from './entities/productDirect.entity';
 
 @Injectable()
@@ -13,6 +15,12 @@ export class ProductDirectService {
     constructor(
         @InjectRepository(ProductDirect)
         private readonly productDirectRepository: Repository<ProductDirect>,
+
+        @InjectRepository(Admin)
+        private readonly adminRepository: Repository<Admin>,
+
+        @InjectRepository(DirectStore)
+        private readonly directStoreRepository: Repository<DirectStore>,
     ) {}
 
     async findAll() {
@@ -27,43 +35,72 @@ export class ProductDirectService {
         });
     }
 
-    async create({ createProductDirectInput, quantity }) {
-        // const original = await this.productDirectRepository.findOne({
-        //     where: {name: createProductDirectInput.name}
-        // });
+    // async create({ createProductDirectInput, quantity }) {
+    //     // const original = await this.productDirectRepository.findOne({
+    //     //     where: {name: createProductDirectInput.name}
+    //     // });
 
-        // const origQuantity = original.quantity;
+    //     // const origQuantity = original.quantity;
 
-        const result = await this.productDirectRepository.save({
-            ...createProductDirectInput,
-            // category: {name: createProductDirectInput.categoryName},
-            // directStore: {id: createProductDirectInput.directStoreId}
+    //     const result = await this.productDirectRepository.save({
+    //         ...createProductDirectInput,
+    //         // category: {name: createProductDirectInput.categoryName},
+    //         // directStore: {id: createProductDirectInput.directStoreId}
 
-            // quantity: this.productDirectRepository.quantity + quantity
-            // quantity: origQuantity + quantity
+    //         // quantity: this.productDirectRepository.quantity + quantity
+    //         // quantity: origQuantity + quantity
 
-            // 하나하나 직접 나열하는 방식
-            // name: createProductDirectInput.name,
-            // description: createProductDirectInput.description,
-            // price: createProductDirectInput.price,
-        });
+    //         // 하나하나 직접 나열하는 방식
+    //         // name: createProductDirectInput.name,
+    //         // description: createProductDirectInput.description,
+    //         // price: createProductDirectInput.price,
+    //     });
 
-        return result;
+    //     return result;
+    // }
+
+    async create({ title, content, price, quantity, category, directStoreId, currentUser }) {
+        const adminId = currentUser.id;
+
+        // const theAdmin = await this.adminRepository.findOne({id: adminId});
+
+        const theStore = await this.directStoreRepository.findOne({id: directStoreId});
+
+        const storeAdmin = theStore.admin.id;
+
+        if (adminId === storeAdmin) {
+            const result = await this.productDirectRepository.save({
+                title,
+                content,
+                price,
+                quantity,
+                category: {id: category},
+                directStoreId: {id: directStoreId}
+    
+                // 하나하나 직접 나열하는 방식
+                // name: createProductUglyInput.name,
+                // description: createProductUglyInput.description,
+                // price: createProductUglyInput.price,
+            });
+            return result;
+        } else {
+            throw new UnprocessableEntityException("로그인 된 계정은 권한이 없습니다.");
+        }
     }
 
-    async update({ productId, updateProductDirectInput }) {
-        const myproduct = await this.productDirectRepository.findOne({
-            where: { id: productId },
-        });
+    // async update({ productId, updateProductDirectInput }) {
+    //     const myproduct = await this.productDirectRepository.findOne({
+    //         where: { id: productId },
+    //     });
 
-        const newProductDirect = {
-            ...myproduct,
-            id: productId,
-            ...updateProductDirectInput,
-        };
+    //     const newProductDirect = {
+    //         ...myproduct,
+    //         id: productId,
+    //         ...updateProductDirectInput,
+    //     };
 
-        return await this.productDirectRepository.save(newProductDirect);
-    }
+    //     return await this.productDirectRepository.save(newProductDirect);
+    // }
 
     async checkSoldout({ productId }) {
         const product = await this.productDirectRepository.findOne({

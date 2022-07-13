@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { BoardUgly } from 'src/apis/boardUgly/entities/boardUgly.entity';
 import { Seller } from 'src/apis/seller/entities/seller.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
@@ -39,12 +38,12 @@ export class ProductUgly {
   createdAt: Date;
 
   // 수량
-  @Column()
+  @Column({default: 0})
   @Field(() => Int)
   quantity: number;
 
   // 판매량
-  @Column()
+  @Column({default: 0})
   @Field(() => Int)
   quantitySold: number;
 
