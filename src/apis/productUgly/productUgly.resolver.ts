@@ -36,10 +36,10 @@ export class ProductUglyResolver {
     @Args('price') price: number,
     @Args('quantity') quantity: number,
     @Args('origin') origin: string,
-    // @Args('sellerId') sellerId: string,
-    @CurrentUser() currentUser: ICurrentUser
+    @Args('sellerId') sellerId: string,
+    // @CurrentUser() currentUser: ICurrentUser
   ) {
-    return this.productUglyService.create({ title, content, price, quantity, origin, currentUser });
+    return this.productUglyService.create({ title, content, price, quantity, origin, sellerId });
   }
 
   // @Mutation(() => ProductUgly)

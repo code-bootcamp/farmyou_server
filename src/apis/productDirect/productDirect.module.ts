@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BoardDirect } from '../boardDirect/entities/boardDirect.entity';
+import { Admin } from '../admin/entities/admin.entity';
 import { Category } from '../category/entities/category.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
 import { ImageDirectProduct } from '../imageDirectProduct/entities/imageDirectProduct.entity';
@@ -14,10 +14,10 @@ import { ProductDirectService } from './productDirect.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
+    Admin,
     ProductDirect, 
     Category, 
     ImageDirectProduct, 
-    BoardDirect, 
     DirectStore,
     Inquiry,
     Payment,
