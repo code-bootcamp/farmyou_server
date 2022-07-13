@@ -11,14 +11,14 @@ export class ProductDirectResolver {
 
   // keeping
   @Query(() => [ProductDirect])
-  fetchProducts() {
+  fetchDirectProducts() {
     return this.productDirectService.findAll();
   }
 
   // ElasticSearch??
   // contains/partial
   @Query(() => ProductDirect)
-  fetchProduct(
+  fetchDirectProduct(
     @Args('title') title: string, //
   ) {
     return this.productDirectService.findOne({ title });
@@ -60,7 +60,7 @@ export class ProductDirectResolver {
   // }
 
   @Mutation(() => Boolean)
-  deleteProduct(
+  deleteProductDirect(
     @Args('productId') productId: string, //
   ) {
     return this.productDirectService.delete({ productId });
