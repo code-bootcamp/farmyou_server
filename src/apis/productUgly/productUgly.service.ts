@@ -30,6 +30,7 @@ export class ProductUglyService {
     async findOne({ productId }) {
         return await this.productUglyRepository.findOne({
             where: { id: productId },
+            relations: ['seller'],
         });
     }
 
