@@ -134,7 +134,7 @@ type Query {
   fetchPayments: [Payment!]!
   fetchAllDirectProducts: [ProductDirect!]!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
-  fetchDirectProductsByStoreAndCategory(directStoreId: String, categoryId: String): [ProductDirect!]!
+  fetchDirectProductsByStoreAndCategory(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
   fetchProductUglytitle(title: String!): [ProductUgly!]!
