@@ -89,6 +89,7 @@ type Inquiry {
   id: String!
   title: String!
   question: String!
+  answerTitle: String!
   answer: String!
   createdAt: DateTime!
   status: INQUIRY_STATUS_ENUM!
@@ -141,6 +142,7 @@ type Query {
 
 type Mutation {
   createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean): Admin!
+  uploadFile(files: [Upload!]!): [String!]!
   createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
   updateSeller(email: String, password: String, phone: String): Seller!
   loginUser(email: String!, password: String!): String!
@@ -155,7 +157,7 @@ type Mutation {
   uploadImage(user_type: String!, user_id: String!, files: [Upload!]!): [ImageUser!]!
   uploadImageUser(files: [Upload!]!): [String!]!
   createInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
-  updateInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
+  postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
