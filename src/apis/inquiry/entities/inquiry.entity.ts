@@ -36,22 +36,27 @@ export class Inquiry {
     @Field(() => String)
     id: string;
 
-    // 제목
+    // 질문제목
     @Column()
     @Field(() => String)
     title: string;
 
-    // 내용
+    // 질문내용
     @Column({nullable: true})
     @Field(() => String)
     question: string;
 
-    // 내용
+    // 답변제목
+    @Column({nullable: true})
+    @Field(() => String)
+    answerTitle: string;
+
+    // 답변내용
     @Column({nullable: true})
     @Field(() => String)
     answer: string;
 
-    // 등록일
+    // 등록일자
     @CreateDateColumn()
     @Field(() => Date)
     createdAt: Date;

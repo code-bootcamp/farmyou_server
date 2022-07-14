@@ -20,6 +20,7 @@ export class InquiryResolver {
         return this.inquiryService.findAll();
     }
 
+    // Inquiry (문의) 생성은 User (구매자)만 가능
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => String)
     createInquiry(
@@ -43,22 +44,38 @@ export class InquiryResolver {
 
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => String)
-    updateInquiry(
-        @Args('title') title: string,
-        @Args('question') question: string,
-        // @Args('userId') userId: string,
-        // TODO: 아래 두 개 nullable 적용?
-        @Args({name: 'productDirectId', nullable: true}) productDirectId: string,
-        @Args({name: 'productUglyId', nullable: true}) productUglyId: string,
+    // updateInquiry(
+    //     @Args('title') title: string,
+    //     @Args('question') question: string,
+    //     // @Args('userId') userId: string,
+    //     // TODO: 아래 두 개 nullable 적용?
+    //     @Args({name: 'productDirectId', nullable: true}) productDirectId: string,
+    //     @Args({name: 'productUglyId', nullable: true}) productUglyId: string,
+    //     @CurrentUser() currentUser: ICurrentUser
+    // ) {
+    //     return this.inquiryService.create(
+    //         title,
+    //         question,
+    //         // userId,
+    //         productDirectId,
+    //         productUglyId,
+    //         currentUser
+    //     );
+    // }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Mutation(() => String)
+    postResponse (
+        @Args('inquiryId') inquiryId: string,
+        @Args('answerTitle') answerTitle: string,
+        @Args('answer') answer: string,
         @CurrentUser() currentUser: ICurrentUser
     ) {
-        return this.inquiryService.create(
-            title,
-            question,
-            // userId,
-            productDirectId,
-            productUglyId,
+        return this.inquiryService.answer({
+            inquiryId,
+            answerTitle,
+            answer,
             currentUser
-        );
+        });
     }
 }
