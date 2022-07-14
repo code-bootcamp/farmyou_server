@@ -19,6 +19,16 @@ export class ProductUglyResolver {
     return this.productUglyService.findOne({ productId });
   }
 
+  // 7월 14일 승원 타이틀 조회 테스트
+  // 상품이름으로 조회
+  @Query(()=>[ProductUgly])
+  fetchProductUglytitle(
+    @Args('title') title: string
+  ): Promise<ProductUgly[]> {
+    return this.productUglyService.findtitle(title)
+  }
+  //===============================================
+
   @Mutation(() => ProductUgly)
   createProductUgly(
     @Args('title') title: string,

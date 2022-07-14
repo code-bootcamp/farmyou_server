@@ -78,4 +78,17 @@ export class ProductUglyService {
         const result = await this.productUglyRepository.delete({ id: productId });
         return result.affected ? true : false;
     }
+
+    // 7월 14일 승원 타이틀 조회 테스트
+    // 상품이름으로 조회
+    async findtitle(
+        title : string,
+    ): Promise<ProductUgly[]>{
+        const serchData = await this.productUglyRepository.find({
+            relations: ['seller',]
+        });
+        let result = serchData.filter((word) =>word.title.includes(title));
+        return result
+    }
+    //===============================================  
 }
