@@ -40,6 +40,11 @@ export class Seller {
   @Field(() => Number)
   like: number
 
+  // 계정타입
+  @Column({default: "seller"})
+  @Field(() => String)
+  type: string;
+
   // 회원등록날짜
   @CreateDateColumn()
   @Field(() => Date)

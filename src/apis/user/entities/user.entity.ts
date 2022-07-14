@@ -32,6 +32,11 @@ export class User {
   @Field(() => String)
   phone: string;
 
+  // 계정타입
+  @Column({default: "user"})
+  @Field(() => String)
+  type: string;
+
   // 회원등록날짜
   @CreateDateColumn()
   @Field(() => Date)

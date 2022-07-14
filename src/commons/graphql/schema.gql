@@ -11,6 +11,7 @@ type DirectStore {
 type Admin {
   id: String!
   email: String!
+  type: String!
   createdAt: DateTime!
   directStore: DirectStore!
   isWebMaster: Boolean!
@@ -48,6 +49,7 @@ type Seller {
   phone: String!
   grade: String!
   like: Float!
+  type: String!
   createdAt: DateTime!
   users: [User!]!
 }
@@ -57,6 +59,7 @@ type User {
   name: String!
   email: String!
   phone: String!
+  type: String!
   createdAt: DateTime!
   sellers: [Seller!]!
   directProducts: [ProductDirect!]!
@@ -85,12 +88,18 @@ type ImageUser {
 type Inquiry {
   id: String!
   title: String!
-  content: String!
+  question: String!
+  answer: String!
   createdAt: DateTime!
-  status: Boolean!
+  status: INQUIRY_STATUS_ENUM!
   user: User!
   productDirect: ProductDirect!
   productUgly: ProductUgly!
+}
+
+enum INQUIRY_STATUS_ENUM {
+  NOT_ANSWERED
+  ANSWERED
 }
 
 type Payment {
@@ -110,10 +119,9 @@ enum PAYMENT_STATUS_ENUM {
 
 type Query {
   fetchAdminOfTheStore(directStoreId: String!): Admin!
-  fetchAdminLoggedIn: Admin!
   fetchSellers: [Seller!]!
-  fetchSellerLoggedIn: Seller!
   checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
+  fetchUserLoggedIn: String!
   fetchCategory(name: String!): Category!
   fetchCategories: [Category!]!
   fetchDirectStore(name: String!): DirectStore!
@@ -128,7 +136,6 @@ type Query {
   fetchProductUglytitle(title: String!): [ProductUgly!]!
   fetchUser: String!
   fetchUsers: [User!]!
-  fetchUserLoggedIn: User!
   checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
 }
 
@@ -147,7 +154,8 @@ type Mutation {
   uploadImageUgly(files: [Upload!]!): [String!]!
   uploadImage(user_type: String!, user_id: String!, files: [Upload!]!): [ImageUser!]!
   uploadImageUser(files: [Upload!]!): [String!]!
-  createInquiry(title: String!, content: String!, userId: String!, productDirectId: String, productUglyId: String): String!
+  createInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
+  updateInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!

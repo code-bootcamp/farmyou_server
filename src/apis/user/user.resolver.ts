@@ -81,12 +81,6 @@ export class UserResolver {
         return this.userService.findAll();
     }
 
-    @UseGuards(GqlAuthAccessGuard)
-    @Query(() => User)
-    fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
-        return this.userService.findLoggedIn({ currentUser });
-    }
-
     // PasswordCheckModal
     @UseGuards(GqlAuthAccessGuard)
     @Query(() => Boolean)
