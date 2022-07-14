@@ -132,8 +132,9 @@ type Query {
   fetchInquiry(title: String!): Inquiry!
   fetchInquiries: [Inquiry!]!
   fetchPayments: [Payment!]!
-  fetchDirectProducts: [ProductDirect!]!
-  fetchDirectProductsByDirectStore(directStoreID: String!): [ProductDirect!]!
+  fetchAllDirectProducts: [ProductDirect!]!
+  fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
+  fetchDirectProductsByStoreAndCategory(directStoreId: String, categoryId: String): [ProductDirect!]!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
   fetchProductUglytitle(title: String!): [ProductUgly!]!

@@ -8,7 +8,7 @@ export class ProductDirectResolver {
     constructor(private readonly productDirectService: ProductDirectService) {}
 
     @Query(() => [ProductDirect])
-    fetchDirectProducts() {
+    fetchAllDirectProducts() {
         return this.productDirectService.findAll();
     }
 
@@ -22,11 +22,27 @@ export class ProductDirectResolver {
     // }
 
     @Query(() => [ProductDirect])
-    fetchDirectProductsByDirectStore(
-        @Args('directStoreID') directStoreId: string,
+    fetchDirectProductsByDirectStoreId(
+        @Args('directStoreId') directStoreId: string,
     ) {
-        return this.productDirectService.find({ directStoreId });
+        return this.productDirectService.findById({ directStoreId });
     }
+
+    @Query(() => [ProductDirect])
+    fetchDirectProductsByStoreAndCategory(
+        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
+        @Args({name: 'categoryId', nullable: true}) categoryId: string
+    ) {
+        return this.productDirectService.findByStoreAndCategory({directStoreId, categoryId});
+    }
+
+    // TODO: not working now
+    // @Query(() => [ProductDirect])
+    // fetchDirectProductsByDirectStoreName(
+    //     @Args('directStoreName') directStoreName: string,
+    // ) {
+    //     return this.productDirectService.findByName({ directStoreName });
+    // }
 
     @Mutation(() => ProductDirect)
     createProductDirect(
