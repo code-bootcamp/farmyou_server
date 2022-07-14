@@ -41,6 +41,7 @@ export class ProductDirectService {
         if (!directStoreId) {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
+                .orderBy('productDirect.createdAt', 'DESC')
                 .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
                 .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
                 .where('productDirect.categoryId = :categoryId', {
@@ -52,6 +53,7 @@ export class ProductDirectService {
         } else if (!categoryId) {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
+                .orderBy('productDirect.createdAt', 'DESC')
                 .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
                 .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
                 .where('productDirect.directStoreId = :directStoreId', {
@@ -63,6 +65,7 @@ export class ProductDirectService {
         } else {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
+                .orderBy('productDirect.createdAt', 'DESC')
                 .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
                 .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
                 .where('productDirect.directStoreId = :directStoreId', {
