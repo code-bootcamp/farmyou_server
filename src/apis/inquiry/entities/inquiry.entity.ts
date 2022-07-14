@@ -72,6 +72,7 @@ export class Inquiry {
     @Field(() => User)
     user: User;
 
+    // 삭제여부
     @Column({default: false})
     @Field(() => Boolean)
     isDeleted: boolean;
