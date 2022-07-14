@@ -124,10 +124,6 @@ type Query {
   fetchDirectProduct(title: String!): ProductDirect!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
-  fetchUser: String!
-  fetchUsers: [User!]!
-  fetchUserLoggedIn: User!
-  checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
 }
 
 type Mutation {
@@ -149,24 +145,7 @@ type Mutation {
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
-  createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!): User!
-  updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
-  likeYou(sellerId: String!): String!
-  deleteUser(email: String!): Boolean!
-  deleteLoginUser: User!
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
-
-input CreateAddressUserInput {
-  address: String!
-  detailedAddress: String!
-  postalCode: String!
-}
-
-input UpdateAddressUserInput {
-  address: String
-  detailedAddress: String
-  postalCode: String
-}
