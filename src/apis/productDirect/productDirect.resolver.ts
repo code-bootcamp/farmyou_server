@@ -34,7 +34,7 @@ export class ProductDirectResolver {
         @Args('content') content: string,
         @Args('price') price: number,
         @Args('quantity') quantity: number,
-        @Args('category') category: string,
+        @Args('categoryId') categoryId: string,
         @Args('directStoreId') directStoreId: string,
         @Args('adminId') adminId: string,
         // @CurrentUser() currentUser: ICurrentUser
@@ -44,7 +44,7 @@ export class ProductDirectResolver {
             content,
             price,
             quantity,
-            category,
+            categoryId,
             directStoreId,
             adminId,
         });
