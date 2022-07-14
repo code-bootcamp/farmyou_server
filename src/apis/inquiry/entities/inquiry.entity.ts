@@ -61,6 +61,8 @@ export class Inquiry {
     @Field(() => User)
     user: User;
 
+    // @
+
     // 직매장상품
     @ManyToOne(() => ProductDirect)
     @Field(() => ProductDirect)

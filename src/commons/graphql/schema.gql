@@ -35,7 +35,7 @@ type ProductDirect {
   quantity: Int!
   quantitySold: Int!
   isSoldout: Boolean!
-  category: String!
+  categoryId: String!
   directStoreId: String!
   users: [User!]!
   adminId: Admin!
@@ -148,7 +148,7 @@ type Mutation {
   uploadImageUser(files: [Upload!]!): [String!]!
   createInquiry(title: String!, content: String!, userId: String!, productDirectId: String, productUglyId: String): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
-  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, category: String!, directStoreId: String!, adminId: String!): ProductDirect!
+  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
