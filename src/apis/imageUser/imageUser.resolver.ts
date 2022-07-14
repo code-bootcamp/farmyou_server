@@ -22,7 +22,7 @@ export class ImageUserResolver {
 
   ) {
     const urls = this.uploadImageUser(files);
-    return this.imageUserService.saveImage({user_type, user_id, urls});
+    // return this.imageUserService.saveImage({user_type, user_id, urls});
   }
 
   @Mutation(() => [String])
@@ -35,9 +35,5 @@ export class ImageUserResolver {
     return this.imageUserService.upload({ files });
 
   }
-  // 코드 작동하는지 테스트 하기위해 만든것
-  // @Mutation(() => [String])
-  // test() {
-  //   return ['hello', 'world'];
-  // }
+
 }

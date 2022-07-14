@@ -20,6 +20,11 @@ export class Admin {
   // @Field(() => String) 비밀번호 노출 금지!!
   password: string;
 
+  // 계정타입
+  @Column({default: "admin"})
+  @Field(() => String)
+  type: string;
+
   // 등록날짜
   @CreateDateColumn()
   @Field(() => Date)

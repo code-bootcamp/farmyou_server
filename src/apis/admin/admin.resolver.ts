@@ -45,12 +45,4 @@ export class AdminResolver {
   ) {
     return this.adminService.findOne({directStoreId});
   }
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => Admin)
-  fetchAdminLoggedIn(
-    @CurrentUser() currentUser: ICurrentUser
-  ) {
-    return this.adminService.findLoggedIn({ currentUser });
-  }
 }

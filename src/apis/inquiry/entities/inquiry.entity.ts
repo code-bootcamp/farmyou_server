@@ -10,14 +10,14 @@ import {
     CreateDateColumn,
 } from 'typeorm';
 
-export enum CONTENT_TYPE_ENUM {
-    QUESTION = 'QUESTION',
-    ANSWER = 'ANSWER',
-}
+// export enum CONTENT_TYPE_ENUM {
+//     QUESTION = 'QUESTION',
+//     ANSWER = 'ANSWER',
+// }
 
-registerEnumType(CONTENT_TYPE_ENUM, {
-    name: 'CONTENT_TYPE_ENUMM',
-});
+// registerEnumType(CONTENT_TYPE_ENUM, {
+//     name: 'CONTENT_TYPE_ENUMM',
+// });
 
 export enum INQUIRY_STATUS_ENUM {
     NOT_ANSWERED = 'NOT_ANSWERED',
@@ -42,9 +42,14 @@ export class Inquiry {
     title: string;
 
     // 내용
-    @Column()
+    @Column({nullable: true})
     @Field(() => String)
-    content: string;
+    question: string;
+
+    // 내용
+    @Column({nullable: true})
+    @Field(() => String)
+    answer: string;
 
     // 등록일
     @CreateDateColumn()
@@ -52,16 +57,19 @@ export class Inquiry {
     createdAt: Date;
 
     // 답변상태
-    @Column()
-    @Field(() => Boolean)
-    status: boolean;
+    @Column({ type: 'enum', enum: INQUIRY_STATUS_ENUM })
+    @Field(() => INQUIRY_STATUS_ENUM)
+    status: string;
 
     // 회원
     @ManyToOne(() => User)
     @Field(() => User)
     user: User;
 
-    // @
+    // // 컨텐츠 타입
+    // @Column({ type: 'enum', enum: CONTENT_TYPE_ENUM })
+    // @Field(() => CONTENT_TYPE_ENUM)
+    // QorA: string;
 
     // 직매장상품
     @ManyToOne(() => ProductDirect)
