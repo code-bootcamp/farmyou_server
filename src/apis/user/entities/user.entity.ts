@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { Seller } from 'src/apis/seller/entities/seller.entity';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, JoinTable, ManyToMany } from 'typeorm';
 
@@ -40,4 +41,8 @@ export class User {
   @ManyToMany(() => Seller, (sellers) => sellers.users)
   @Field(() => [Seller])
   sellers: Seller[];
+
+  @ManyToMany(() => ProductDirect, (directProducts) => directProducts.users)
+  @Field(() => [ProductDirect])
+  directProducts: ProductDirect[];
 }

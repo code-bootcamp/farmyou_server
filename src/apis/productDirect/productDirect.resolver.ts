@@ -5,40 +5,55 @@ import { ProductDirectService } from './productDirect.service';
 
 @Resolver()
 export class ProductDirectResolver {
-  constructor(private readonly productDirectService: ProductDirectService) {}
+    constructor(private readonly productDirectService: ProductDirectService) {}
 
-  @Query(() => [ProductDirect])
-  fetchDirectProducts() {
-    return this.productDirectService.findAll();
-  }
+    @Query(() => [ProductDirect])
+    fetchDirectProducts() {
+        return this.productDirectService.findAll();
+    }
 
-  // ElasticSearch??
-  // contains/partial
-  @Query(() => ProductDirect)
-  fetchDirectProduct(
-    @Args('title') title: string, //
-  ) {
-    return this.productDirectService.findOne({ title });
-  }
+    // ElasticSearch??
+    // contains/partial
+    // @Query(() => ProductDirect)
+    // fetchDirectProduct(
+    //   @Args('title') title: string, //
+    // ) {
+    //   return this.productDirectService.findOne({ title });
+    // }
 
-  @Mutation(() => ProductDirect)
-  createProductDirect(
-    @Args('title') title: string,
-    @Args('content') content: string,
-    @Args('price') price: number,
-    @Args('quantity') quantity: number,
-    @Args('category') category: string,
-    @Args('directStoreId') directStoreId: string,
-    @Args('adminId') adminId: string,
-    // @CurrentUser() currentUser: ICurrentUser
-  ) {
-    return this.productDirectService.create({ title, content, price, quantity, category, directStoreId, adminId });
-  }
+    @Query(() => [ProductDirect])
+    fetchDirectProductsByDirectStore(
+        @Args('directStoreID') directStoreId: string,
+    ) {
+        return this.productDirectService.find({ directStoreId });
+    }
 
-  @Mutation(() => Boolean)
-  deleteProductDirect(
-    @Args('productId') productId: string, //
-  ) {
-    return this.productDirectService.delete({ productId });
-  }
+    @Mutation(() => ProductDirect)
+    createProductDirect(
+        @Args('title') title: string,
+        @Args('content') content: string,
+        @Args('price') price: number,
+        @Args('quantity') quantity: number,
+        @Args('category') category: string,
+        @Args('directStoreId') directStoreId: string,
+        @Args('adminId') adminId: string,
+        // @CurrentUser() currentUser: ICurrentUser
+    ) {
+        return this.productDirectService.create({
+            title,
+            content,
+            price,
+            quantity,
+            category,
+            directStoreId,
+            adminId,
+        });
+    }
+
+    @Mutation(() => Boolean)
+    deleteProductDirect(
+        @Args('productId') productId: string, //
+    ) {
+        return this.productDirectService.delete({ productId });
+    }
 }

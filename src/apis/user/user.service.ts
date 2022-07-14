@@ -34,10 +34,12 @@ export class UserService {
       name,
       email,
       password,
-      phone
+      phone,
+      sellers: []
     });
 
-    console.log(thisUser);
+    console.log(thisUser.sellers);
+    console.log(typeof thisUser.sellers);
 
     await this.addressUserService.create(
       addressUser.address,
