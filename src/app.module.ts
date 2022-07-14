@@ -21,6 +21,8 @@ import { Seller } from './apis/seller/entities/seller.entity';
 import { SellerModule } from './apis/seller/seller.module';
 import { AdminModule } from './apis/admin/admin.module';
 
+
+
 @Module({
   imports: [
     AdminModule,

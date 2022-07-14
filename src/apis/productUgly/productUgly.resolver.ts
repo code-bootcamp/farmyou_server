@@ -51,19 +51,4 @@ export class ProductUglyResolver {
   ) {
     return this.productUglyService.delete({ productId });
   }
-
-
-  // //7월 14일 승원 만들기
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => String)
-  // createImageReservation(
-  //   @Args('productUgly') productUgly: ProductUgly,
-  //   @CurrentUser() currentUser: ICurrentUser,
-  // ) {
-  //   const result = this.productUglyService.createImageUgleProduct({
-  //     productUgly,
-  //     currentUser,
-  //   });
-  //   if (result) return '등록 되었습니다.';
-  // }
 }
