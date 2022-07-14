@@ -19,8 +19,8 @@ export class ImageUglyProductService {
       waitedFiles.map((el) => {
         return new Promise((resolve, reject) => {
           el.createReadStream()
-            .pipe(storage.file(el.filename).createWriteStream())
-            .on('finish', () => resolve(`pukkukim/${el.filename}`))
+            .pipe(storage.file(`productUgly/${el.filename}`).createWriteStream())
+            .on('finish', () => resolve(`pukkukim/productUgly/${el.filename}`))
             .on('error', () => reject());
         });
       }),
