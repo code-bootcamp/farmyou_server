@@ -21,22 +21,74 @@ export class ImageUserService {
 
   // async upload({ user_type, user_id, files }) {
 
+  // async upload({ files }) {
+  //   // if (user_type === "Seller" || user_type === "판매자") {
+  //   //   // 유저타입이 판매자일 경우 seller 값에 id 저장
+  //   //   await this.imageUserRepository.save({
+  //   //     seller: user_id
+  //   //   });
+  //   //   // 유저타입이 구매자일 경우 user 값에 id 저장
+  //   // } else {
+  //   //   await this.imageUserRepository.save({
+  //   //     user: user_id
+  //   //   });
+  //   // }
+  //   // 일단 먼저 다 받기
+  //   const waitedFiles = await Promise.all(files);
+  //   console.log(waitedFiles); // [file, file]
+
+  //   const storage = new Storage({
+  //     projectId: 'codecamp-355721',
+  //     keyFilename: 'gcp-file-storage.json',
+  //   }).bucket('pukkukim');
+
+  //   const results = await Promise.all(
+  //     waitedFiles.map((el) => {
+  //       return new Promise((resolve, reject) => {
+  //         el.createReadStream()
+  //           .pipe(storage.file(el.filename).createWriteStream())
+  //           .on('finish', () => resolve(`pukkukim/${el.filename}`))
+  //           .on('error', () => reject());
+  //       });
+  //     }),
+  //   ); // await Promise.all([Promise, Promise])
+  //   // const results = ["폴더명/파일명", "폴더명/파일명"]
+
+  //   console.log(results);
+  //   // not working
+  //   // await this.imageUserRepository.save({url: results});
+
+  //   return results;
+  // }
+
+  // // not sure if it'll work
+  // async saveImage({user_type, user_id, urls}) {
+  //   urls.array.forEach(async element => {
+  //     if (user_type === "Seller" || user_type === "판매자") {
+  //       // 유저타입이 판매자일 경우 seller 값에 id 저장
+  //       await this.imageUserRepository.save({
+  //         seller: user_id
+  //       });
+  //       // 유저타입이 구매자일 경우 user 값에 id 저장
+  //     } else {
+  //       await this.imageUserRepository.save({
+  //         user: user_id
+  //       });
+  //     }
+  //     this.imageUserRepository.save({
+  //       url: element
+  //     })
+  //   });
+  // }
+
+  //7월 14일 승원 유저이미지 업로드 기능 생성
   async upload({ files }) {
-    // if (user_type === "Seller" || user_type === "판매자") {
-    //   // 유저타입이 판매자일 경우 seller 값에 id 저장
-    //   await this.imageUserRepository.save({
-    //     seller: user_id
-    //   });
-    //   // 유저타입이 구매자일 경우 user 값에 id 저장
-    // } else {
-    //   await this.imageUserRepository.save({
-    //     user: user_id
-    //   });
-    // }
     // 일단 먼저 다 받기
     const waitedFiles = await Promise.all(files);
     console.log(waitedFiles); // [file, file]
 
+    // TODO: 아이디 바꾸기
+    // TODO: json 파일 넣기
     const storage = new Storage({
       projectId: 'codecamp-355721',
       keyFilename: 'gcp-file-storage.json',
@@ -46,38 +98,15 @@ export class ImageUserService {
       waitedFiles.map((el) => {
         return new Promise((resolve, reject) => {
           el.createReadStream()
-            .pipe(storage.file(el.filename).createWriteStream())
-            .on('finish', () => resolve(`pukkukim/${el.filename}`))
+            .pipe(storage.file(`user/${el.filename}`).createWriteStream())
+            .on('finish', () => resolve(`pukkukim/user/${el.filename}`))
             .on('error', () => reject());
         });
       }),
-    ); // await Promise.all([Promise, Promise])
+    );
+    // await Promise.all([Promise, Promise])
     // const results = ["폴더명/파일명", "폴더명/파일명"]
 
-    console.log(results);
-    // not working
-    // await this.imageUserRepository.save({url: results});
-
     return results;
-  }
-
-  // not sure if it'll work
-  async saveImage({user_type, user_id, urls}) {
-    urls.array.forEach(async element => {
-      if (user_type === "Seller" || user_type === "판매자") {
-        // 유저타입이 판매자일 경우 seller 값에 id 저장
-        await this.imageUserRepository.save({
-          seller: user_id
-        });
-        // 유저타입이 구매자일 경우 user 값에 id 저장
-      } else {
-        await this.imageUserRepository.save({
-          user: user_id
-        });
-      }
-      this.imageUserRepository.save({
-        url: element
-      })
-    });
   }
 }

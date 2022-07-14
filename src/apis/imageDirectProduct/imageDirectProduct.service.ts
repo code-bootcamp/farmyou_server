@@ -19,8 +19,8 @@ export class ImageDirectProductService {
       waitedFiles.map((el) => {
         return new Promise((resolve, reject) => {
           el.createReadStream()
-            .pipe(storage.file(el.filename).createWriteStream())
-            .on('finish', () => resolve(`pukkukim/${el.filename}`))
+            .pipe(storage.file(`productDirect/${el.filename}`).createWriteStream())
+            .on('finish', () => resolve(`pukkukim/productDirect/${el.filename}`))
             .on('error', () => reject());
         });
       }),

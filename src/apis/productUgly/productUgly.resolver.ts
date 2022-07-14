@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { ProductUgly } from './entities/productUgly.entity';
 import { ProductUglyService } from './productUgly.service';
@@ -49,4 +51,19 @@ export class ProductUglyResolver {
   ) {
     return this.productUglyService.delete({ productId });
   }
+
+
+  // //7월 14일 승원 만들기
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => String)
+  // createImageReservation(
+  //   @Args('productUgly') productUgly: ProductUgly,
+  //   @CurrentUser() currentUser: ICurrentUser,
+  // ) {
+  //   const result = this.productUglyService.createImageUgleProduct({
+  //     productUgly,
+  //     currentUser,
+  //   });
+  //   if (result) return '등록 되었습니다.';
+  // }
 }
