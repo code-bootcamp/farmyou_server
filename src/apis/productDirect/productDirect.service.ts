@@ -1,9 +1,6 @@
-import {
-    Injectable,
-    UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, createConnection, Repository } from 'typeorm';
 import { Admin } from '../admin/entities/admin.entity';
 import { Category } from '../category/entities/category.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
@@ -34,27 +31,79 @@ export class ProductDirectService {
     //     });
     // }
 
-    async find({directStoreId}) {
-        return await this.productDirectRepository.find({where: {directStoreId}});
+    async findById({ directStoreId }) {
+        return await this.productDirectRepository.find({
+            where: { directStoreId },
+        });
     }
 
+    async findByStoreAndCategory({ directStoreId, categoryId }) {
+        if (!directStoreId) {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.categoryId = :categoryId', {
+                    categoryId: categoryId,
+                })
+                .getMany();
+        } else if (!categoryId) {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.directStoreId = :directStoreId', {
+                    directStoreId: directStoreId,
+                })
+                .getMany();
+        } else {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.directStoreId = :directStoreId', {
+                    directStoreId: directStoreId,
+                })
+                .andWhere('productDirect.categoryId = :categoryId', {
+                    categoryId: categoryId,
+                })
+                .getMany();
+        }
+    }
+
+    // TODO: not working now
+    // async findByName({directStoreName}) {
+    //     const store = await this.directStoreRepository.find({relations: ['admin'], where: {name: directStoreName}});
+    //     console.log(store);
+    //     return await this.productDirectRepository.find({where: {name: directStoreName}});
+    // }
+
     // TODO
-    async create({ title, content, price, quantity, categoryId, directStoreId, adminId }) {
+    async create({
+        title,
+        content,
+        price,
+        quantity,
+        categoryId,
+        directStoreId,
+        adminId,
+    }) {
         // const adminId = currentUser.id;
 
-        const theAdmin = await this.adminRepository.findOne({where: {id: adminId}});
+        const theAdmin = await this.adminRepository.findOne({
+            where: { id: adminId },
+        });
 
-        const theStore = await this.directStoreRepository.findOne({where: {id: directStoreId}, relations: ['admin']});
+        const theStore = await this.directStoreRepository.findOne({
+            where: { id: directStoreId },
+            relations: ['admin'],
+        });
         console.log(theStore);
         console.log(theStore.admin);
 
         const storeAdmin = theStore.admin.id;
 
-        console.log("got here 1");
-
         if (theAdmin && adminId === storeAdmin) {
-            console.log("got here 2");
-
             const result = await this.productDirectRepository.save({
                 title,
                 content,
@@ -62,8 +111,8 @@ export class ProductDirectService {
                 quantity,
                 categoryId,
                 directStoreId,
-                adminId
-    
+                adminId,
+
                 // 하나하나 직접 나열하는 방식
                 // name: createProductUglyInput.name,
                 // description: createProductUglyInput.description,
@@ -71,7 +120,9 @@ export class ProductDirectService {
             });
             return result;
         } else {
-            throw new UnprocessableEntityException("로그인 된 계정은 권한이 없습니다.");
+            throw new UnprocessableEntityException(
+                '로그인 된 계정은 권한이 없습니다.',
+            );
         }
     }
 
