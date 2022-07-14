@@ -3,10 +3,10 @@ import {
     UnprocessableEntityException,
     UseGuards,
 } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
-import { GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
-import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { GqlAuthAccessGuard, GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
+import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import * as jwt from 'jsonwebtoken';
@@ -143,5 +143,11 @@ export class AuthResolver {
     @Mutation(() => String)
     restoreAccessToken(@CurrentUser() currentUser: any) {
         return this.authService.getAccessToken({ user: currentUser });
+    }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => String)
+    fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
+        return this.authService.findLoggedIn({ currentUser });
     }
 }

@@ -50,14 +50,6 @@ export class SellerResolver {
     return this.sellerService.findAll();
   }
 
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => Seller)
-  fetchSellerLoggedIn(
-    @CurrentUser() currentUser: ICurrentUser
-  ) {
-    return this.sellerService.findLoggedIn({ currentUser });
-  }
-
   // PasswordCheckModal
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => Boolean)

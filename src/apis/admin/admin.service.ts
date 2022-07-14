@@ -80,12 +80,4 @@ export class AdminService {
             );
         }
     }
-
-    async findLoggedIn({ currentUser }) {
-        return await this.adminRepository.findOne({
-            where: {
-                id: currentUser.id,
-            },
-        });
-    }
 }

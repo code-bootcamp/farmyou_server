@@ -16,7 +16,7 @@ import {
 @ObjectType()
 export class ProductDirect {
     // 직매장상품ID
-    @PrimaryGeneratedColumn('increment')
+    @PrimaryGeneratedColumn('uuid')
     @Field(() => String)
     id: string;
 
