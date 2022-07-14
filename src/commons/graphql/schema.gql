@@ -145,6 +145,7 @@ type Query {
 
 type Mutation {
   createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean): Admin!
+  uploadFile(files: [Upload!]!): [String!]!
   createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
   updateSeller(email: String, password: String, phone: String): Seller!
   loginUser(email: String!, password: String!): String!
