@@ -39,7 +39,7 @@ export class ProductDirectService {
     }
 
     // TODO
-    async create({ title, content, price, quantity, category, directStoreId, adminId }) {
+    async create({ title, content, price, quantity, categoryId, directStoreId, adminId }) {
         // const adminId = currentUser.id;
 
         const theAdmin = await this.adminRepository.findOne({where: {id: adminId}});
@@ -50,13 +50,17 @@ export class ProductDirectService {
 
         const storeAdmin = theStore.admin.id;
 
+        console.log("got here 1");
+
         if (theAdmin && adminId === storeAdmin) {
+            console.log("got here 2");
+
             const result = await this.productDirectRepository.save({
                 title,
                 content,
                 price,
                 quantity,
-                category: {name: category},
+                categoryId,
                 directStoreId,
                 adminId
     
