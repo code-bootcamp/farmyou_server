@@ -94,6 +94,8 @@ type Inquiry {
   createdAt: DateTime!
   status: INQUIRY_STATUS_ENUM!
   user: User!
+  isDeleted: Boolean!
+  deletedAt: DateTime!
   productDirect: ProductDirect!
   productUgly: ProductUgly!
 }
@@ -157,6 +159,8 @@ type Mutation {
   uploadImageUser(files: [Upload!]!): [String!]!
   createInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
   postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
+  editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
+  deleteInquiry(inquiryId: String!): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
