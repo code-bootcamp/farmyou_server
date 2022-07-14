@@ -31,9 +31,10 @@ export class ProductDirectResolver {
     @Query(() => [ProductDirect])
     fetchDirectProductsByStoreAndCategory(
         @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
-        @Args({name: 'categoryId', nullable: true}) categoryId: string
+        @Args({name: 'categoryId', nullable: true}) categoryId: string,
+        @Args('page') page: number
     ) {
-        return this.productDirectService.findByStoreAndCategory({directStoreId, categoryId});
+        return this.productDirectService.findByStoreAndCategory({directStoreId, categoryId}, page);
     }
 
     // TODO: not working now
