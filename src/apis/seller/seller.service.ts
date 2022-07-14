@@ -56,14 +56,6 @@ export class SellerService {
     return this.sellerRepository.save(loggedSeller);
   }
 
-  async findLoggedIn({ currentUser }) {
-    return await this.sellerRepository.findOne({
-      where: {
-        id: currentUser.id,
-      },
-    });
-  }
-
   async postBoardDirect({sellerId, boardDirectNum}) {
     return this.sellerRepository.save({
       id: sellerId, 

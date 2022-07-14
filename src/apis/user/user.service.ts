@@ -89,15 +89,6 @@ export class UserService {
     return this.userRepository.save(loggedUser);
   }
 
-  async findLoggedIn({ currentUser }) {
-    return await this.userRepository.findOne({
-      where: {
-        id: currentUser.id,
-      },
-    });
-  }
-
-
   async delete({ email }) {
     const result = await this.userRepository.delete({ email });
     return result.affected ? true : false;

@@ -17,7 +17,10 @@ export class DirectStoreService {
   }
 
   async findOne({ name }) {
-    return await this.directStoreRepository.findOne({ where: { name: name } });
+    return await this.directStoreRepository.findOne({ 
+        where: { name: name },
+        relations: ['admin']
+    });
   }  
 
   async create({ name }) {
