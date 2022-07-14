@@ -27,7 +27,7 @@ export class ProductUglyResolver {
   ): Promise<ProductUgly[]> {
     return this.productUglyService.findtitle(title)
   }
-  //===============================================
+  
 
   @Mutation(() => ProductUgly)
   createProductUgly(

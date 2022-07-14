@@ -90,5 +90,4 @@ export class ProductUglyService {
         let result = serchData.filter((word) =>word.title.includes(title));
         return result
     }
-    //===============================================  
 }
