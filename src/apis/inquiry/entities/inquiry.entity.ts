@@ -8,6 +8,7 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     CreateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 
 // export enum CONTENT_TYPE_ENUM {
@@ -71,10 +72,14 @@ export class Inquiry {
     @Field(() => User)
     user: User;
 
-    // // 컨텐츠 타입
-    // @Column({ type: 'enum', enum: CONTENT_TYPE_ENUM })
-    // @Field(() => CONTENT_TYPE_ENUM)
-    // QorA: string;
+    @Column({default: false})
+    @Field(() => Boolean)
+    isDeleted: boolean;
+
+    // 삭제일자
+    @DeleteDateColumn()
+    @Field(() => Date)
+    deletedAt: Date;
 
     // 직매장상품
     @ManyToOne(() => ProductDirect)

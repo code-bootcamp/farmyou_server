@@ -20,12 +20,12 @@ import { RedisClientOptions } from 'redis';
 import { Seller } from './apis/seller/entities/seller.entity';
 import { SellerModule } from './apis/seller/seller.module';
 import { AdminModule } from './apis/admin/admin.module';
-import { FileModule } from './file/file.module';
+
+
 
 @Module({
   imports: [
     AdminModule,
-    FileModule,
     SellerModule,
     AuthModule,
     CategoryModule,
