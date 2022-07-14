@@ -12,11 +12,13 @@ export class SellerService {
   ) {}
 
   async findOne({ email }) {
-    return await this.sellerRepository.findOne({ email });
+    return await this.sellerRepository.findOne({ relations: ['users'], where: {email: email} });
   }
 
   async findAll() {
-    return await this.sellerRepository.find();
+    return await this.sellerRepository.find({
+        relations: ['users']
+    });
   }
 
   async create({ email, hashedPassword: password, name, phone }) {

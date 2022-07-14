@@ -59,7 +59,7 @@ export class ProductDirect {
     // @ManyToOne(() => Category, {cascade: true})
     @ManyToOne(() => Category)
     @Field(() => String)
-    category: Category;
+    categoryId: Category;
 
     // 직매장ID
     @ManyToOne(() => DirectStore)

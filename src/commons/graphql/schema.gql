@@ -35,7 +35,7 @@ type ProductDirect {
   quantity: Int!
   quantitySold: Int!
   isSoldout: Boolean!
-  category: String!
+  categoryId: String!
   directStoreId: String!
   users: [User!]!
   adminId: Admin!
@@ -125,6 +125,7 @@ type Query {
   fetchDirectProductsByDirectStore(directStoreID: String!): [ProductDirect!]!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
+  fetchProductUglytitle(title: String!): [ProductUgly!]!
   fetchUser: String!
   fetchUsers: [User!]!
   fetchUserLoggedIn: User!
@@ -146,9 +147,9 @@ type Mutation {
   uploadImageUgly(files: [Upload!]!): [String!]!
   uploadImage(user_type: String!, user_id: String!, files: [Upload!]!): [ImageUser!]!
   uploadImageUser(files: [Upload!]!): [String!]!
-  createInquiry(title: String!, content: String!, userId: String!, productDirectId: String!, productUglyId: String!): String!
+  createInquiry(title: String!, content: String!, userId: String!, productDirectId: String, productUglyId: String): String!
   createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
-  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, category: String!, directStoreId: String!, adminId: String!): ProductDirect!
+  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
