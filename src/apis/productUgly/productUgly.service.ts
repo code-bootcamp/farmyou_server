@@ -90,4 +90,17 @@ export class ProductUglyService {
         let result = serchData.filter((word) =>word.title.includes(title));
         return result
     }
+
+    // //7월 14일 승원 이미지 만들기 테스트
+    // async createImageUgleProduct({ productUgly, currentUser }) {
+    //     const { urls, } = productUgly;
+    //     return await Promise.all(
+    //       urls.map((url: string) => {
+    //         return this.productUglyRepository.save({
+              
+    //           user: currentUser,
+    //         });
+    //       }),
+    //     );
+    //   }
 }
