@@ -2,31 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Seller {
-  id: String!
-  name: String!
-  email: String!
-  phone: String!
-  grade: String!
-  like: Float!
-  createdAt: DateTime!
-  users: [Seller!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type User {
-  id: String!
-  name: String!
-  email: String!
-  phone: String!
-  createdAt: DateTime!
-  sellers: [Seller!]!
-}
-
 type DirectStore {
   id: String!
   name: String!
@@ -40,6 +15,11 @@ type Admin {
   directStore: DirectStore!
   isWebMaster: Boolean!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Category {
   id: String!
@@ -57,8 +37,29 @@ type ProductDirect {
   isSoldout: Boolean!
   category: String!
   directStoreId: String!
-  userId: String!
-  adminId: String!
+  users: [User!]!
+  adminId: Admin!
+}
+
+type Seller {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  grade: String!
+  like: Float!
+  createdAt: DateTime!
+  users: [User!]!
+}
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  createdAt: DateTime!
+  sellers: [Seller!]!
+  directProducts: [ProductDirect!]!
 }
 
 type ProductUgly {
@@ -121,7 +122,7 @@ type Query {
   fetchInquiries: [Inquiry!]!
   fetchPayments: [Payment!]!
   fetchDirectProducts: [ProductDirect!]!
-  fetchDirectProduct(title: String!): ProductDirect!
+  fetchDirectProductsByDirectStore(directStoreID: String!): [ProductDirect!]!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
   fetchUser: String!
@@ -134,7 +135,9 @@ type Mutation {
   createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean): Admin!
   createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
   updateSeller(email: String, password: String, phone: String): Seller!
-  login(email: String!, password: String!, userType: String!): String!
+  loginUser(email: String!, password: String!): String!
+  loginSeller(email: String!, password: String!): String!
+  loginAdmin(email: String!, password: String!): String!
   logout: String!
   restoreAccessToken: String!
   createCategory(name: String!): Category!
@@ -151,7 +154,7 @@ type Mutation {
   deleteProductUgly(productId: String!): Boolean!
   createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!): User!
   updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
-  likeYou(sellerId: String!): String!
+  likeYou(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
   deleteLoginUser: User!
 }
