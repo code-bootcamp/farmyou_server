@@ -37,7 +37,7 @@ export class ProductDirectService {
         });
     }
 
-    async findByStoreAndCategory({ directStoreId, categoryId }, page) {
+    async findByStoreAndCategoryByDateCreated({ directStoreId, categoryId }, page) {
         if (!directStoreId) {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
@@ -66,6 +66,92 @@ export class ProductDirectService {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
                 .orderBy('productDirect.createdAt', 'DESC')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.directStoreId = :directStoreId', {
+                    directStoreId: directStoreId,
+                })
+                .andWhere('productDirect.categoryId = :categoryId', {
+                    categoryId: categoryId,
+                })
+                .skip((page-1)*10)
+                .take(10)
+                .getMany();
+        }
+    }
+
+    async findByStoreAndCategoryByPriceHighToLow({ directStoreId, categoryId }, page) {
+        if (!directStoreId) {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy('productDirect.price', 'DESC')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.categoryId = :categoryId', {
+                    categoryId: categoryId,
+                })
+                .skip((page-1)*10)
+                .take(10)
+                .getMany();
+        } else if (!categoryId) {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy('productDirect.price', 'DESC')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.directStoreId = :directStoreId', {
+                    directStoreId: directStoreId,
+                })
+                .skip((page-1)*10)
+                .take(10)
+                .getMany();
+        } else {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy('productDirect.price', 'DESC')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.directStoreId = :directStoreId', {
+                    directStoreId: directStoreId,
+                })
+                .andWhere('productDirect.categoryId = :categoryId', {
+                    categoryId: categoryId,
+                })
+                .skip((page-1)*10)
+                .take(10)
+                .getMany();
+        }
+    }
+
+    async findByStoreAndCategoryByPriceLowToHigh({ directStoreId, categoryId }, page) {
+        if (!directStoreId) {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy('productDirect.price', 'ASC')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.categoryId = :categoryId', {
+                    categoryId: categoryId,
+                })
+                .skip((page-1)*10)
+                .take(10)
+                .getMany();
+        } else if (!categoryId) {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy('productDirect.price', 'ASC')
+                .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
+                .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
+                .where('productDirect.directStoreId = :directStoreId', {
+                    directStoreId: directStoreId,
+                })
+                .skip((page-1)*10)
+                .take(10)
+                .getMany();
+        } else {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy('productDirect.price', 'ASC')
                 .leftJoinAndSelect('productDirect.directStoreId', 'directStore')
                 .leftJoinAndSelect('productDirect.categoryId', 'categoryId')
                 .where('productDirect.directStoreId = :directStoreId', {
