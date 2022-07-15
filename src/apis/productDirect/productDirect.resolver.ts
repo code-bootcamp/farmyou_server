@@ -29,12 +29,30 @@ export class ProductDirectResolver {
     }
 
     @Query(() => [ProductDirect])
-    fetchDirectProductsByStoreAndCategory(
+    fetchDirectProductsByStoreAndCategoryByDateCreated(
         @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
         @Args({name: 'categoryId', nullable: true}) categoryId: string,
         @Args('page') page: number
     ) {
-        return this.productDirectService.findByStoreAndCategory({directStoreId, categoryId}, page);
+        return this.productDirectService.findByStoreAndCategoryByDateCreated({directStoreId, categoryId}, page);
+    }
+
+    @Query(() => [ProductDirect])
+    fetchDirectProductsByStoreAndCategoryByPriceHighToLow(
+        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
+        @Args({name: 'categoryId', nullable: true}) categoryId: string,
+        @Args('page') page: number
+    ) {
+        return this.productDirectService.findByStoreAndCategoryByPriceHighToLow({directStoreId, categoryId}, page);
+    }
+
+    @Query(() => [ProductDirect])
+    fetchDirectProductsByStoreAndCategoryByPriceLowToHigh(
+        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
+        @Args({name: 'categoryId', nullable: true}) categoryId: string,
+        @Args('page') page: number
+    ) {
+        return this.productDirectService.findByStoreAndCategoryByPriceLowToHigh({directStoreId, categoryId}, page);
     }
 
     // TODO: not working now

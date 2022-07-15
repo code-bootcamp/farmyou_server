@@ -134,7 +134,9 @@ type Query {
   fetchPayments: [Payment!]!
   fetchAllDirectProducts: [ProductDirect!]!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
-  fetchDirectProductsByStoreAndCategory(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchDirectProductsByStoreAndCategoryByDateCreated(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchDirectProductsByStoreAndCategoryByPriceHighToLow(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchDirectProductsByStoreAndCategoryByPriceLowToHigh(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
   fetchProductUglytitle(title: String!): [ProductUgly!]!
