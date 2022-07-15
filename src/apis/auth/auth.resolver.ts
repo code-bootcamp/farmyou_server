@@ -14,10 +14,24 @@ import { Cache } from 'cache-manager';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { SellerService } from '../seller/seller.service';
 import { AdminService } from '../admin/admin.service';
+import { Seller } from '../seller/entities/seller.entity';
+import { User } from '../user/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Admin } from '../admin/entities/admin.entity';
 
 @Resolver()
 export class AuthResolver {
     constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+
+        @InjectRepository(Seller)
+        private readonly sellerRepository: Repository<Seller>,
+
+        @InjectRepository(Admin)
+        private readonly adminRepository: Repository<Admin>,
+
         private readonly userService: UserService, //
         private readonly authService: AuthService,
         private readonly sellerService: SellerService,
@@ -147,6 +161,12 @@ export class AuthResolver {
 
     @UseGuards(GqlAuthAccessGuard)
     @Query(() => String)
+    fetchTypeOfUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
+        return this.authService.findLoggedInType({ currentUser });
+    }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => User || Seller || Admin)
     fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
         return this.authService.findLoggedIn({ currentUser });
     }
