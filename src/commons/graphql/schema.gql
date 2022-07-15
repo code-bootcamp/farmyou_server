@@ -126,7 +126,8 @@ type Query {
   fetchAdminOfTheStore(directStoreId: String!): Admin!
   fetchSellers: [Seller!]!
   checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
-  fetchUserLoggedIn: String!
+  fetchTypeOfUserLoggedIn: String!
+  fetchUserLoggedIn: User!
   fetchCategory(name: String!): Category!
   fetchCategories: [Category!]!
   fetchDirectStore(name: String!): DirectStore!
