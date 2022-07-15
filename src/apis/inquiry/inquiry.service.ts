@@ -74,7 +74,7 @@ export class InquiryService {
     }
 
     async answer({ inquiryId, answerTitle, answer, currentUser }) {
-        const thisUserType = await this.authService.findLoggedIn({
+        const thisUserType = await this.authService.findLoggedInType({
             currentUser,
         });
 

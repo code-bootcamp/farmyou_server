@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
@@ -104,7 +104,7 @@ export class AuthService {
         res.redirect('http://localhost:5500/frontTest/social-login.test.html');
     }
 
-    async findLoggedIn({ currentUser }) {
+    async findLoggedInType({ currentUser }) {
         console.log(currentUser.id);
 
         try {
@@ -135,30 +135,6 @@ export class AuthService {
                 }
             }
         }
-
-        // const thisSeller = await this.sellerRepository.findOne({
-        //     where: {
-        //         id: currentUser.id,
-        //     },
-        // });
-
-        // // console.log("got here 3");
-
-        // if (thisSeller) {
-        //     return thisSeller.type;
-        // }
-
-        // const thisAdmin = await this.adminRepository.findOne({
-        //     where: {
-        //         id: currentUser.id,
-        //     },
-        // });
-
-        // if (thisAdmin) {
-        //     return thisAdmin.type;
-        // }
-
-        // return "누구세요?";
     }
 
     // async findLoggedIn({ currentUser }) {
@@ -170,4 +146,44 @@ export class AuthService {
 
     //     return thisUser.type;
     //   }
+
+    async findLoggedIn({ currentUser }) {
+        try {
+            const thisUser = await this.userRepository.findOne({
+                where: {
+                    id: currentUser.id,
+                },
+            });
+            if (!thisUser) {
+                throw new NotFoundException('없어요');
+            }
+            return thisUser;
+        } catch (err) {
+            try {
+                const thisSeller = await this.sellerRepository.findOne({
+                    where: {
+                        id: currentUser.id,
+                    },
+                });
+                if (!thisSeller) {
+                    throw new NotFoundException('없어요');
+                }
+                return thisSeller;
+            } catch (err) {
+                try {
+                    const thisAdmin = await this.adminRepository.findOne({
+                        where: {
+                            id: currentUser.id,
+                        },
+                    });
+                    if (!thisAdmin) {
+                        throw new NotFoundException('없어요');
+                    }
+                    return thisAdmin;
+                } catch (err) {
+                    throw new NotFoundException('오류가 발생했습니다.');
+                }
+            }
+        }
+    }
 }
