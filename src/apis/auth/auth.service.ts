@@ -148,14 +148,15 @@ export class AuthService {
     //   }
 
     async findLoggedIn({ currentUser }) {
-        console.log(currentUser.id);
-
         try {
             const thisUser = await this.userRepository.findOne({
                 where: {
                     id: currentUser.id,
                 },
             });
+            if (!thisUser) {
+                throw new NotFoundException('없어요');
+            }
             return thisUser;
         } catch (err) {
             try {
@@ -164,6 +165,9 @@ export class AuthService {
                         id: currentUser.id,
                     },
                 });
+                if (!thisSeller) {
+                    throw new NotFoundException('없어요');
+                }
                 return thisSeller;
             } catch (err) {
                 try {
@@ -172,6 +176,9 @@ export class AuthService {
                             id: currentUser.id,
                         },
                     });
+                    if (!thisAdmin) {
+                        throw new NotFoundException('없어요');
+                    }
                     return thisAdmin;
                 } catch (err) {
                     throw new NotFoundException('오류가 발생했습니다.');
