@@ -10,6 +10,7 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     ManyToMany,
+    DeleteDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -39,6 +40,16 @@ export class ProductDirect {
     @CreateDateColumn()
     @Field(() => Date)
     createdAt: Date;
+
+    // 삭제여부
+    @Column({default: false})
+    @Field(() => Boolean)
+    isDeleted: boolean;
+
+    // 삭제일자
+    @DeleteDateColumn()
+    @Field(() => Date)
+    deletedAt: Date;
 
     // 수량
     @Column({ default: 0 })

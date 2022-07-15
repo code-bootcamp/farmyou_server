@@ -33,6 +33,8 @@ type ProductDirect {
   content: String!
   price: Int!
   createdAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime!
   quantity: Int!
   quantitySold: Int!
   isSoldout: Boolean!
