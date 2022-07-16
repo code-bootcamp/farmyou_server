@@ -3,11 +3,9 @@ import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { UpdateAddressUserInput } from '../addressUser/dto/updateAddressUser.input';
-import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { CreateAddressUserInput } from '../addressUser/dto/createAddressUser.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -29,15 +27,8 @@ export class UserResolver {
         @InjectRepository(Seller)
         private readonly sellerRepository: Repository<Seller>,
 
-        @InjectRepository(ProductDirect)
-        private readonly productDirectRepository: Repository<ProductDirect>,
-
-        @InjectRepository(ProductUgly)
-        private readonly productUglyRepository: Repository<ProductUgly>,
-
         private readonly userService: UserService, //
-    ) // myCart: []
-    {}
+    ) {}
 
     // 회원 생성하기
     @Mutation(() => User)
@@ -49,7 +40,6 @@ export class UserResolver {
         @Args('addressUser') addressUser: CreateAddressUserInput,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
-        // console.log(hashedPassword);
         return this.userService.create({
             name,
             email,
@@ -117,9 +107,9 @@ export class UserResolver {
         }
     }
 
+    // 좋아유
     @Mutation(() => String)
     async likeYou(
-        // @CurrentUser() currentUser: ICurrentUser,
         @Args('userId') userId: string,
         @Args('sellerId') sellerId: string,
     ) {
@@ -132,21 +122,91 @@ export class UserResolver {
             relations: ['sellers'],
         });
 
-        // 이게 안걸러짐
-        if (!likedSeller.users.includes(thisUser)) {
+        let addSeller: boolean = true;
+
+        for (let i = 0; i < thisUser.sellers.length; i++) {
+            if (thisUser.sellers[i].id == likedSeller.id) {
+                addSeller = false;
+                break;
+            }
+        }
+
+        if (addSeller) {
+            thisUser.sellers.push(likedSeller);
+
+            await this.userRepository.save(thisUser);
+        }
+
+        let addUser: boolean = true;
+
+        for (let i = 0; i < likedSeller.users.length; i++) {
+            if (likedSeller.users[i].id == thisUser.id) {
+                addUser = false;
+                break;
+            }
+        }
+
+        if (addUser) {
             likedSeller.users.push(thisUser);
             likedSeller.like++;
+
+            if (likedSeller.like >= 10) {
+                likedSeller.grade = '인기셀러';
+            }
+
+            await this.sellerRepository.save(likedSeller);
+
+            return '좋아유~';
         }
 
-        await this.sellerRepository.save(likedSeller);
+        return '이전에 이미 고백했지 말입니다.';
+    }
 
-        if (!thisUser.sellers.includes(likedSeller)) {
-            thisUser.sellers.push(likedSeller);
+    // 좋아유 취소
+    @Mutation(() => String)
+    async likeYouNoMore(
+        @Args('userId') userId: string,
+        @Args('sellerId') sellerId: string,
+    ) {
+        const likedSeller = await this.sellerRepository.findOne({
+            where: { id: sellerId },
+            relations: ['users'],
+        });
+        const thisUser = await this.userRepository.findOne({
+            where: { id: userId },
+            relations: ['sellers'],
+        });
+
+        for (let i = 0; i < thisUser.sellers.length; i++) {
+            if (thisUser.sellers[i].id == likedSeller.id) {
+                const firstArray = thisUser.sellers.slice(0, i);
+                const secondArray = thisUser.sellers.slice(i + 1);
+                thisUser.sellers = firstArray.concat(secondArray);
+
+                await this.userRepository.save(thisUser);
+
+                break;
+            }
         }
 
-        await this.userRepository.save(thisUser);
+        for (let i = 0; i < likedSeller.users.length; i++) {
+            if (likedSeller.users[i].id == thisUser.id) {
+                const firstArray = likedSeller.users.slice(0, i);
+                const secondArray = likedSeller.users.slice(i + 1);
+                likedSeller.users = firstArray.concat(secondArray);
+                likedSeller.like--;
 
-        return '좋아유~';
+                if (likedSeller.like < 10) {
+                    likedSeller.grade = '일반셀러';
+                }
+
+                await this.sellerRepository.save(likedSeller);
+
+                return '마음 식었어유~';
+            }
+        }
+
+        return '애초에 좋아한 적 없었지 말입니다.';
     }
 
     // 관리자의 유저 삭제
