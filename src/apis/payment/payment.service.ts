@@ -150,11 +150,20 @@ export class PaymentService {
     
   ) {}
   async create({impUid, amount, currentUser}) {
+    console.log("로마로마로말마롬라ㅗ마로마로마ㅗ라");
+    console.log(currentUser)
     // 1. 거래기록 1줄 생성 해야함 
+    const thisUser = await this.userRepository.findOne({
+      // relations: ['sellers', 'directProducts'],
+      where: {id: currentUser.id}
+    });
+
+    console.log(thisUser);
+
     const payment = this.paymentRepository.create({
       impUid: impUid,
       amount: amount, 
-      user: currentUser,
+      user: thisUser,
       paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT, 
     })
     console.log(payment)
