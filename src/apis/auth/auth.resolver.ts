@@ -5,7 +5,10 @@ import {
 } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
-import { GqlAuthAccessGuard, GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+    GqlAuthAccessGuard,
+    GqlAuthRefreshGuard,
+} from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';

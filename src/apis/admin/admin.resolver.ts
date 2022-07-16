@@ -13,36 +13,39 @@ import { DirectStore } from '../directStore/entities/directStore.entity';
 
 @Resolver()
 export class AdminResolver {
-  constructor(
-    @InjectRepository(Admin)
-    private readonly adminRepository: Repository<Admin>,
+    constructor(
+        @InjectRepository(Admin)
+        private readonly adminRepository: Repository<Admin>,
 
-    @InjectRepository(Seller)
-    private readonly sellerRepository: Repository<Seller>,
+        @InjectRepository(Seller)
+        private readonly sellerRepository: Repository<Seller>,
 
-    @InjectRepository(DirectStore)
-    private readonly directStoreRepository: Repository<DirectStore>,
+        @InjectRepository(DirectStore)
+        private readonly directStoreRepository: Repository<DirectStore>,
 
-    private readonly adminService: AdminService, //
-  ) {}
+        private readonly adminService: AdminService, //
+    ) {}
 
-  // 관리자 생성하기
-  @Mutation(() => Admin)
-  async createAdmin(
-    @Args('email') email: string,
-    @Args('password') password: string,
-    @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
-    @Args({name: 'isWebMaster', nullable: true}) isWebMaster: boolean,
-  ) {
-    const hashedPassword = await bcrypt.hash(password, 10.2);
-    // console.log(hashedPassword);
-    return this.adminService.create({ email, hashedPassword, directStoreId, isWebMaster });
-  }
+    // 관리자 생성하기
+    @Mutation(() => Admin)
+    async createAdmin(
+        @Args('email') email: string,
+        @Args('password') password: string,
+        @Args({ name: 'directStoreId', nullable: true }) directStoreId: string,
+        @Args({ name: 'isWebMaster', nullable: true }) isWebMaster: boolean,
+    ) {
+        const hashedPassword = await bcrypt.hash(password, 10.2);
+        // console.log(hashedPassword);
+        return this.adminService.create({
+            email,
+            hashedPassword,
+            directStoreId,
+            isWebMaster,
+        });
+    }
 
-  @Query(() => Admin)
-  fetchAdminOfTheStore(
-    @Args('directStoreId') directStoreId: string
-  ) {
-    return this.adminService.findOne({directStoreId});
-  }
+    @Query(() => Admin)
+    fetchAdminOfTheStore(@Args('directStoreId') directStoreId: string) {
+        return this.adminService.findOne({ directStoreId });
+    }
 }
