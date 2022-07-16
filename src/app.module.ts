@@ -51,7 +51,7 @@ import { FileModule } from './apis/file/file.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '34.64.180.64', //인스턴스 sql 비공개ip주소
+      host: '172.30.192.13', //인스턴스 sql 비공개ip주소
       // host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
@@ -67,7 +67,6 @@ import { FileModule } from './apis/file/file.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    //
     // CacheModule.register<RedisClientOptions>({
     //   store: redisStore,
     //   url: 'redis://my-redis:6379',
