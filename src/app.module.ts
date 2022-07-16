@@ -67,6 +67,7 @@ import { FileModule } from './apis/file/file.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    //
     // CacheModule.register<RedisClientOptions>({
     //   store: redisStore,
     //   url: 'redis://my-redis:6379',
