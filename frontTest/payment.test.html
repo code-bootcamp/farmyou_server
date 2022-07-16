@@ -42,17 +42,17 @@
                 "http://localhost:3000/graphql",
                 {
                   query: `
-                            mutation {
-                                createPayment(impUid: "${rsp.imp_uid}", amount:${rsp.paid_amount}, productDirectId: "${rsp.product_Directid}", productUglyId: "${rsp.product_Uglyid}"   ) {
-                                    amount
-                                }
-                            }
-                        `,
+                      mutation {
+                          createPayment(impUid: "${rsp.imp_uid}", amount:${rsp.paid_amount}){
+                              id
+                          }
+                      }
+                  `,
                 },
                 {
                   headers: {
                     Authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiIyZDI2ZDZiYi1kNzVlLTRjMTQtYWI3YS0xYWNjMmI2NWQ1YmIiLCJpYXQiOjE2NTc0MjU3MzcsImV4cCI6MTY1NzQyOTMzN30.E51OTJurdgWU_C_voNHfKLIjh8iYx14vabyrpbKSkOI",
+                      "Bearer eeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiI3NjZkOWIyNC0wY2MwLTRkOGUtYmExMC00ODg2YWE2MGMwMGMiLCJpYXQiOjE2NTc5NzY2MzcsImV4cCI6MTY1Nzk4MDIzN30.Rno3iffk10Q8ls93ZmhPgV50Qmnf-lOS0pGsukFOIRE",
                   },
                 }
               );

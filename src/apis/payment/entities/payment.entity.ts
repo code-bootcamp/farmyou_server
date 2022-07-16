@@ -1,8 +1,8 @@
-import { Int, ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+ import { Int, ObjectType, Field, registerEnumType } from '@nestjs/graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 
 
 export enum PAYMENT_STATUS_ENUM {
@@ -33,8 +33,12 @@ export class Payment {
 
   // 결제완료
   @Column({ type: 'enum', enum: PAYMENT_STATUS_ENUM })
-  @Field(() => PAYMENT_STATUS_ENUM)
+  @Field(() => PAYMENT_STATUS_ENUM   )
   paymentComplete: string;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 
   // 회원
   @ManyToOne(() => User)
