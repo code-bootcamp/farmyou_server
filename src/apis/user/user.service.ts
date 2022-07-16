@@ -98,7 +98,7 @@ export class UserService {
         }
 
         if (password) {
-            loggedUser.password = await bcrypt.hash(password, 10);
+            loggedUser.password = await bcrypt.hash(password, 10.2);
         }
 
         if (phone) {
