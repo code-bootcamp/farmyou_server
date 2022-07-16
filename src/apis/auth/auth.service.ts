@@ -89,7 +89,7 @@ export class AuthService {
     async loginSocial(req, res) {
         let user = await this.userService.findOne({ email: req.user.email });
 
-        const hashedPassword = await bcrypt.hash(req.user.password, 10); // 비밀번호 숨겨서 보내기
+        const hashedPassword = await bcrypt.hash(req.user.password, 10.2); // 비밀번호 숨겨서 보내기
 
         // 2. 회원가입
         if (!user) {
