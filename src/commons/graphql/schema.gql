@@ -132,8 +132,8 @@ type Query {
   fetchCategories: [Category!]!
   fetchDirectStore(name: String!): DirectStore!
   fetchDirectStores: [DirectStore!]!
-  fetchInquiry(title: String!): Inquiry!
-  fetchInquiries: [Inquiry!]!
+  fetchInquiry(id: String!): Inquiry!
+  fetchInquiriesByProduct(productId: String!): [Inquiry!]!
   fetchPayments: [Payment!]!
   fetchAllDirectProducts: [ProductDirect!]!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
@@ -181,6 +181,7 @@ type Mutation {
   likeYou(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
   deleteLoginUser: User!
+  placeProductInCart(productType: String!, productId: String!, quantity: Float!): String!
 }
 
 """The `Upload` scalar type represents a file upload."""

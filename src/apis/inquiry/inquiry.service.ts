@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Inquiry, INQUIRY_STATUS_ENUM } from './entities/inquiry.entity';
 import { Repository } from 'typeorm';
@@ -25,13 +25,42 @@ export class InquiryService {
         private readonly authService: AuthService,
     ) {}
 
-    async findAll() {
-        return await this.inquiryRepository.find();
+    async findAll(productId) {
+        const direct = await this.productDirectRepository.findOne({
+            relations: ['adminId'],
+            where: {id: productId}
+        });
+
+        const ugly = await this.productUglyRepository.findOne({
+            relations: ['seller'],
+            where: {id: productId}
+        });
+
+        console.log('direct: ', direct);
+        console.log('ugly: ', ugly);
+
+        if (!direct && !ugly) {
+            throw new NotFoundException('해당 제품에 대한 문의글이 없습니다');
+        }
+
+        if (!direct) {
+            return await this.inquiryRepository.find({
+                relations: ['productUgly'],
+                where: {productUgly: productId}
+            });
+        }
+
+        if (!ugly) {
+            return await this.inquiryRepository.find({
+                relations: ['productDirect'],
+                where: {productDirect: productId}
+            });
+        }
     }
 
-    async findOne({ title }) {
+    async findOne({ id }) {
         return await this.inquiryRepository.findOne({
-            where: { title: title },
+            where: { id },
         });
     }
 

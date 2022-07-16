@@ -59,7 +59,6 @@ export class ProductUgly {
 
   // 판매자ID
   @ManyToOne(() => Seller)
-  // @ManyToOne(() => Seller, seller => seller.)
   @Field(() => Seller)
   seller: Seller;
 }

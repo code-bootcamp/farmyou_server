@@ -6,6 +6,8 @@ import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { ImageUser } from '../imageUser/entities/imageUser.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
+import { ProductDirect } from '../productDirect/entities/productDirect.entity';
+import { ProductUgly } from '../productUgly/entities/productUgly.entity';
 import { Seller } from '../seller/entities/seller.entity';
 import { User } from './entities/user.entity';
 import { UserResolver } from './user.resolver';
@@ -18,12 +20,16 @@ import { UserService } from './user.service';
     Payment,
     ImageUser,
     Inquiry,
-    Seller])],
+    Seller,
+    ProductDirect,
+    ProductUgly,
+])],
   providers: [
     JwtAccessStrategy,
     UserResolver, //
     UserService,
-    AddressUserService
+    AddressUserService,
+    Object
   ],
 })
 export class UserModule {}

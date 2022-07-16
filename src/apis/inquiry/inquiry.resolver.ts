@@ -10,13 +10,15 @@ export class InquiryResolver {
     constructor(private readonly inquiryService: InquiryService) {}
 
     @Query(() => Inquiry)
-    fetchInquiry(@Args('title') title: string) {
-        return this.inquiryService.findOne({ title });
+    fetchInquiry(@Args('id') id: string) {
+        return this.inquiryService.findOne({ id });
     }
 
     @Query(() => [Inquiry])
-    fetchInquiries() {
-        return this.inquiryService.findAll();
+    fetchInquiriesByProduct(
+        @Args('productId') productId: string
+    ) {
+        return this.inquiryService.findAll(productId);
     }
 
     // Inquiry (문의) 생성은 User (구매자)만 가능
