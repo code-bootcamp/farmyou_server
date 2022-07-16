@@ -16,8 +16,8 @@ export class AddressUser {
     address: string;
 
     // 상세주소
-    @Column()
-    @Field(() => String)
+    @Column({nullable: true})
+    @Field(() => String, {nullable: true})
     detailedAddress: string;
 
     // 우편번호
@@ -31,6 +31,6 @@ export class AddressUser {
 
     // 회원
     @ManyToOne(() => User)
-    @Field(() => User)
+    @Field(() => User, {nullable: true})
     user: User;
 }

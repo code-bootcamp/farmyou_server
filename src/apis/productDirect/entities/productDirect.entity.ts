@@ -48,7 +48,7 @@ export class ProductDirect {
 
     // 삭제일자
     @DeleteDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, {nullable: true})
     deletedAt: Date;
 
     // 수량
@@ -69,21 +69,21 @@ export class ProductDirect {
     // 카테고리ID
     // @ManyToOne(() => Category, {cascade: true})
     @ManyToOne(() => Category)
-    @Field(() => String)
+    @Field(() => Category, {nullable: true})
     categoryId: Category;
 
     // 직매장ID
     @ManyToOne(() => DirectStore)
-    @Field(() => String)
+    @Field(() => DirectStore, {nullable: true})
     directStoreId: DirectStore;
 
     // TODO: 구매자ID 배열로 바꾸기
     @ManyToMany(() => User, (users) => users.directProducts)
-    @Field(() => [User])
+    @Field(() => [User], {nullable: true})
     users: User[];
 
     // 관리자ID
     @ManyToOne(() => Admin)
-    @Field(() => Admin)
-    adminId: Admin;
+    @Field(() => Admin, {nullable: true})
+    admin: Admin;
 }
