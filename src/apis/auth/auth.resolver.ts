@@ -100,7 +100,7 @@ export class AuthResolver {
 
     @Mutation(() => String)
     async loginAdmin(
-        @Args('email') email: string, //
+        @Args('email') email: string, //'myAccessKey
         @Args('password') password: string,
         @Context() context: any,
     ) {

@@ -6,7 +6,7 @@ export class CreateAddressUserInput {
     address: string;
 
     @Field(() => String)
-    detailedAddress: string;
+    detailedAddress?: string;
 
     @Field(() => String)
     postalCode: string;
