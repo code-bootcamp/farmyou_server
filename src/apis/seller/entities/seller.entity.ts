@@ -21,7 +21,7 @@ export class Seller {
   email: string;
 
   // 비밀번호
-  @Column()
+  @Column({select: false})
   // @Field(() => String) 비밀번호 노출 금지!!
   password: string;
 
@@ -50,6 +50,7 @@ export class Seller {
   @Field(() => Date)
   createdAt: Date;
 
+  @JoinTable()
   @ManyToMany(() => User, (users) => users.sellers)
   @Field(() => [User], {nullable: true})
   users: User[];
