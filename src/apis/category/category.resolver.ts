@@ -4,26 +4,22 @@ import { CategoryService } from './category.service';
 
 @Resolver()
 export class CategoryResolver {
-  constructor(
-    private readonly categoryService: CategoryService,
-  ) {}
+    constructor(private readonly categoryService: CategoryService) {}
 
-  @Query(() => Category)
-  fetchCategory(
-    @Args('name') name: string
-  ) {
-    return this.categoryService.findOne({name});
-  }
+    @Query(() => Category)
+    fetchCategory(@Args('name') name: string) {
+        return this.categoryService.findOne({ name });
+    }
 
-  @Query(() => [Category])
-  fetchCategories() {
-    return this.categoryService.findAll();
-  }
+    @Query(() => [Category])
+    fetchCategories() {
+        return this.categoryService.findAll();
+    }
 
-  @Mutation(() => Category)
-  createCategory(
-    @Args('name') name: string, //
-  ) {
-    return this.categoryService.create({ name });
-  }
+    @Mutation(() => Category)
+    createCategory(
+        @Args('name') name: string, //
+    ) {
+        return this.categoryService.create({ name });
+    }
 }

@@ -53,6 +53,26 @@ export class ProductUglyResolver {
     return this.productUglyService.delete({ productId });
   }
 
+  @Query(() => [ProductUgly])
+  fetchUglyProductsByDateCreated(
+      @Args('page') page: number
+  ) {
+      return this.productUglyService.findByDateCreated(page);
+  }
+
+  @Query(() => [ProductUgly])
+  fetchUglyProductsByPriceHighToLow(
+      @Args('page') page: number
+  ) {
+      return this.productUglyService.findByPriceHighToLow(page);
+  }
+
+  @Query(() => [ProductUgly])
+  fetchUglyProductsByPriceLowToHigh(
+      @Args('page') page: number
+  ) {
+      return this.productUglyService.findByPriceLowToHigh(page);
+  }
   //
   //
   //-=-=-=-=-=-=-==-=-=-=-=-=-===-=-=-=-=-=-=-=--=-=-=-=-=-=

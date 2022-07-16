@@ -13,20 +13,22 @@ import { Seller } from '../seller/entities/seller.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([
-    Admin,
-    AddressUser,
-    Payment,
-    ImageUser,
-    Inquiry,
-    Seller,
-    DirectStore
-  ])],
-  providers: [
-    JwtAccessStrategy,
-    AdminResolver, //
-    AdminService,
-    AddressUserService
-  ],
+    imports: [
+        TypeOrmModule.forFeature([
+            Admin,
+            AddressUser,
+            Payment,
+            ImageUser,
+            Inquiry,
+            Seller,
+            DirectStore,
+        ]),
+    ],
+    providers: [
+        JwtAccessStrategy,
+        AdminResolver, //
+        AdminService,
+        AddressUserService,
+    ],
 })
 export class AdminModule {}

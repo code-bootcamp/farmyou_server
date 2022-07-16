@@ -4,26 +4,20 @@ import { DirectStoreService } from './directStore.service';
 
 @Resolver()
 export class DirectStoreResolver {
-  constructor(
-    private readonly directStoreService: DirectStoreService,
-  ) {}
+    constructor(private readonly directStoreService: DirectStoreService) {}
 
-  @Query(() => DirectStore)
-  fetchDirectStore(
-    @Args('name') name: string
-  ) {
-    return this.directStoreService.findOne({name});
-  }
+    @Query(() => DirectStore)
+    fetchDirectStore(@Args('name') name: string) {
+        return this.directStoreService.findOne({ name });
+    }
 
-  @Query(() => [DirectStore])
-  fetchDirectStores() {
-    return this.directStoreService.findAll();
-  }
+    @Query(() => [DirectStore])
+    fetchDirectStores() {
+        return this.directStoreService.findAll();
+    }
 
-  @Mutation(() => DirectStore)
-  createDirectStore(
-    @Args('name') name: string
-  ) {
-    return this.directStoreService.create({ name });
-  }
+    @Mutation(() => DirectStore)
+    createDirectStore(@Args('name') name: string) {
+        return this.directStoreService.create({ name });
+    }
 }

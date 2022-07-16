@@ -5,10 +5,10 @@ import { CategoryResolver } from './category.resolver';
 import { CategoryService } from './category.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category])],
-  providers: [
-    CategoryResolver, //
-    CategoryService,
-  ],
+    imports: [TypeOrmModule.forFeature([Category])],
+    providers: [
+        CategoryResolver, //
+        CategoryService,
+    ],
 })
 export class CategoryModule {}
