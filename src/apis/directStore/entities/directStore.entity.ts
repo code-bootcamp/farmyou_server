@@ -17,6 +17,6 @@ export class DirectStore {
 
   @JoinColumn()
   @OneToOne(() => Admin)
-  @Field(() => Admin)
+  @Field(() => Admin, {nullable: true})
   admin?: Admin;
 }
