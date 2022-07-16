@@ -1,14 +1,13 @@
 import {
-    HttpException,
-    HttpStatus,
     Injectable,
     NotFoundException,
-    UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Seller } from '../seller/entities/seller.entity';
 import { ProductUgly } from './entities/productUgly.entity';
+
+const ELM_PER_PAGE = 10;
 
 @Injectable()
 export class ProductUglyService {
@@ -23,7 +22,7 @@ export class ProductUglyService {
     // 성란느님 덕분
     async findAll() {
         return await this.productUglyRepository.find({
-            relations: ['seller']
+            relations: ['seller'],
         });
     }
 
@@ -35,7 +34,7 @@ export class ProductUglyService {
     }
 
     async create({ title, content, price, quantity, origin, sellerId }) {
-        const theSeller = await this.sellerRepository.findOne({id: sellerId});
+        const theSeller = await this.sellerRepository.findOne({ id: sellerId });
 
         // console.log(theSeller);
 
@@ -47,7 +46,7 @@ export class ProductUglyService {
                 quantity,
                 origin,
                 seller: theSeller,
-    
+
                 // 하나하나 직접 나열하는 방식
                 // name: createProductUglyInput.name,
                 // description: createProductUglyInput.description,
@@ -57,7 +56,9 @@ export class ProductUglyService {
             console.log(result.seller);
             return result;
         } else {
-            throw new NotFoundException("로그인 된 계정은 판매자 계정이 아닙니다.");
+            throw new NotFoundException(
+                '로그인 된 계정은 판매자 계정이 아닙니다.',
+            );
         }
     }
 
@@ -76,19 +77,46 @@ export class ProductUglyService {
     }
 
     async delete({ productId }) {
-        const result = await this.productUglyRepository.delete({ id: productId });
+        const result = await this.productUglyRepository.delete({
+            id: productId,
+        });
         return result.affected ? true : false;
     }
 
     // 7월 14일 승원 타이틀 조회 테스트
     // 상품이름으로 조회
-    async findtitle(
-        title : string,
-    ): Promise<ProductUgly[]>{
+    async findtitle(title: string): Promise<ProductUgly[]> {
         const serchData = await this.productUglyRepository.find({
-            relations: ['seller',]
+            relations: ['seller'],
         });
-        let result = serchData.filter((word) =>word.title.includes(title));
-        return result
+        let result = serchData.filter((word) => word.title.includes(title));
+        return result;
+    }
+
+    async findByDateCreated(page) {
+        return await this.productUglyRepository
+            .createQueryBuilder('productUgly')
+            .orderBy('productUgly.createdAt', 'DESC')
+            .skip((page - 1) * ELM_PER_PAGE)
+            .take(ELM_PER_PAGE)
+            .getMany();
+    }
+
+    async findByPriceHighToLow(page) {
+        return await this.productUglyRepository
+            .createQueryBuilder('productUgly')
+            .orderBy('productUgly.price', 'DESC')
+            .skip((page - 1) * ELM_PER_PAGE)
+            .take(ELM_PER_PAGE)
+            .getMany();
+    }
+
+    async findByPriceLowToHigh(page) {
+        return await this.productUglyRepository
+            .createQueryBuilder('productUgly')
+            .orderBy('productUgly.price', 'ASC')
+            .skip((page - 1) * ELM_PER_PAGE)
+            .take(ELM_PER_PAGE)
+            .getMany();
     }
 }

@@ -12,6 +12,13 @@ import { CreateAddressUserInput } from '../addressUser/dto/createAddressUser.inp
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Seller } from '../seller/entities/seller.entity';
+import { ProductDirect } from '../productDirect/entities/productDirect.entity';
+import { ProductUgly } from '../productUgly/entities/productUgly.entity';
+
+export enum PRODUCT_TYPE_ENUM {
+    UGLY_PRODUCT = 'UGLY_PRODUCT',
+    DIRECT_PRODUCT = 'DIRECT_PRODUCT',
+}
 
 @Resolver()
 export class UserResolver {
@@ -22,8 +29,15 @@ export class UserResolver {
         @InjectRepository(Seller)
         private readonly sellerRepository: Repository<Seller>,
 
+        @InjectRepository(ProductDirect)
+        private readonly productDirectRepository: Repository<ProductDirect>,
+
+        @InjectRepository(ProductUgly)
+        private readonly productUglyRepository: Repository<ProductUgly>,
+
         private readonly userService: UserService, //
-    ) {}
+    ) // myCart: []
+    {}
 
     // 회원 생성하기
     @Mutation(() => User)
@@ -150,5 +164,15 @@ export class UserResolver {
     ) {
         const result = this.userService.deleteUser({ currentUser });
         if (result) return '로그인한 계정이 삭제되었습니다.';
+    }
+
+    // @Mutation(() => ProductDirect || ProductUgly)
+    @Mutation(() => String)
+    async placeProductInCart(
+        @Args('productType') productType: PRODUCT_TYPE_ENUM,
+        @Args('productId') productId: string,
+        @Args('quantity') quantity: number,
+    ) {
+        return this.userService.place(productType, productId, quantity);
     }
 }

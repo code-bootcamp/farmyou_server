@@ -22,7 +22,7 @@ import { InquiryService } from './inquiry.service';
         ProductUgly, 
         Seller,
         Admin,
-        AddressUser
+        AddressUser,
     ])],
   providers: [
     InquiryResolver, //
@@ -30,7 +30,8 @@ import { InquiryService } from './inquiry.service';
     AuthService,
     JwtService,
     UserService,
-    AddressUserService
+    AddressUserService,
+    Object
   ],
 })
 export class InquiryModule {}
