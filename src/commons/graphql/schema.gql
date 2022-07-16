@@ -112,6 +112,7 @@ type Payment {
   impUid: String!
   amount: Int!
   paymentComplete: PAYMENT_STATUS_ENUM!
+  createdAt: DateTime!
   user: User!
   productDirect: ProductDirect!
   productUgly: ProductUgly!
@@ -134,7 +135,6 @@ type Query {
   fetchDirectStores: [DirectStore!]!
   fetchInquiry(id: String!): Inquiry!
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
-  fetchPayments: [Payment!]!
   fetchAllDirectProducts: [ProductDirect!]!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
   fetchDirectProductsByStoreAndCategoryByDateCreated(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
@@ -171,6 +171,7 @@ type Mutation {
   postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
+  createPayment(impUid: String!, amount: Float!): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!

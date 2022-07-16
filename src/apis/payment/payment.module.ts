@@ -9,7 +9,10 @@ import { PaymentResolver } from './payment.resolver';
 import { PaymentService } from './payment.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment, User, ProductDirect, ProductUgly])],
+  imports: [TypeOrmModule.forFeature([
+    Payment, 
+    User,
+  ])],
   providers: [
     PaymentResolver, //
     PaymentService,
