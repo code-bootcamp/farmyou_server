@@ -25,7 +25,6 @@ export class PaymentResolver {
 //     @Args({name: 'productDirectId', nullable: true}) productDirectId: string,
 //     @Args({name: 'productUglyId', nullable: true}) productUglyId: string,
 //   ) {
-
 //     const iampAmount = await this.iamportService.getToken({ impUid });
 //     const { amount: paymentAmount } = iampAmount;
 //     console.log(iampAmount);
