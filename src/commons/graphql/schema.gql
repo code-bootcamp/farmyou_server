@@ -178,6 +178,7 @@ type Mutation {
   createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!): User!
   updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
   likeYou(userId: String!, sellerId: String!): String!
+  noLongerLikeYou(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
   deleteLoginUser: User!
   placeProductInCart(productType: String!, productId: String!, quantity: Float!): String!
