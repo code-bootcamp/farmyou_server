@@ -38,7 +38,7 @@ export class AuthService {
 
         // 개발환경
         res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-        // cros 오류
+        // cors 오류
         // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
         // res.setHeader('Access-Control-Allow-Credentials', 'true');
         // res.setHeader(
@@ -58,7 +58,7 @@ export class AuthService {
     getAccessToken({ user }) {
         return this.jwtService.sign(
             { email: user.email, sub: user.id },
-            { secret: 'myAccessKey', expiresIn: '1h' },
+            { secret: 'myAccessKey', expiresIn: '10h' },
         );
     }
 
@@ -89,7 +89,7 @@ export class AuthService {
     async loginSocial(req, res) {
         let user = await this.userService.findOne({ email: req.user.email });
 
-        const hashedPassword = await bcrypt.hash(req.user.password, 10); // 비밀번호 숨겨서 보내기
+        const hashedPassword = await bcrypt.hash(req.user.password, 10.2); // 비밀번호 숨겨서 보내기
 
         // 2. 회원가입
         if (!user) {

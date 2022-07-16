@@ -27,11 +27,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
-  // cros 오류 
-  app.enableCors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  });
+  // cors 오류 
+  // app.enableCors({
+  //   origin: 'http://localhost:3000',
+  //   credentials: true,
+  // });
   await app.listen(3000);
 }
 bootstrap();

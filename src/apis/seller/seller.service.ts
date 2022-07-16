@@ -46,7 +46,7 @@ export class SellerService {
     }
 
     if (password) {
-      loggedSeller.password = await bcrypt.hash(password, 10);
+      loggedSeller.password = await bcrypt.hash(password, 10.2);
     }
 
     if (phone) {

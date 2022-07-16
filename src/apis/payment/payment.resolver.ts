@@ -20,6 +20,7 @@ export class PaymentResolver {
     @Args("amount") amount: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) { 
+    console.log("뿌꾸뿌꾸뿌꾸뿌꾸ㅃ꾸ㅃ꾸ㅃ꾸ㅃ꾸");
     return this.paymentService.create({impUid, amount, currentUser})
   }
 
