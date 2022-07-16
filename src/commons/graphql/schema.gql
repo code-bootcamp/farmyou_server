@@ -5,7 +5,7 @@
 type DirectStore {
   id: String!
   name: String!
-  admin: Admin!
+  admin: Admin
 }
 
 type Admin {
@@ -13,7 +13,7 @@ type Admin {
   email: String!
   type: String!
   createdAt: DateTime!
-  directStore: DirectStore!
+  directStore: DirectStore
   isWebMaster: Boolean!
 }
 
@@ -34,14 +34,14 @@ type ProductDirect {
   price: Int!
   createdAt: DateTime!
   isDeleted: Boolean!
-  deletedAt: DateTime!
+  deletedAt: DateTime
   quantity: Int!
   quantitySold: Int!
   isSoldout: Boolean!
-  categoryId: String!
-  directStoreId: String!
-  users: [User!]!
-  adminId: Admin!
+  categoryId: Category
+  directStoreId: DirectStore
+  users: [User!]
+  admin: Admin
 }
 
 type Seller {
@@ -53,7 +53,7 @@ type Seller {
   like: Float!
   type: String!
   createdAt: DateTime!
-  users: [User!]!
+  users: [User!]
 }
 
 type User {
@@ -63,8 +63,8 @@ type User {
   phone: String!
   type: String!
   createdAt: DateTime!
-  sellers: [Seller!]!
-  directProducts: [ProductDirect!]!
+  sellers: [Seller!]
+  directProducts: [ProductDirect!]
 }
 
 type ProductUgly {
@@ -76,8 +76,8 @@ type ProductUgly {
   quantity: Int!
   quantitySold: Int!
   origin: String!
-  userId: String!
-  seller: Seller!
+  user: User
+  seller: Seller
 }
 
 type ImageUser {
@@ -91,15 +91,15 @@ type Inquiry {
   id: String!
   title: String!
   question: String!
-  answerTitle: String!
-  answer: String!
+  answerTitle: String
+  answer: String
   createdAt: DateTime!
   status: INQUIRY_STATUS_ENUM!
-  user: User!
+  user: User
   isDeleted: Boolean!
-  deletedAt: DateTime!
-  productDirect: ProductDirect!
-  productUgly: ProductUgly!
+  deletedAt: DateTime
+  productDirect: ProductDirect
+  productUgly: ProductUgly
 }
 
 enum INQUIRY_STATUS_ENUM {
@@ -171,7 +171,6 @@ type Mutation {
   postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
-  createPayment(impUid: String!, amount: Float!, productDirectId: String, productUglyId: String): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!

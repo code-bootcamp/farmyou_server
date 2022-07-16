@@ -39,7 +39,7 @@ export class Admin {
 
     @JoinColumn()
     @OneToOne(() => DirectStore)
-    @Field(() => DirectStore)
+    @Field(() => DirectStore, {nullable: true})
     directStore?: DirectStore;
 
     @Column({ default: false })

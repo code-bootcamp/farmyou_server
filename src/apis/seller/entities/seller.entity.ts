@@ -51,6 +51,6 @@ export class Seller {
   createdAt: Date;
 
   @ManyToMany(() => User, (users) => users.sellers)
-  @Field(() => [User])
+  @Field(() => [User], {nullable: true})
   users: User[];
 }

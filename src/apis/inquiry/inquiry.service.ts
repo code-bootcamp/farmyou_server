@@ -27,7 +27,7 @@ export class InquiryService {
 
     async findAll(productId) {
         const direct = await this.productDirectRepository.findOne({
-            relations: ['adminId'],
+            relations: ['admin'],
             where: {id: productId}
         });
 
@@ -125,12 +125,12 @@ export class InquiryService {
         if (thisInquiry && !thisInquiry.productDirect) {
             theProduct = await this.productUglyRepository.findOne({
                 where: { id: thisInquiry.productUgly.id },
-                relations: ['userId', 'seller'],
+                relations: ['user', 'seller'],
             });
         } else if (thisInquiry && !thisInquiry.productUgly) {
             theProduct = await this.productDirectRepository.findOne({
                 where: { id: thisInquiry.productDirect.id },
-                relations: ['categoryId', 'directStoreId', 'adminId'],
+                relations: ['categoryId', 'directStoreId', 'admin'],
             });
         }
 
@@ -139,8 +139,8 @@ export class InquiryService {
                 theProduct.seller &&
                 currentUser.id === theProduct.seller.id) ||
             (theProduct &&
-                theProduct.adminId &&
-                currentUser.id === theProduct.adminId.id)
+                theProduct.admin &&
+                currentUser.id === theProduct.admin.id)
         ) {
             const theInquiry = await this.inquiryRepository.findOne({
                 id: inquiryId,
