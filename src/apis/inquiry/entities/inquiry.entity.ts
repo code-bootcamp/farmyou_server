@@ -1,4 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { isNullableType } from 'graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';
@@ -33,7 +34,7 @@ registerEnumType(INQUIRY_STATUS_ENUM, {
 @ObjectType()
 export class Inquiry {
     // 문의ID
-    @PrimaryGeneratedColumn('increment')
+    @PrimaryGeneratedColumn('uuid')
     @Field(() => String)
     id: string;
 
@@ -49,12 +50,12 @@ export class Inquiry {
 
     // 답변제목
     @Column({nullable: true})
-    @Field(() => String)
+    @Field(() => String, {nullable: true})
     answerTitle: string;
 
     // 답변내용
     @Column({nullable: true})
-    @Field(() => String)
+    @Field(() => String, {nullable: true})
     answer: string;
 
     // 등록일자
@@ -69,7 +70,7 @@ export class Inquiry {
 
     // 회원
     @ManyToOne(() => User)
-    @Field(() => User)
+    @Field(() => User, {nullable: true})
     user: User;
 
     // 삭제여부
@@ -79,16 +80,16 @@ export class Inquiry {
 
     // 삭제일자
     @DeleteDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, {nullable: true})
     deletedAt: Date;
 
     // 직매장상품
     @ManyToOne(() => ProductDirect)
-    @Field(() => ProductDirect)
+    @Field(() => ProductDirect, {nullable: true})
     productDirect?: ProductDirect;
 
     // 못난이상품
     @ManyToOne(() => ProductUgly)
-    @Field(() => ProductUgly)
+    @Field(() => ProductUgly, {nullable: true})
     productUgly?: ProductUgly;
 }

@@ -16,30 +16,29 @@ export class PaymentResolver {
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>
   ) {}
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Payment)
-  async createPayment(
-    @Args("impUid") impUid: string,
-    @Args('amount') amount: number, //
-    @CurrentUser() currentUser: ICurrentUser,
-    @Args({name: 'productDirectId', nullable: true}) productDirectId: string,
-    @Args({name: 'productUglyId', nullable: true}) productUglyId: string,
-
-  ) {
-    // const iampAmount = await this.iamportService.getToken({ impUid });
-    // const { amount: paymentAmount } = iampAmount;
-    // console.log(iampAmount);
-    // if (paymentAmount !== amount) {
-    //   throw new UnprocessableEntityException('유효하지 않은 에러입니다.');
-    // }
-    // const oldpayment = await this.paymentRepository.findOne({
-    //   where: { impUid: impUid },
-    // });
-    // if (oldpayment !== undefined) {
-    //   throw new ConflictException('이미 결제가 된 건 입니다.');
-    // }
-    return await this.paymentService.create({ impUid, amount, currentUser, productDirectId, productUglyId });
-  }
+//   @UseGuards(GqlAuthAccessGuard)
+//   @Mutation(() => Payment)
+//   async createPayment(
+//     @Args("impUid") impUid: string,
+//     @Args('amount') amount: number, //
+//     @CurrentUser() currentUser: ICurrentUser,
+//     @Args({name: 'productDirectId', nullable: true}) productDirectId: string,
+//     @Args({name: 'productUglyId', nullable: true}) productUglyId: string,
+//   ) {
+//     const iampAmount = await this.iamportService.getToken({ impUid });
+//     const { amount: paymentAmount } = iampAmount;
+//     console.log(iampAmount);
+//     if (paymentAmount !== amount) {
+//       throw new UnprocessableEntityException('유효하지 않은 에러입니다.');
+//     }
+//     const oldpayment = await this.paymentRepository.findOne({
+//       where: { impUid: impUid },
+//     });
+//     if (oldpayment !== undefined) {
+//       throw new ConflictException('이미 결제가 된 건 입니다.');
+//     }
+//     return await this.paymentService.create({ impUid, amount, currentUser, productDirectId, productUglyId });
+//   }
 
   @Query(() => [Payment])
   async fetchPayments() {

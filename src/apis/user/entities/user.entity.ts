@@ -44,10 +44,10 @@ export class User {
 
   @JoinTable()
   @ManyToMany(() => Seller, (sellers) => sellers.users)
-  @Field(() => [Seller])
+  @Field(() => [Seller], {nullable: true})
   sellers: Seller[];
 
   @ManyToMany(() => ProductDirect, (directProducts) => directProducts.users)
-  @Field(() => [ProductDirect])
+  @Field(() => [ProductDirect], {nullable: true})
   directProducts: ProductDirect[];
 }

@@ -54,11 +54,11 @@ export class ProductUgly {
 
   // 구매자ID
   @ManyToOne(() => User)
-  @Field(() => String)
-  userId: User;
+  @Field(() => User, {nullable: true})
+  user: User;
 
   // 판매자ID
   @ManyToOne(() => Seller)
-  @Field(() => Seller)
+  @Field(() => Seller, {nullable: true})
   seller: Seller;
 }
