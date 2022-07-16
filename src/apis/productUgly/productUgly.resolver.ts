@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
+import { CreateProductUglyInput } from './dto/createProductUgly.input';
 import { ProductUgly } from './entities/productUgly.entity';
 import { ProductUglyService } from './productUgly.service';
 
@@ -72,4 +73,16 @@ export class ProductUglyResolver {
   ) {
       return this.productUglyService.findByPriceLowToHigh(page);
   }
+  //
+  //
+  //-=-=-=-=-=-=-==-=-=-=-=-=-===-=-=-=-=-=-=-=--=-=-=-=-=-=
+  // 7월 15일 승원 못난이상품 생성 이미지까지 담아보기 테스트
+  // @Mutation(() => ProductUgly)
+  // createProductUgly(
+  //   @Args('createProductUglyInput') createProductUglyInput: CreateProductUglyInput,
+  //   @Args('sellerId') sellerId: string,
+  //   // @CurrentUser() currentUser: ICurrentUser
+  // ) {
+  //   return this.productUglyService.create({ createProductUglyInput, sellerId });
+  // }
 }
