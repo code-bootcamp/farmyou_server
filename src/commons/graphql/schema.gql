@@ -143,6 +143,9 @@ type Query {
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
   fetchProductUglytitle(title: String!): [ProductUgly!]!
+  fetchUglyProductsByDateCreated(page: Float!): [ProductUgly!]!
+  fetchUglyProductsByPriceHighToLow(page: Float!): [ProductUgly!]!
+  fetchUglyProductsByPriceLowToHigh(page: Float!): [ProductUgly!]!
   fetchUser: String!
   fetchUsers: [User!]!
   checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
