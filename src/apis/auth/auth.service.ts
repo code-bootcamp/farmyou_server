@@ -54,6 +54,7 @@ export class AuthService {
             `refreshToken=${refreshToken}; path=/; domain=.garbi.shop; SameSite=None; Secure; httpOnly;`,
         );
     }
+    // 
 
     getAccessToken({ user }) {
         return this.jwtService.sign(
