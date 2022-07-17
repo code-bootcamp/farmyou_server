@@ -45,19 +45,31 @@ import { FileModule } from './apis/file/file.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({req, res}) => ({req, res}),
       cors: {
-        origin: 'http://localhost:3000',
-        credentials: true,
+        Credential: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: [
+          'Access-Control-Allow-Headers',
+          'Authorization',
+          'X-Requested-With',
+          'Content-Type',
+          'Accept',
+        ],
+        origin: [
+          'http://localhost:3000',
+          'http://127.0.0.1:5500',
+          'http://127.0.0.1:5500/frontTest/payment.test.html',
+        ],
       },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '172.30.192.13', //인스턴스 sql 비공개ip주소
-      // host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
+      // host: '172.30.192.13', //인스턴스 sql 비공개ip주소
+      host: 'localhost',                  //내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
     //   password: 'root',
 // 
-      password: 'root',
+      password: '12345678',
       database: 'farmyou_server', //인스턴스 sql ID값
       // database:               // 내부에서 테스트로 돌려볼 데이터 베이스 이름
       entities: [__dirname + '/apis/**/*.entity.*'],
