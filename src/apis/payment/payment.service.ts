@@ -53,4 +53,8 @@ export class PaymentService {
         // 4. 프론트엔드에 최종결과 돌려주기
         return payment;
     }
+<<<<<<< HEAD
 }
+=======
+  }
+>>>>>>> 844d584b0a886432b91511527a3b7f3ebabb2396
