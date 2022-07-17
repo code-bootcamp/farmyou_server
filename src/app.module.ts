@@ -47,8 +47,20 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({req, res}) => ({req, res}),
       cors: {
-        origin: 'http://localhost:3000',
-        credentials: true,
+        Credential: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: [
+          'Access-Control-Allow-Headers',
+          'Authorization',
+          'X-Requested-With',
+          'Content-Type',
+          'Accept',
+        ],
+        origin: [
+          'http://localhost:3000',
+          'http://127.0.0.1:5500',
+          'http://127.0.0.1:5500/frontTest/payment.test.html',
+        ],
       },
     }),
     TypeOrmModule.forRoot({
@@ -60,6 +72,7 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
       password: 'root',
 // 
     //   password: '12345678',
+
       database: 'farmyou_server', //인스턴스 sql ID값
       // database:               // 내부에서 테스트로 돌려볼 데이터 베이스 이름
       entities: [__dirname + '/apis/**/*.entity.*'],
