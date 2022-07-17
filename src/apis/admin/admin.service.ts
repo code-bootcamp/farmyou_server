@@ -10,6 +10,8 @@ import { Repository, getConnection } from 'typeorm';
 import { Admin } from './entities/admin.entity';
 import * as bcrypt from 'bcrypt';
 import { DirectStore } from '../directStore/entities/directStore.entity';
+import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
+import { FileResolver } from '../file/file.resolver';
 
 @Injectable()
 export class AdminService {
@@ -19,11 +21,17 @@ export class AdminService {
 
         @InjectRepository(DirectStore)
         private readonly directStoreRepository: Repository<DirectStore>,
+
+        @InjectRepository(File)
+        private readonly fileRepository: Repository<File>,
+
+        private readonly fileResolver: FileResolver
     ) {}
 
     async findOne({ directStoreId }) {
         return await this.adminRepository.findOne({
-            directStore: { id: directStoreId },
+            relations: ['directStore'],
+            where: {directStore: { id: directStoreId }},
         });
     }
 
@@ -36,6 +44,7 @@ export class AdminService {
         hashedPassword: password,
         directStoreId,
         isWebMaster,
+        files
     }) {
         if (isWebMaster === true) {
             const webmaster = await this.adminRepository.findOne({
@@ -71,6 +80,18 @@ export class AdminService {
                 name: theStore.name,
                 admin: thisAdmin,
             });
+
+            if (files) {
+                const imageId = await this.fileResolver.uploadFile(files);
+                const theImage = await this.fileRepository.findOne({
+                    relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+                    where: {id: imageId}
+                });
+                theImage.type = IMAGE_TYPE_ENUM.ADMIN;
+                theImage.admin = thisAdmin;
+    
+                await this.fileRepository.save(theImage);
+            }
 
             // return await this.adminRepository.save({ email, password, name, phone });
             return thisAdmin;

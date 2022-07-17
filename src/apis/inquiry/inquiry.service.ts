@@ -27,12 +27,12 @@ export class InquiryService {
 
     async findAll(productId) {
         const direct = await this.productDirectRepository.findOne({
-            relations: ['admin'],
+            relations: ['admin', 'users'],
             where: {id: productId}
         });
 
         const ugly = await this.productUglyRepository.findOne({
-            relations: ['seller'],
+            relations: ['seller', 'users'],
             where: {id: productId}
         });
 
@@ -45,14 +45,14 @@ export class InquiryService {
 
         if (!direct) {
             return await this.inquiryRepository.find({
-                relations: ['productUgly'],
+                relations: ['productUgly', 'user'],
                 where: {productUgly: productId}
             });
         }
 
         if (!ugly) {
             return await this.inquiryRepository.find({
-                relations: ['productDirect'],
+                relations: ['productDirect', 'user'],
                 where: {productDirect: productId}
             });
         }
@@ -66,8 +66,11 @@ export class InquiryService {
 
     async create(title, question, productDirectId, productUglyId, currentUser) {
         const writer = await this.userRepository.findOne({
+            relations: ['directProducts', 'uglyProducts'],
             where: { id: currentUser.id },
         });
+
+        console.log("WRITER IS ", writer);
 
         if (productDirectId) {
             try {

@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
+import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { Seller } from 'src/apis/seller/entities/seller.entity';
 import {
     Column,
@@ -53,7 +54,13 @@ export class User {
     @Field(() => [Seller], { nullable: true })
     sellers: Seller[];
 
+    @JoinTable()
     @ManyToMany(() => ProductDirect, (directProducts) => directProducts.users)
     @Field(() => [ProductDirect], { nullable: true })
     directProducts: ProductDirect[];
+
+    @JoinTable()
+    @ManyToMany(() => ProductUgly, (uglyProducts) => uglyProducts.users)
+    @Field(() => [ProductUgly], { nullable: true })
+    uglyProducts: ProductUgly[];
 }
