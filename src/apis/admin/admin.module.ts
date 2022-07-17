@@ -11,6 +11,10 @@ import { AdminResolver } from './admin.resolver';
 import { AdminService } from './admin.service';
 import { Seller } from '../seller/entities/seller.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
+import { User } from '../user/entities/user.entity';
+import { File } from '../file/entities/file.entity';
+import { FileResolver } from '../file/file.resolver';
+import { FileService } from '../file/file.service';
 
 @Module({
     imports: [
@@ -22,6 +26,8 @@ import { DirectStore } from '../directStore/entities/directStore.entity';
             Inquiry,
             Seller,
             DirectStore,
+            User,
+            File
         ]),
     ],
     providers: [
@@ -29,6 +35,8 @@ import { DirectStore } from '../directStore/entities/directStore.entity';
         AdminResolver, //
         AdminService,
         AddressUserService,
+        FileResolver,
+        FileService
     ],
 })
 export class AdminModule {}

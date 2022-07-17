@@ -21,11 +21,13 @@ import { Seller } from './apis/seller/entities/seller.entity';
 import { SellerModule } from './apis/seller/seller.module';
 import { AdminModule } from './apis/admin/admin.module';
 import { FileModule } from './apis/file/file.module';
+import { AddressUserModule } from './apis/addressUser/addressUser.module';
 
 
 
 @Module({
   imports: [
+    AddressUserModule,
     AdminModule,
     FileModule,
     SellerModule,
@@ -44,10 +46,10 @@ import { FileModule } from './apis/file/file.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({req, res}) => ({req, res}),
-      // cors: {
-      //   origin: 'http://localhost:3000',
-      //   credentials: true,
-      // },
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',

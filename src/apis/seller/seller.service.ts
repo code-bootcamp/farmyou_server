@@ -1,65 +1,99 @@
-import { ConflictException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import {
+    ConflictException,
+    HttpException,
+    Injectable,
+    NotFoundException,
+    UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getConnection } from 'typeorm';
 import { Seller } from './entities/seller.entity';
 import * as bcrypt from 'bcrypt';
+import { FileResolver } from '../file/file.resolver';
+import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
 
 @Injectable()
 export class SellerService {
-  constructor(
-    @InjectRepository(Seller)
-    private readonly sellerRepository: Repository<Seller>,
-  ) {}
+    constructor(
+        @InjectRepository(Seller)
+        private readonly sellerRepository: Repository<Seller>,
 
-  async findOne({ email }) {
-    return await this.sellerRepository.findOne({ relations: ['users'], where: {email: email} });
-  }
+        @InjectRepository(File)
+        private readonly fileRepository: Repository<File>,
 
-  async findAll() {
-    return await this.sellerRepository.find({
-        relations: ['users']
-    });
-  }
+        private readonly fileResolver: FileResolver
+    ) {}
 
-  async create({ email, hashedPassword: password, name, phone }) {
-    const seller = await this.sellerRepository.findOne({ email });
-    if (seller) throw new ConflictException('이미 등록된 이메일 입니다.');
-
-    const thisSeller = await this.sellerRepository.save({
-      email, 
-      password, 
-      name, 
-      phone,
-      like: 0,
-      users: []
-     });
-
-    // return await this.sellerRepository.save({ email, password, name, phone });
-    return thisSeller;
-  }
-
-  async update({currentUser, email, password, phone}) {
-    const loggedSeller = await this.sellerRepository.findOne({id: currentUser.id});
-
-    if (email) {
-      loggedSeller.email = email;
+    async findOne({ email }) {
+        return await this.sellerRepository.findOne({
+            relations: ['users'],
+            where: { email: email },
+        });
     }
 
-    if (password) {
-      loggedSeller.password = await bcrypt.hash(password, 10.2);
+    async findAll() {
+        return await this.sellerRepository.find({
+            relations: ['users'],
+        });
     }
 
-    if (phone) {
-      loggedSeller.phone = phone;
+    async create({ email, hashedPassword: password, name, phone, files }) {
+        const seller = await this.sellerRepository.findOne({
+            relations: ['users'],
+            where: { email },
+        });
+        if (seller) throw new ConflictException('이미 등록된 이메일 입니다.');
+
+        const thisSeller = await this.sellerRepository.save({
+            email,
+            password,
+            name,
+            phone,
+            like: 0,
+            users: [],
+        });
+
+        if (files) {
+            const imageId = await this.fileResolver.uploadFile(files);
+            const theImage = await this.fileRepository.findOne({
+                relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+                where: {id: imageId}
+            });
+            theImage.type = IMAGE_TYPE_ENUM.SELLER;
+            theImage.seller = thisSeller;
+
+            await this.fileRepository.save(theImage);
+        }
+
+        // return await this.sellerRepository.save({ email, password, name, phone });
+        return thisSeller;
     }
 
-    return this.sellerRepository.save(loggedSeller);
-  }
+    async update({ currentUser, email, password, phone }) {
+        const loggedSeller = await this.sellerRepository.findOne({
+            relations: ['users'],
+            where: { id: currentUser.id },
+        });
 
-  async postBoardDirect({sellerId, boardDirectNum}) {
-    return this.sellerRepository.save({
-      id: sellerId, 
-      boardDirectNum
-    });
-  }
+        if (email) {
+            loggedSeller.email = email;
+        }
+
+        if (password) {
+            loggedSeller.password = await bcrypt.hash(password, 10.2);
+        }
+
+        if (phone) {
+            loggedSeller.phone = phone;
+        }
+
+        return this.sellerRepository.save(loggedSeller);
+    }
+
+    async postBoardDirect({ sellerId, boardDirectNum }) {
+        return this.sellerRepository.save({
+            id: sellerId,
+            boardDirectNum,
+        });
+    }
 }

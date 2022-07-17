@@ -1,9 +1,8 @@
-import {
-    Injectable,
-    NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
+import { FileResolver } from '../file/file.resolver';
 import { Seller } from '../seller/entities/seller.entity';
 import { ProductUgly } from './entities/productUgly.entity';
 
@@ -17,24 +16,32 @@ export class ProductUglyService {
 
         @InjectRepository(Seller)
         private readonly sellerRepository: Repository<Seller>,
+
+        @InjectRepository(File)
+        private readonly fileRepository: Repository<File>,
+
+        private readonly fileResolver: FileResolver
     ) {}
 
     // 성란느님 덕분
     async findAll() {
         return await this.productUglyRepository.find({
-            relations: ['seller'],
+            relations: ['seller', 'users'],
         });
     }
 
     async findOne({ productId }) {
         return await this.productUglyRepository.findOne({
             where: { id: productId },
-            relations: ['seller'],
+            relations: ['seller', 'users'],
         });
     }
 
-    async create({ title, content, price, quantity, origin, sellerId }) {
-        const theSeller = await this.sellerRepository.findOne({ id: sellerId });
+    async create({ title, content, price, quantity, origin, sellerId, files}) {
+        const theSeller = await this.sellerRepository.findOne({
+            relations: ['users'],
+            where: { id: sellerId },
+        });
 
         // console.log(theSeller);
 
@@ -53,6 +60,18 @@ export class ProductUglyService {
                 // price: createProductUglyInput.price,
             });
 
+            if (files) {
+                const imageId = await this.fileResolver.uploadFile(files);
+                const theImage = await this.fileRepository.findOne({
+                    relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+                    where: {id: imageId}
+                });
+                theImage.type = IMAGE_TYPE_ENUM.UGLY_PRODUCT;
+                theImage.productUgly = result;
+    
+                await this.fileRepository.save(theImage);
+            }
+
             console.log(result.seller);
             return result;
         } else {
@@ -64,12 +83,13 @@ export class ProductUglyService {
 
     async update({ productId, updateProductUglyInput }) {
         const myproduct = await this.productUglyRepository.findOne({
+            relations: ['seller', 'users'],
             where: { id: productId },
         });
 
         const newProductUgly = {
             ...myproduct,
-            id: productId,
+            where: {id: productId},
             ...updateProductUglyInput,
         };
 
@@ -87,7 +107,7 @@ export class ProductUglyService {
     // 상품이름으로 조회
     async findtitle(title: string): Promise<ProductUgly[]> {
         const serchData = await this.productUglyRepository.find({
-            relations: ['seller'],
+            relations: ['seller', 'users'],
         });
         let result = serchData.filter((word) => word.title.includes(title));
         return result;

@@ -19,6 +19,9 @@ import { Seller } from '../seller/entities/seller.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
+import { FileResolver } from '../file/file.resolver';
+import { FileService } from '../file/file.service';
+import { File } from '../file/entities/file.entity';
 
 @Module({
     imports: [
@@ -32,6 +35,7 @@ import { ProductUgly } from '../productUgly/entities/productUgly.entity';
             DirectStore,
             ProductDirect,
             ProductUgly,
+            File
         ]),
     ],
     providers: [
@@ -45,7 +49,9 @@ import { ProductUgly } from '../productUgly/entities/productUgly.entity';
         AddressUserService,
         SellerService,
         AdminService,
-        Object
+        FileResolver,
+        FileService,
+        Object,
     ],
     controllers: [
         AuthController, //

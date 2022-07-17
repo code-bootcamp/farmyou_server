@@ -56,17 +56,6 @@ type Seller {
   users: [User!]
 }
 
-type User {
-  id: String!
-  name: String!
-  email: String!
-  phone: String!
-  type: String!
-  createdAt: DateTime!
-  sellers: [Seller!]
-  directProducts: [ProductDirect!]
-}
-
 type ProductUgly {
   id: String!
   title: String!
@@ -76,8 +65,29 @@ type ProductUgly {
   quantity: Int!
   quantitySold: Int!
   origin: String!
-  user: User
+  users: [User!]
   seller: Seller
+}
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  type: String!
+  createdAt: DateTime!
+  sellers: [Seller!]
+  directProducts: [ProductDirect!]
+  uglyProducts: [ProductUgly!]
+}
+
+type AddressUser {
+  id: String!
+  address: String!
+  detailedAddress: String
+  postalCode: String!
+  isMain: Boolean!
+  user: User
 }
 
 type ImageUser {
@@ -124,6 +134,8 @@ enum PAYMENT_STATUS_ENUM {
 }
 
 type Query {
+  fetchAddress(addressId: String!): AddressUser!
+  fetchAddressesOfTheUser(userId: String!): [AddressUser!]!
   fetchAdminOfTheStore(directStoreId: String!): Admin!
   fetchSellers: [Seller!]!
   checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
@@ -146,15 +158,19 @@ type Query {
   fetchUglyProductsByDateCreated(page: Float!): [ProductUgly!]!
   fetchUglyProductsByPriceHighToLow(page: Float!): [ProductUgly!]!
   fetchUglyProductsByPriceLowToHigh(page: Float!): [ProductUgly!]!
-  fetchUser: String!
+  fetchUser: User!
   fetchUsers: [User!]!
   checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
 }
 
 type Mutation {
-  createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean): Admin!
-  uploadFile(files: [Upload!]!): [String!]!
-  createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
+  createAddress(address: String!, detailedAddress: String, postalCode: String!, userId: String!, isMain: Boolean!): AddressUser!
+  deleteAddress(id: String!): Boolean!
+  updateAddress(addressId: String!, updateAddressUserInput: UpdateAddressUserInput!): AddressUser!
+  assignMain(userId: String!, addressId: String!): AddressUser!
+  createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean, files: [Upload!]): Admin!
+  uploadFile(files: [Upload!]): [String!]!
+  createSeller(name: String!, email: String!, password: String!, phone: String!, files: [Upload!]): Seller!
   updateSeller(email: String, password: String, phone: String): Seller!
   loginUser(email: String!, password: String!): String!
   loginSeller(email: String!, password: String!): String!
@@ -172,17 +188,23 @@ type Mutation {
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
   createPayment(impUid: String!, amount: Float!): Payment!
-  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!): ProductDirect!
+  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!, files: [Upload!]): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
-  createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!): ProductUgly!
+  createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, files: [Upload!]): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
-  createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!): User!
+  createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, files: [Upload!]): User!
   updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
   likeYou(userId: String!, sellerId: String!): String!
   likeYouNoMore(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
   deleteLoginUser: User!
-  placeProductInCart(productType: String!, productId: String!, quantity: Float!): String!
+  buyProduct(productType: String!, productId: String!, quantity: Float!): User!
+}
+
+input UpdateAddressUserInput {
+  address: String
+  detailedAddress: String
+  postalCode: String
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -192,10 +214,4 @@ input CreateAddressUserInput {
   address: String!
   detailedAddress: String!
   postalCode: String!
-}
-
-input UpdateAddressUserInput {
-  address: String
-  detailedAddress: String
-  postalCode: String
 }

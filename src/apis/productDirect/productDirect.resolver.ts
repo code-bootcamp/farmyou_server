@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { ProductDirect } from './entities/productDirect.entity';
 import { ProductDirectService } from './productDirect.service';
@@ -63,6 +64,13 @@ export class ProductDirectResolver {
     //     return this.productDirectService.findByName({ directStoreName });
     // }
 
+    // @Query(() => Boolean)
+    // checkSoldout(
+    //     @Args('productId') productId: string
+    // ) {
+    //     return this.productDirectService.checkSoldout({productId});
+    // }
+
     @Mutation(() => ProductDirect)
     createProductDirect(
         @Args('title') title: string,
@@ -72,6 +80,8 @@ export class ProductDirectResolver {
         @Args('categoryId') categoryId: string,
         @Args('directStoreId') directStoreId: string,
         @Args('adminId') adminId: string,
+        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+        files: FileUpload[],
         // @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.create({
@@ -82,6 +92,7 @@ export class ProductDirectResolver {
             categoryId,
             directStoreId,
             adminId,
+            files
         });
     }
 
