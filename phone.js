@@ -11,20 +11,9 @@ import 'dotenv/config'
 // }
 
 export function getToken(){
-    const mycount = 6
-    // if(mycount === undefined){
-    //     console.log("에러 발생!!! 갯수를 제대로 입력해 주세요!!!")
-    //     return
-    // } else if(mycount <= 0){
-    //     console.log("에러 발생!!! 갯수가 너무 적습니다!!!")
-    //     return
-    // } else if(mycount > 10) {
-    //     console.log("에러 발생!!! 갯수가 너무 많습니다!!!")
-    //     return
-    // }
+    const mycount = 6;
     const result = String(Math.floor(Math.random() * 10**mycount)).padStart(mycount, "0")
-    return result
-    // console.log(result)
+    return result;
 }
 
 export async function sendTokenToSMS(fff, ggg){
@@ -39,7 +28,6 @@ export async function sendTokenToSMS(fff, ggg){
         from: SMS_SENDER, 
         text: `안녕하세요?! 요청하신 인증번호는 [${ggg}] 입니다.` 
     })
-    console.log(result)
 
-    // console.log(fff + "번호로 인증번호" + ggg + "를 전송합니다!!")
+    console.log(result);
 }

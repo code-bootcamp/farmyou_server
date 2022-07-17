@@ -100,7 +100,8 @@ export class AuthService {
                 name: req.user.name,
                 phone: req.user.phone,
                 addressUser: null,
-            });
+                files: null
+        });
         }
 
         //3. 로그인

@@ -8,6 +8,7 @@ import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
 export class SellerResolver {
@@ -25,10 +26,12 @@ export class SellerResolver {
     @Args('email') email: string,
     @Args('password') password: string,
     @Args('phone') phone: string,
+    @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+    files: FileUpload[],
   ) {
     const hashedPassword = await bcrypt.hash(password, 10.2);
     // console.log(hashedPassword);
-    return this.sellerService.create({ name, email, hashedPassword, phone });
+    return this.sellerService.create({ name, email, hashedPassword, phone, files });
   }
 
   // 회원 정보 업데이트 하기 

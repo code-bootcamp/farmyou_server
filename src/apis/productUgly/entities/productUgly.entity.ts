@@ -6,7 +6,8 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  ManyToMany
 } from 'typeorm';
 
 @Entity()
@@ -52,10 +53,10 @@ export class ProductUgly {
   @Field(() => String)
   origin: string;
 
-  // 구매자ID
-  @ManyToOne(() => User)
-  @Field(() => User, {nullable: true})
-  user: User;
+  // TODO: 구매자ID 배열로 바꾸기
+  @ManyToMany(() => User, (users) => users.uglyProducts)
+  @Field(() => [User], {nullable: true})
+  users: User[];
 
   // 판매자ID
   @ManyToOne(() => Seller)

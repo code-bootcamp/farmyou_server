@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Admin } from '../admin/entities/admin.entity';
 import { Category } from '../category/entities/category.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
+import { File } from '../file/entities/file.entity';
+import { FileResolver } from '../file/file.resolver';
+import { FileService } from '../file/file.service';
 import { ImageDirectProduct } from '../imageDirectProduct/entities/imageDirectProduct.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
@@ -22,11 +25,14 @@ import { ProductDirectService } from './productDirect.service';
     Inquiry,
     Payment,
     User,
-    Seller
+    Seller,
+    File
   ])],
   providers: [
     ProductDirectResolver, //
     ProductDirectService,
+    FileResolver,
+    FileService
   ],
 })
 export class ProductDirectModule {}
