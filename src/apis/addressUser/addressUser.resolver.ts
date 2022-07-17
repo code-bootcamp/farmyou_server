@@ -13,14 +13,14 @@ export class AddressUserResolver {
     }
 
     @Query(() => [AddressUser])
-    fetchAddresses() {
-        return this.addressUserService.findAll();
+    fetchAddressesOfTheUser(@Args('userId') userId: string) {
+        return this.addressUserService.findAll(userId);
     }
 
-    @Mutation(() => String)
+    @Mutation(() => AddressUser)
     createAddress(
         @Args('address') address: string,
-        @Args('detailedAddress') detailedAddress: string,
+        @Args({name: 'detailedAddress', nullable: true}) detailedAddress: string,
         @Args('postalCode') postalCode: string,
         @Args('userId') userId: string,
         @Args('isMain') isMain: boolean,
@@ -48,6 +48,17 @@ export class AddressUserResolver {
         return await this.addressUserService.update({
             addressId,
             updateAddressUserInput,
+        });
+    }
+
+    @Mutation(() => AddressUser)
+    async assignMain(
+        @Args('userId') userId: string,
+        @Args('addressId') addressId: string,
+    ) {
+        return await this.addressUserService.assign({
+            userId,
+            addressId,
         });
     }
 }

@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, registerEnumType, Resolver } from '@nestjs/graphql';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
@@ -12,11 +12,16 @@ import { Repository } from 'typeorm';
 import { Seller } from '../seller/entities/seller.entity';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 export enum PRODUCT_TYPE_ENUM {
     UGLY_PRODUCT = 'UGLY_PRODUCT',
     DIRECT_PRODUCT = 'DIRECT_PRODUCT',
 }
+
+registerEnumType(PRODUCT_TYPE_ENUM, {
+    name: 'PRODUCT_TYPE_ENUM',
+});
 
 @Resolver()
 export class UserResolver {
@@ -38,6 +43,8 @@ export class UserResolver {
         @Args('password') password: string,
         @Args('phone') phone: string,
         @Args('addressUser') addressUser: CreateAddressUserInput,
+        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+        files: FileUpload[],
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         return this.userService.create({
@@ -46,6 +53,7 @@ export class UserResolver {
             hashedPassword,
             phone,
             addressUser,
+            files
         });
     }
 
@@ -70,13 +78,13 @@ export class UserResolver {
     }
 
     @UseGuards(GqlAuthAccessGuard)
-    @Query(() => String)
+    @Query(() => User)
     fetchUser(
         @CurrentUser() currentUser: ICurrentUser, //
     ) {
-        console.log('fetchUser 실행 완료!!!');
-        console.log('유저정보는??!!!', currentUser);
-        return 'qqq';
+        const id = currentUser.id;
+        console.log(id);
+        return this.userService.findOneById({ id });
     }
 
     // 관리자페이지에서 모든유저 조회할때 사용 하게 될 듯
@@ -227,12 +235,23 @@ export class UserResolver {
     }
 
     // @Mutation(() => ProductDirect || ProductUgly)
-    @Mutation(() => String)
-    async placeProductInCart(
+    // @Mutation(() => String)
+    // async placeProductInCart(
+    //     @Args('productType') productType: PRODUCT_TYPE_ENUM,
+    //     @Args('productId') productId: string,
+    //     @Args('quantity') quantity: number,
+    // ) {
+    //     return this.userService.place(productType, productId, quantity);
+    // }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Mutation(() => User)
+    async buyProduct(
         @Args('productType') productType: PRODUCT_TYPE_ENUM,
         @Args('productId') productId: string,
         @Args('quantity') quantity: number,
+        @CurrentUser() currentUser: ICurrentUser
     ) {
-        return this.userService.place(productType, productId, quantity);
+        return this.userService.buy({productType, productId, quantity, currentUser});
     }
 }

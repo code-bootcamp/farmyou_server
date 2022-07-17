@@ -12,15 +12,6 @@ import {
     DeleteDateColumn,
 } from 'typeorm';
 
-// export enum CONTENT_TYPE_ENUM {
-//     QUESTION = 'QUESTION',
-//     ANSWER = 'ANSWER',
-// }
-
-// registerEnumType(CONTENT_TYPE_ENUM, {
-//     name: 'CONTENT_TYPE_ENUMM',
-// });
-
 export enum INQUIRY_STATUS_ENUM {
     NOT_ANSWERED = 'NOT_ANSWERED',
     ANSWERED = 'ANSWERED',
