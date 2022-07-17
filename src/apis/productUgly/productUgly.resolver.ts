@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { CreateProductUglyInput } from './dto/createProductUgly.input';
@@ -8,81 +9,78 @@ import { ProductUglyService } from './productUgly.service';
 
 @Resolver()
 export class ProductUglyResolver {
-  constructor(private readonly productUglyService: ProductUglyService) {}
+    constructor(private readonly productUglyService: ProductUglyService) {}
 
-  @Query(() => [ProductUgly])
-  fetchUglyProducts() {
-    return this.productUglyService.findAll();
-  }
+    @Query(() => [ProductUgly])
+    fetchUglyProducts() {
+        return this.productUglyService.findAll();
+    }
 
-  @Query(() => ProductUgly)
-  fetchUglyProduct(
-    @Args('productId') productId: string, //
-  ) {
-    return this.productUglyService.findOne({ productId });
-  }
+    @Query(() => ProductUgly)
+    fetchUglyProduct(
+        @Args('productId') productId: string, //
+    ) {
+        return this.productUglyService.findOne({ productId });
+    }
 
-  // 7월 14일 승원 타이틀 조회 테스트
-  // 상품이름으로 조회
-  @Query(()=>[ProductUgly])
-  fetchProductUglytitle(
-    @Args('title') title: string
-  ): Promise<ProductUgly[]> {
-    return this.productUglyService.findtitle(title)
-  }
-  
+    // 7월 14일 승원 타이틀 조회 테스트
+    // 상품이름으로 조회
+    @Query(() => [ProductUgly])
+    fetchProductUglytitle(
+        @Args('title') title: string,
+    ): Promise<ProductUgly[]> {
+        return this.productUglyService.findtitle(title);
+    }
 
-  @Mutation(() => ProductUgly)
-  createProductUgly(
-    @Args('title') title: string,
-    @Args('content') content: string,
-    @Args('price') price: number,
-    @Args('quantity') quantity: number,
-    @Args('origin') origin: string,
-    @Args('sellerId') sellerId: string,
-    // @CurrentUser() currentUser: ICurrentUser
-  ) {
-    return this.productUglyService.create({ title, content, price, quantity, origin, sellerId });
-  }
-  
-  // 수량이 0개 되었을 때
-  @Mutation(() => Boolean)
-  deleteProductUgly(
-    @Args('productId') productId: string, //
-  ) {
-    return this.productUglyService.delete({ productId });
-  }
+    @Mutation(() => ProductUgly)
+    createProductUgly(
+        @Args('title') title: string,
+        @Args('content') content: string,
+        @Args('price') price: number,
+        @Args('quantity') quantity: number,
+        @Args('origin') origin: string,
+        @Args('sellerId') sellerId: string,
+        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+        files: FileUpload[],
+        // @CurrentUser() currentUser: ICurrentUser
+    ) {
+        return this.productUglyService.create(
+            { title, content, price, quantity, origin, sellerId, files }
+        );
+    }
 
-  @Query(() => [ProductUgly])
-  fetchUglyProductsByDateCreated(
-      @Args('page') page: number
-  ) {
-      return this.productUglyService.findByDateCreated(page);
-  }
+    // 수량이 0개 되었을 때
+    @Mutation(() => Boolean)
+    deleteProductUgly(
+        @Args('productId') productId: string, //
+    ) {
+        return this.productUglyService.delete({ productId });
+    }
 
-  @Query(() => [ProductUgly])
-  fetchUglyProductsByPriceHighToLow(
-      @Args('page') page: number
-  ) {
-      return this.productUglyService.findByPriceHighToLow(page);
-  }
+    @Query(() => [ProductUgly])
+    fetchUglyProductsByDateCreated(@Args('page') page: number) {
+        return this.productUglyService.findByDateCreated(page);
+    }
 
-  @Query(() => [ProductUgly])
-  fetchUglyProductsByPriceLowToHigh(
-      @Args('page') page: number
-  ) {
-      return this.productUglyService.findByPriceLowToHigh(page);
-  }
-  //
-  //
-  //-=-=-=-=-=-=-==-=-=-=-=-=-===-=-=-=-=-=-=-=--=-=-=-=-=-=
-  // 7월 15일 승원 못난이상품 생성 이미지까지 담아보기 테스트
-  // @Mutation(() => ProductUgly)
-  // createProductUgly(
-  //   @Args('createProductUglyInput') createProductUglyInput: CreateProductUglyInput,
-  //   @Args('sellerId') sellerId: string,
-  //   // @CurrentUser() currentUser: ICurrentUser
-  // ) {
-  //   return this.productUglyService.create({ createProductUglyInput, sellerId });
-  // }
+    @Query(() => [ProductUgly])
+    fetchUglyProductsByPriceHighToLow(@Args('page') page: number) {
+        return this.productUglyService.findByPriceHighToLow(page);
+    }
+
+    @Query(() => [ProductUgly])
+    fetchUglyProductsByPriceLowToHigh(@Args('page') page: number) {
+        return this.productUglyService.findByPriceLowToHigh(page);
+    }
+    //
+    //
+    //-=-=-=-=-=-=-==-=-=-=-=-=-===-=-=-=-=-=-=-=--=-=-=-=-=-=
+    // 7월 15일 승원 못난이상품 생성 이미지까지 담아보기 테스트
+    // @Mutation(() => ProductUgly)
+    // createProductUgly(
+    //   @Args('createProductUglyInput') createProductUglyInput: CreateProductUglyInput,
+    //   @Args('sellerId') sellerId: string,
+    //   // @CurrentUser() currentUser: ICurrentUser
+    // ) {
+    //   return this.productUglyService.create({ createProductUglyInput, sellerId });
+    // }
 }

@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Seller } from '../seller/entities/seller.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
 export class AdminResolver {
@@ -33,6 +34,8 @@ export class AdminResolver {
         @Args('password') password: string,
         @Args({ name: 'directStoreId', nullable: true }) directStoreId: string,
         @Args({ name: 'isWebMaster', nullable: true }) isWebMaster: boolean,
+        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+        files: FileUpload[],
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         // console.log(hashedPassword);
@@ -41,6 +44,7 @@ export class AdminResolver {
             hashedPassword,
             directStoreId,
             isWebMaster,
+            files
         });
     }
 

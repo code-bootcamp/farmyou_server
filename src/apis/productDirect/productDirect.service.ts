@@ -4,6 +4,8 @@ import { Connection, createConnection, Repository } from 'typeorm';
 import { Admin } from '../admin/entities/admin.entity';
 import { Category } from '../category/entities/category.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
+import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
+import { FileResolver } from '../file/file.resolver';
 import { ProductDirect } from './entities/productDirect.entity';
 
 @Injectable()
@@ -17,10 +19,17 @@ export class ProductDirectService {
 
         @InjectRepository(DirectStore)
         private readonly directStoreRepository: Repository<DirectStore>,
+
+        @InjectRepository(File)
+        private readonly fileRepository: Repository<File>,
+
+        private readonly fileResolver: FileResolver
     ) {}
 
     async findAll() {
-        return await this.productDirectRepository.find();
+        return await this.productDirectRepository.find({
+            relations: ['categoryId', 'directStoreId', 'users', 'admin']
+        });
     }
 
     // ElasticSearch??
@@ -33,6 +42,7 @@ export class ProductDirectService {
 
     async findById({ directStoreId }) {
         return await this.productDirectRepository.find({
+            relations: ['categoryId', 'directStoreId', 'users', 'admin'],
             where: { directStoreId },
         });
     }
@@ -182,16 +192,18 @@ export class ProductDirectService {
         categoryId,
         directStoreId,
         adminId,
+        files
     }) {
         // const adminId = currentUser.id;
 
         const theAdmin = await this.adminRepository.findOne({
+            relations: ['directStore'],
             where: { id: adminId },
         });
 
         const theStore = await this.directStoreRepository.findOne({
-            where: { id: directStoreId },
             relations: ['admin'],
+            where: { id: directStoreId },
         });
         console.log(theStore);
         console.log(theStore.admin);
@@ -204,15 +216,23 @@ export class ProductDirectService {
                 content,
                 price,
                 quantity,
-                categoryId,
-                directStoreId,
-                adminId,
-
-                // 하나하나 직접 나열하는 방식
-                // name: createProductUglyInput.name,
-                // description: createProductUglyInput.description,
-                // price: createProductUglyInput.price,
+                categoryId: {id: categoryId},
+                directStoreId: {id: directStoreId},
+                admin: {id: adminId},
             });
+
+            if (files) {
+                const imageId = await this.fileResolver.uploadFile(files);
+                const theImage = await this.fileRepository.findOne({
+                    relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+                    where: {id: imageId}
+                });
+                theImage.type = IMAGE_TYPE_ENUM.DIRECT_PRODUCT;
+                theImage.productDirect = result;
+    
+                await this.fileRepository.save(theImage);
+            }
+
             return result;
         } else {
             throw new UnprocessableEntityException(
@@ -221,8 +241,10 @@ export class ProductDirectService {
         }
     }
 
+    // 이건 왜 여기있지???
     async checkSoldout({ productId }) {
         const product = await this.productDirectRepository.findOne({
+            relations: ['categoryId', 'directStoreId', 'users', 'admin'],
             where: { id: productId },
         });
 

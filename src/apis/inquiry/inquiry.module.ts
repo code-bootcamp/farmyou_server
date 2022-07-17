@@ -5,6 +5,9 @@ import { AddressUserService } from '../addressUser/addressUser.service';
 import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { Admin } from '../admin/entities/admin.entity';
 import { AuthService } from '../auth/auth.service';
+import { File } from '../file/entities/file.entity';
+import { FileResolver } from '../file/file.resolver';
+import { FileService } from '../file/file.service';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
 import { Seller } from '../seller/entities/seller.entity';
@@ -15,23 +18,28 @@ import { InquiryResolver } from './inquiry.resolver';
 import { InquiryService } from './inquiry.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([
-        Inquiry, 
-        User, 
-        ProductDirect, 
-        ProductUgly, 
-        Seller,
-        Admin,
-        AddressUser,
-    ])],
-  providers: [
-    InquiryResolver, //
-    InquiryService,
-    AuthService,
-    JwtService,
-    UserService,
-    AddressUserService,
-    Object
-  ],
+    imports: [
+        TypeOrmModule.forFeature([
+            Inquiry,
+            User,
+            ProductDirect,
+            ProductUgly,
+            Seller,
+            Admin,
+            AddressUser,
+            File
+        ]),
+    ],
+    providers: [
+        InquiryResolver, //
+        InquiryService,
+        FileResolver,
+        FileService,
+        AuthService,
+        JwtService,
+        UserService,
+        AddressUserService,
+        Object,
+    ],
 })
 export class InquiryModule {}
