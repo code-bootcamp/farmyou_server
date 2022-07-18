@@ -1,8 +1,20 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, registerEnumType, Resolver } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { ProductDirect } from './entities/productDirect.entity';
 import { ProductDirectService } from './productDirect.service';
+
+export enum SORT_CONDITION_ENUM {
+    MOST_RECENT = '최신순',
+    PRICE_ASC = '낮은가격순',
+    PRICE_DESC = '높은가격순',
+}
+
+registerEnumType(SORT_CONDITION_ENUM, {
+    name: 'SORT_CONDITION_ENUM',
+});
 
 @Resolver()
 export class ProductDirectResolver {
@@ -30,30 +42,22 @@ export class ProductDirectResolver {
     }
 
     @Query(() => [ProductDirect])
-    fetchDirectProductsByStoreAndCategoryByDateCreated(
+    fetchDirectProductsSorted(
+        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
         @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
         @Args({name: 'categoryId', nullable: true}) categoryId: string,
         @Args('page') page: number
     ) {
-        return this.productDirectService.findByStoreAndCategoryByDateCreated({directStoreId, categoryId}, page);
+        return this.productDirectService.findSorted({sortBy, directStoreId, categoryId}, page);
     }
 
+    // 7월 14일 승원 타이틀 조회 테스트
+    // 상품이름으로 조회
     @Query(() => [ProductDirect])
-    fetchDirectProductsByStoreAndCategoryByPriceHighToLow(
-        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
-        @Args({name: 'categoryId', nullable: true}) categoryId: string,
-        @Args('page') page: number
-    ) {
-        return this.productDirectService.findByStoreAndCategoryByPriceHighToLow({directStoreId, categoryId}, page);
-    }
-
-    @Query(() => [ProductDirect])
-    fetchDirectProductsByStoreAndCategoryByPriceLowToHigh(
-        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
-        @Args({name: 'categoryId', nullable: true}) categoryId: string,
-        @Args('page') page: number
-    ) {
-        return this.productDirectService.findByStoreAndCategoryByPriceLowToHigh({directStoreId, categoryId}, page);
+    fetchUglyProductByTitle(
+        @Args('title') title: string,
+    ): Promise<ProductDirect[]> {
+        return this.productDirectService.findByTitle(title);
     }
 
     // TODO: not working now
@@ -71,6 +75,7 @@ export class ProductDirectResolver {
     //     return this.productDirectService.checkSoldout({productId});
     // }
 
+    @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => ProductDirect)
     createProductDirect(
         @Args('title') title: string,
@@ -79,10 +84,10 @@ export class ProductDirectResolver {
         @Args('quantity') quantity: number,
         @Args('categoryId') categoryId: string,
         @Args('directStoreId') directStoreId: string,
-        @Args('adminId') adminId: string,
+        // @Args('adminId') adminId: string,
         @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
         files: FileUpload[],
-        // @CurrentUser() currentUser: ICurrentUser
+        @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.create({
             title,
@@ -91,8 +96,9 @@ export class ProductDirectResolver {
             quantity,
             categoryId,
             directStoreId,
-            adminId,
-            files
+            // adminId,
+            files,
+            currentUser
         });
     }
 

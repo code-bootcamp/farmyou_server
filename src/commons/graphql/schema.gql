@@ -38,8 +38,8 @@ type ProductDirect {
   quantity: Int!
   quantitySold: Int!
   isSoldout: Boolean!
-  categoryId: Category
-  directStoreId: DirectStore
+  category: Category
+  directStore: DirectStore
   users: [User!]
   admin: Admin
 }
@@ -140,7 +140,7 @@ type Query {
   fetchSellers: [Seller!]!
   checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
   fetchTypeOfUserLoggedIn: String!
-  fetchUserLoggedIn: User!
+  fetchUserLoggedIn: Admin!
   fetchCategory(name: String!): Category!
   fetchCategories: [Category!]!
   fetchDirectStore(name: String!): DirectStore!
@@ -149,15 +149,11 @@ type Query {
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
   fetchAllDirectProducts: [ProductDirect!]!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
-  fetchDirectProductsByStoreAndCategoryByDateCreated(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
-  fetchDirectProductsByStoreAndCategoryByPriceHighToLow(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
-  fetchDirectProductsByStoreAndCategoryByPriceLowToHigh(directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchDirectProductsSorted(sortBy: String!, directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchUglyProductByTitle(title: String!): [ProductUgly!]!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
-  fetchProductUglytitle(title: String!): [ProductUgly!]!
-  fetchUglyProductsByDateCreated(page: Float!): [ProductUgly!]!
-  fetchUglyProductsByPriceHighToLow(page: Float!): [ProductUgly!]!
-  fetchUglyProductsByPriceLowToHigh(page: Float!): [ProductUgly!]!
+  fetchUglyProductsSorted(sortBy: String!, page: Float!): [ProductUgly!]!
   fetchUser: User!
   fetchUsers: [User!]!
   checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
@@ -188,7 +184,7 @@ type Mutation {
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
   createPayment(impUid: String!, amount: Float!): Payment!
-  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, adminId: String!, files: [Upload!]): ProductDirect!
+  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, files: [Upload!]): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, files: [Upload!]): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
