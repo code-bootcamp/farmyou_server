@@ -28,22 +28,17 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
   // cors 오류 
-  // app.enableCors({
-  //   origin: 'http://localhost:3000',
-  //   // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  //   // allowedHeaders: [
-  //   //   'Access-Control-Allow-Headers',
-  //   //   'Authorization',
-  //   //   'X-Requested-With',
-  //   //   'Content-Type',
-  //   //   'Accept',
-  //   // ],
-  //   credentials: true,
-  // });
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5500'],
     credentials: true,
   });
+  // app.enableCors({
+  //   origin:[
+  //     'http://localhost:3000', 
+  //     'http://127.0.0.1:5500/frontTest/login/index.html',
+  //   ],
+  //   credentials: true,
+  // });
   await app.listen(3000);
 }
 bootstrap();

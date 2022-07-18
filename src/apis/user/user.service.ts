@@ -47,8 +47,6 @@ export class UserService {
         private readonly addressUserService: AddressUserService,
 
         private readonly fileResolver: FileResolver,
-
-        public myCart = new Array()
     ) {}
 
     async findOne({ email }) {
