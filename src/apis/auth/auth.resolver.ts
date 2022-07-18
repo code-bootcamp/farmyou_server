@@ -126,36 +126,71 @@ export class AuthResolver {
         return this.authService.getAccessToken({ user: admin });
     }
 
+    // @Mutation(() => String)
+    // async logout(@Context() context: any) {
+    //     // console.log("=============================================================");
+    //     // console.log("refresh is ", context.req.headers.cookie);
+    //     // console.log("=============================================================");
+    //     const accessToken = context.req.headers.authorization.replace(
+    //         'Bearer ',
+    //         '',
+    //     );
+    //     const refreshToken = context.req.headers.cookie.replace(
+    //         'refreshToken=',
+    //         '',
+    //     );
+
+    //     try {
+    //         jwt.verify(accessToken, 'myAccessKey');
+    //         jwt.verify(refreshToken, 'myRefreshKey');
+
+    //         // JWT의 payload나 거기 있는 exp를 어떻게 이용하는 지 모르겠음...
+    //         await this.cacheManager.set(accessToken, 'accessToken', {
+    //             ttl: 120,
+    //         });
+    //         await this.cacheManager.set(refreshToken, 'refreshToken', {
+    //             ttl: 12000,
+    //         });
+
+    //         return '로그아웃에 성공했습니다.';
+    //     } catch (error) {
+    //         throw new UnauthorizedException('Unauthorized');
+    //     }
+    // }
+
+    // from BE1
+    @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => String)
     async logout(@Context() context: any) {
-        // console.log("=============================================================");
-        // console.log("refresh is ", context.req.headers.cookie);
-        // console.log("=============================================================");
-        const accessToken = context.req.headers.authorization.replace(
-            'Bearer ',
-            '',
-        );
-        const refreshToken = context.req.headers.cookie.replace(
-            'refreshToken=',
-            '',
-        );
-
-        try {
-            jwt.verify(accessToken, 'myAccessKey');
-            jwt.verify(refreshToken, 'myRefreshKey');
-
-            // JWT의 payload나 거기 있는 exp를 어떻게 이용하는 지 모르겠음...
-            await this.cacheManager.set(accessToken, 'accessToken', {
-                ttl: 120,
-            });
-            await this.cacheManager.set(refreshToken, 'refreshToken', {
-                ttl: 12000,
-            });
-
-            return '로그아웃에 성공했습니다.';
-        } catch (error) {
-            throw new UnauthorizedException('Unauthorized');
-        }
+      try {
+        let RT = context.req.headers.cookie.split('Token=')[1];
+        let AT = context.req.headers.authorization.split(' ')[1];
+        // let tem = Math.floor(Date.now() / 1000);
+  
+        jwt.verify(RT, 'myRefreshKey', async (err, payload) => {
+          if (err) {
+            throw err;
+          }
+          await this.cacheManager.set(`R ${RT}`, 'RefreshToken', {
+            ttl: 28800,
+          });
+        });
+  
+        jwt.verify(AT, 'myAccessKey', async (err, payload) => {
+          if (err) {
+            console.log(err, '*******');
+            throw err;
+          }
+          await this.cacheManager.set(`A ${AT}`, 'AccessToken', {
+            ttl: 3600,
+          });
+        });
+  
+        return '로그아웃에 성공했습니다.';
+      } catch (error) {
+        console.log(error, ' !!! ');
+        throw error;
+      }
     }
 
     // GqlAuthAccessGuard is imported from src/commons/auth/gql-auth.guard.ts
@@ -170,6 +205,13 @@ export class AuthResolver {
     fetchTypeOfUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
         return this.authService.findLoggedInType({ currentUser });
     }
+
+    // @UseGuards(GqlAuthAccessGuard)
+    // // @Query(() => User || Seller || Admin)
+    // @Query(() => Admin || Seller || User)
+    // fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
+    //     return this.authService.findLoggedIn({ currentUser });
+    // }
 
     @UseGuards(GqlAuthAccessGuard)
     // @Query(() => User || Seller || Admin)

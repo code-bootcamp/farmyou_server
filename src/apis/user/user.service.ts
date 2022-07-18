@@ -19,12 +19,12 @@ export enum PRODUCT_TYPE_ENUM {
     DIRECT_PRODUCT = 'DIRECT_PRODUCT',
 }
 
-const productInCart = {
-    // "productType": PRODUCT_TYPE_ENUM,
-    // "productId": String,
-    "product": ProductDirect || ProductUgly,
-    "quantity": Number
-}
+// const productInCart = {
+//     // "productType": PRODUCT_TYPE_ENUM,
+//     // "productId": String,
+//     "product": ProductDirect || ProductUgly,
+//     "quantity": Number
+// }
 
 @Injectable()
 export class UserService {
@@ -156,7 +156,7 @@ export class UserService {
             this.addressUserRepository.save(loggedUserAddress);
         }
 
-        return this.userRepository.save(loggedUser);
+        return await this.userRepository.save(loggedUser);
     }
 
     async delete({ email }) {
@@ -193,7 +193,7 @@ export class UserService {
     // }
 
     async buy({productType, productId, quantity, currentUser}) {
-        console.log("CURRENT USER IS ", currentUser);
+        // console.log("CURRENT USER IS ", currentUser);
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
             where: {id: currentUser.id}

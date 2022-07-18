@@ -63,8 +63,8 @@ export class InquiryService {
                 .orderBy('inquiry.createdAt', 'DESC')
                 .leftJoinAndSelect('inquiry.productUgly', 'productUgly')
                 .leftJoinAndSelect('inquiry.user', 'user')
-                .where('inquiry.productUgly.id = :productUgly.id', {
-                    productUgly: {id: productId}
+                .where('inquiry.productUgly = :productUgly', {
+                    productUgly: productId
                 })
                 .getMany();
         }
