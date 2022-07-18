@@ -34,14 +34,14 @@ async function bootstrap() {
       'http://127.0.0.1:5500',
       'http://127.0.0.1:5500/frontTest/payment.test.html',
     ],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: [
-      'Access-Control-Allow-Headers',
-      'Authorization',
-      'X-Requested-With',
-      'Content-Type',
-      'Accept',
-    ],
+    // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    // allowedHeaders: [
+    //   'Access-Control-Allow-Headers',
+    //   'Authorization',
+    //   'X-Requested-With',
+    //   'Content-Type',
+    //   'Accept',
+    // ],
     credentials: true,
   });
   await app.listen(3000);
