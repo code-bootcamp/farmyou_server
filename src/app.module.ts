@@ -46,17 +46,21 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({req, res}) => ({req, res}),
+      // cors: {
+      //   Credential: true,
+      //   // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+      //   // allowedHeaders: [
+      //   //   'Access-Control-Allow-Headers',
+      //   //   'Authorization',
+      //   //   'X-Requested-With',
+      //   //   'Content-Type',
+      //   //   'Accept',
+      //   // ],
+      //   origin: 'http://localhost:3000',
+      // },
       cors: {
-        Credential: true,
-        // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-        // allowedHeaders: [
-        //   'Access-Control-Allow-Headers',
-        //   'Authorization',
-        //   'X-Requested-With',
-        //   'Content-Type',
-        //   'Accept',
-        // ],
         origin: 'http://localhost:3000',
+        credentials: true,
       },
     }),
     TypeOrmModule.forRoot({
