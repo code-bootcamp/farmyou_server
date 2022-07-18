@@ -1,0 +1,214 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type DirectStore {
+  id: String!
+  name: String!
+  admin: Admin
+}
+
+type Admin {
+  id: String!
+  email: String!
+  type: String!
+  createdAt: DateTime!
+  directStore: DirectStore
+  isWebMaster: Boolean!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Category {
+  id: String!
+  name: String!
+}
+
+type ProductDirect {
+  id: String!
+  title: String!
+  content: String!
+  price: Int!
+  createdAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  quantity: Int!
+  quantitySold: Int!
+  isSoldout: Boolean!
+  category: Category
+  directStore: DirectStore
+  users: [User!]
+  admin: Admin
+}
+
+type Seller {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  grade: String!
+  like: Float!
+  type: String!
+  createdAt: DateTime!
+  users: [User!]
+}
+
+type ProductUgly {
+  id: String!
+  title: String!
+  content: String!
+  price: Int!
+  createdAt: DateTime!
+  quantity: Int!
+  quantitySold: Int!
+  origin: String!
+  users: [User!]
+  seller: Seller
+}
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  type: String!
+  createdAt: DateTime!
+  sellers: [Seller!]
+  directProducts: [ProductDirect!]
+  uglyProducts: [ProductUgly!]
+}
+
+type AddressUser {
+  id: String!
+  address: String!
+  detailedAddress: String
+  postalCode: String!
+  isMain: Boolean!
+  user: User
+}
+
+type ImageUser {
+  id: String!
+  url: String!
+  seller: String!
+  user: String!
+}
+
+type Inquiry {
+  id: String!
+  title: String!
+  question: String!
+  answerTitle: String
+  answer: String
+  createdAt: DateTime!
+  status: INQUIRY_STATUS_ENUM!
+  user: User
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  productDirect: ProductDirect
+  productUgly: ProductUgly
+}
+
+enum INQUIRY_STATUS_ENUM {
+  NOT_ANSWERED
+  ANSWERED
+}
+
+type Payment {
+  id: String!
+  impUid: String!
+  amount: Int!
+  paymentComplete: PAYMENT_STATUS_ENUM!
+  createdAt: DateTime!
+  user: User!
+  productDirect: ProductDirect!
+  productUgly: ProductUgly!
+}
+
+enum PAYMENT_STATUS_ENUM {
+  PAYMENT
+  CANCEL
+}
+
+type Query {
+  fetchAddress(addressId: String!): AddressUser!
+  fetchAddressesOfTheUser(userId: String!): [AddressUser!]!
+  fetchAdminOfTheStore(directStoreId: String!): Admin!
+  fetchSellers: [Seller!]!
+  checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
+  fetchTypeOfUserLoggedIn: String!
+  fetchUserLoggedIn: Admin!
+  fetchCategory(name: String!): Category!
+  fetchCategories: [Category!]!
+  fetchDirectStore(name: String!): DirectStore!
+  fetchDirectStores: [DirectStore!]!
+  fetchInquiry(id: String!): Inquiry!
+  fetchInquiriesByProduct(productId: String!): [Inquiry!]!
+  fetchAllDirectProducts: [ProductDirect!]!
+  fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
+  fetchDirectProductsSorted(sortBy: String!, directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchUglyProductByTitle(title: String!): [ProductUgly!]!
+  fetchUglyProducts: [ProductUgly!]!
+  fetchUglyProduct(productId: String!): ProductUgly!
+  fetchUglyProductsSorted(sortBy: String!, page: Float!): [ProductUgly!]!
+  fetchUser: User!
+  fetchUsers: [User!]!
+  checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
+}
+
+type Mutation {
+  createAddress(address: String!, detailedAddress: String, postalCode: String!, userId: String!, isMain: Boolean!): AddressUser!
+  deleteAddress(id: String!): Boolean!
+  updateAddress(addressId: String!, updateAddressUserInput: UpdateAddressUserInput!): AddressUser!
+  assignMain(userId: String!, addressId: String!): AddressUser!
+  createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean, files: [Upload!]): Admin!
+  uploadFile(files: [Upload!]): [String!]!
+  createSeller(name: String!, email: String!, password: String!, phone: String!, files: [Upload!]): Seller!
+  updateSeller(email: String, password: String, phone: String): Seller!
+  loginUser(email: String!, password: String!): String!
+  loginSeller(email: String!, password: String!): String!
+  loginAdmin(email: String!, password: String!): String!
+  logout: String!
+  restoreAccessToken: String!
+  createCategory(name: String!): Category!
+  createDirectStore(name: String!): DirectStore!
+  uploadImageDirect(files: [Upload!]!): [String!]!
+  uploadImageUgly(files: [Upload!]!): [String!]!
+  uploadImage(user_type: String!, user_id: String!, files: [Upload!]!): [ImageUser!]!
+  uploadImageUser(files: [Upload!]!): [String!]!
+  createInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
+  postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
+  editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
+  deleteInquiry(inquiryId: String!): String!
+  createPayment(impUid: String!, amount: Float!): Payment!
+  cancelPayment(impUid: String!): Payment!
+  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, files: [Upload!]): ProductDirect!
+  deleteProductDirect(productId: String!): Boolean!
+  createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, files: [Upload!]): ProductUgly!
+  deleteProductUgly(productId: String!): Boolean!
+  createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, files: [Upload!]): User!
+  updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
+  likeYou(userId: String!, sellerId: String!): String!
+  likeYouNoMore(userId: String!, sellerId: String!): String!
+  deleteUser(email: String!): Boolean!
+  deleteLoginUser: User!
+  buyProduct(productType: String!, productId: String!, quantity: Float!): User!
+}
+
+input UpdateAddressUserInput {
+  address: String
+  detailedAddress: String
+  postalCode: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateAddressUserInput {
+  address: String!
+  detailedAddress: String!
+  postalCode: String!
+}
