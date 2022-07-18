@@ -25,7 +25,7 @@ export class InquiryService {
         private readonly authService: AuthService,
     ) {}
 
-    async findAll(productId) {
+    async findByProduct(productId) {
         const direct = await this.productDirectRepository.findOne({
             relations: ['admin', 'users'],
             where: {id: productId}
@@ -43,18 +43,42 @@ export class InquiryService {
             throw new NotFoundException('해당 제품에 대한 문의글이 없습니다');
         }
 
+        // if (!direct) {
+        //     return await this.inquiryRepository.find({
+        //         relations: ['productUgly', 'user'],
+        //         where: {productUgly: productId}
+        //     });
+        // }
+
+        // if (!ugly) {
+        //     return await this.inquiryRepository.find({
+        //         relations: ['productDirect', 'user'],
+        //         where: {productDirect: productId}
+        //     });
+        // }
+
         if (!direct) {
-            return await this.inquiryRepository.find({
-                relations: ['productUgly', 'user'],
-                where: {productUgly: productId}
-            });
+            return await this.inquiryRepository
+                .createQueryBuilder('inquiry')
+                .orderBy('inquiry.createdAt', 'DESC')
+                .leftJoinAndSelect('inquiry.productUgly', 'productUgly')
+                .leftJoinAndSelect('inquiry.user', 'user')
+                .where('inquiry.productUgly.id = :productUgly.id', {
+                    productUgly: {id: productId}
+                })
+                .getMany();
         }
 
         if (!ugly) {
-            return await this.inquiryRepository.find({
-                relations: ['productDirect', 'user'],
-                where: {productDirect: productId}
-            });
+            return await this.inquiryRepository
+                .createQueryBuilder('inquiry')
+                .orderBy('inquiry.createdAt', 'DESC')
+                .leftJoinAndSelect('inquiry.productDirect', 'productDirect')
+                .leftJoinAndSelect('inquiry.user', 'user')
+                .where('inquiry.productDirect = :productDirect', {
+                    productDirect: productId
+                })
+                .getMany();
         }
     }
 
@@ -63,6 +87,10 @@ export class InquiryService {
             where: { id },
         });
     }
+
+    // async findAll() {
+
+    // }
 
     async create(title, question, productDirectId, productUglyId, currentUser) {
         const writer = await this.userRepository.findOne({
@@ -110,6 +138,8 @@ export class InquiryService {
             currentUser,
         });
 
+        console.log(thisUserType);
+
         if (!(thisUserType === 'seller' || thisUserType === 'admin')) {
             return '답변을 달 수 있는 권한이 없습니다.';
         }
@@ -128,12 +158,12 @@ export class InquiryService {
         if (thisInquiry && !thisInquiry.productDirect) {
             theProduct = await this.productUglyRepository.findOne({
                 where: { id: thisInquiry.productUgly.id },
-                relations: ['user', 'seller'],
+                relations: ['users', 'seller'],
             });
         } else if (thisInquiry && !thisInquiry.productUgly) {
             theProduct = await this.productDirectRepository.findOne({
                 where: { id: thisInquiry.productDirect.id },
-                relations: ['categoryId', 'directStoreId', 'admin'],
+                relations: ['category', 'directStore', 'admin'],
             });
         }
 
@@ -162,7 +192,7 @@ export class InquiryService {
 
     async edit({ inquiryId, title, question, currentUser }) {
         const theInquiry = await this.inquiryRepository.findOne({
-            relations: ['user'],
+            relations: ['user', 'productDirect', 'productUgly'],
             where: { id: inquiryId },
         });
 
@@ -189,7 +219,7 @@ export class InquiryService {
 
     async delete({ inquiryId, currentUser }) {
         const theInquiry = await this.inquiryRepository.findOne({
-            relations: ['user'],
+            relations: ['user', 'productDirect', 'productUgly'],
             where: { id: inquiryId },
         });
 

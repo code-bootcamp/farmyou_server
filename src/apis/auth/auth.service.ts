@@ -156,6 +156,7 @@ export class AuthService {
     async findLoggedIn({ currentUser }) {
         try {
             const thisUser = await this.userRepository.findOne({
+                relations:['sellers', 'directProducts', 'uglyProducts'],
                 where: {
                     id: currentUser.id,
                 },
@@ -167,6 +168,7 @@ export class AuthService {
         } catch (err) {
             try {
                 const thisSeller = await this.sellerRepository.findOne({
+                    relations:['users'],
                     where: {
                         id: currentUser.id,
                     },
@@ -178,6 +180,7 @@ export class AuthService {
             } catch (err) {
                 try {
                     const thisAdmin = await this.adminRepository.findOne({
+                        relations:['directStore'],
                         where: {
                             id: currentUser.id,
                         },

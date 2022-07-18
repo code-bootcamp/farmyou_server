@@ -70,12 +70,12 @@ export class ProductDirect {
     // @ManyToOne(() => Category, {cascade: true})
     @ManyToOne(() => Category)
     @Field(() => Category, {nullable: true})
-    categoryId: Category;
+    category: Category;
 
     // 직매장ID
     @ManyToOne(() => DirectStore)
     @Field(() => DirectStore, {nullable: true})
-    directStoreId: DirectStore;
+    directStore: DirectStore;
 
     // TODO: 구매자ID 배열로 바꾸기
     @ManyToMany(() => User, (users) => users.directProducts)

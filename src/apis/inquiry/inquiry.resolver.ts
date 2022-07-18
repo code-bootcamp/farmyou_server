@@ -18,8 +18,13 @@ export class InquiryResolver {
     fetchInquiriesByProduct(
         @Args('productId') productId: string
     ) {
-        return this.inquiryService.findAll(productId);
+        return this.inquiryService.findByProduct(productId);
     }
+
+    // @Query(() => [Inquiry])
+    // fetchInquiries() {
+    //     return this.inquiryService.findAll();
+    // }
 
     // Inquiry (문의) 생성은 User (구매자)만 가능
     @UseGuards(GqlAuthAccessGuard)
