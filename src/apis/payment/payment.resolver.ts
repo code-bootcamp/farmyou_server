@@ -46,13 +46,13 @@ export class PaymentResolver {
     ) {
         // 검증로직
         // 1. iamport 에 요청해서 결제 완료 기록이 존재하는지 확인필요
-        const token = await this.iamportService.getToken();
-        await this.iamportService.checkPaid({ impUid, token, amount });
+        // const token = await this.iamportService.getToken();
+        // await this.iamportService.checkPaid({ impUid, token, amount });
 
         // 2. payment 테이블에는 impUid가 1번만 존재해야 함. (중복 결제 체크)
         await this.paymentService.checkDuplicate({ impUid });
 
-        const theUser: User = await this.userService.buy({productType, productId, quantity, currentUser});
+        await this.userService.buy({productType, productId, quantity, currentUser});
 
         return this.paymentService.create({ impUid, amount, currentUser, productType, productId });
     }
@@ -90,8 +90,11 @@ export class PaymentResolver {
         });
     }
     
-    // @Query(() => [Payment])
-    // async fetchPayments() {
-    //   return await this.paymentService.findAll();
-    // }
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => [Payment])
+    async fetchPaymentsByUser(
+        @CurrentUser() currentUser: ICurrentUser,
+    ) {
+      return await this.paymentService.findAllByUser({currentUser});
+    }
 }
