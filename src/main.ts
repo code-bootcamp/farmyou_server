@@ -29,11 +29,7 @@ async function bootstrap() {
   app.use(graphqlUploadExpress());
   // cors 오류 
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'http://127.0.0.1:5500',
-      'http://127.0.0.1:5500/frontTest/payment.test.html',
-    ],
+    origin: 'http://localhost:3000',
     // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     // allowedHeaders: [
     //   'Access-Control-Allow-Headers',
