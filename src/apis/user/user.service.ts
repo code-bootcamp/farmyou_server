@@ -204,7 +204,7 @@ export class UserService {
 
         if (productType === PRODUCT_TYPE_ENUM.DIRECT_PRODUCT) {
             theProduct = await this.productDirectRepository.findOne({
-                relations: ['categoryId', 'directStoreId', 'users', 'admin'],
+                relations: ['category', 'directStore', 'users', 'admin'],
                 where: {id: productId}
             });
 

@@ -1,11 +1,27 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+    Args,
+    Mutation,
+    Query,
+    registerEnumType,
+    Resolver,
+} from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { CreateProductUglyInput } from './dto/createProductUgly.input';
 import { ProductUgly } from './entities/productUgly.entity';
 import { ProductUglyService } from './productUgly.service';
+
+export enum SORT_CONDITION_ENUM {
+    MOST_RECENT = '최신순',
+    PRICE_ASC = '낮은가격순',
+    PRICE_DESC = '높은가격순',
+}
+
+registerEnumType(SORT_CONDITION_ENUM, {
+    name: 'SORT_CONDITION_ENUM',
+});
 
 @Resolver()
 export class ProductUglyResolver {
@@ -26,10 +42,10 @@ export class ProductUglyResolver {
     // 7월 14일 승원 타이틀 조회 테스트
     // 상품이름으로 조회
     @Query(() => [ProductUgly])
-    fetchProductUglytitle(
+    fetchUglyProductByTitle(
         @Args('title') title: string,
     ): Promise<ProductUgly[]> {
-        return this.productUglyService.findtitle(title);
+        return this.productUglyService.findByTitle(title);
     }
 
     @Mutation(() => ProductUgly)
@@ -44,9 +60,15 @@ export class ProductUglyResolver {
         files: FileUpload[],
         // @CurrentUser() currentUser: ICurrentUser
     ) {
-        return this.productUglyService.create(
-            { title, content, price, quantity, origin, sellerId, files }
-        );
+        return this.productUglyService.create({
+            title,
+            content,
+            price,
+            quantity,
+            origin,
+            sellerId,
+            files,
+        });
     }
 
     // 수량이 0개 되었을 때
@@ -58,18 +80,11 @@ export class ProductUglyResolver {
     }
 
     @Query(() => [ProductUgly])
-    fetchUglyProductsByDateCreated(@Args('page') page: number) {
-        return this.productUglyService.findByDateCreated(page);
-    }
-
-    @Query(() => [ProductUgly])
-    fetchUglyProductsByPriceHighToLow(@Args('page') page: number) {
-        return this.productUglyService.findByPriceHighToLow(page);
-    }
-
-    @Query(() => [ProductUgly])
-    fetchUglyProductsByPriceLowToHigh(@Args('page') page: number) {
-        return this.productUglyService.findByPriceLowToHigh(page);
+    fetchUglyProductsSorted(
+        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
+        @Args('page') page: number,
+    ) {
+        return this.productUglyService.findSorted({sortBy}, page);
     }
     //
     //
