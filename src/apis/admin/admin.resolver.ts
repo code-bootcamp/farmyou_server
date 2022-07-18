@@ -33,7 +33,6 @@ export class AdminResolver {
         @Args('email') email: string,
         @Args('password') password: string,
         @Args({ name: 'directStoreId', nullable: true }) directStoreId: string,
-        @Args({ name: 'isWebMaster', nullable: true }) isWebMaster: boolean,
         @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
         files: FileUpload[],
     ) {
@@ -43,7 +42,6 @@ export class AdminResolver {
             email,
             hashedPassword,
             directStoreId,
-            isWebMaster,
             files
         });
     }
@@ -51,5 +49,10 @@ export class AdminResolver {
     @Query(() => Admin)
     fetchAdminOfTheStore(@Args('directStoreId') directStoreId: string) {
         return this.adminService.findOne({ directStoreId });
+    }
+
+    @Query(() => [Admin])
+    fetchAdmins() {
+      return this.adminService.findAll();
     }
 }

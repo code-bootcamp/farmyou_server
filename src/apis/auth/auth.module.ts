@@ -35,7 +35,7 @@ import { File } from '../file/entities/file.entity';
             DirectStore,
             ProductDirect,
             ProductUgly,
-            File
+            File,
         ]),
     ],
     providers: [
