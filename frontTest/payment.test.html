@@ -47,7 +47,7 @@
                 {
                   query: `
                   mutation {
-                    createPayment(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount}){
+                    createPayment(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount}, productType: "UGLY_PRODUCT", productId: "74e8bd30-b19d-464f-b967-1b62db4d04ec", quantity: 1){
                       id
                     }
                   }
@@ -56,8 +56,8 @@
                 {
                   headers: {
                     Authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYi5jb20iLCJzdWIiOiI3MTZlNTAxYy1jYTkwLTQyMTMtODJkZS0zNmUzMDM2MzhiMzEiLCJpYXQiOjE2NTgxMjE2NDEsImV4cCI6MTY1ODE1NzY0MX0.XRMrbtaQYMXgUegIpVhdGVDvU3WMmhu6NKiVXMk0tZs",
-                  },
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNodW5zaWtAYWFhLmNvbSIsInN1YiI6IjM2NGY1YTc4LTYxOTMtNGMyMi04MGUzLWVlNDM5ZWZhN2ZkNiIsImlhdCI6MTY1ODE2MzI1NSwiZXhwIjoxNjU4MTk5MjU1fQ.YIEe0DzXaRfv5UX1qZtD8NWnUmP8ChiWResBFi0sT64"
+                    },
                 }
               );
               // 우리 백앤드 API에 전송하기

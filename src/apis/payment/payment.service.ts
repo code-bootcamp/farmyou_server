@@ -140,4 +140,16 @@ export class PaymentService {
         });
         return payment;
     }
+
+    async findAllByUser({currentUser}) {
+        const theUser = await this.userRepository.findOne({
+            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            where: {id: currentUser.id}
+        });
+
+        return await this.paymentRepository.find({
+            relations: ['user', 'productDirect', 'productUgly'],
+            where: {user: theUser}
+        });
+    }
 }

@@ -32,7 +32,7 @@ import { ProductDirectService } from './productDirect.service';
     ProductDirectResolver, //
     ProductDirectService,
     FileResolver,
-    FileService
+    FileService,
   ],
 })
 export class ProductDirectModule {}
