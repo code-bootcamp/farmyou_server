@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ------------------------------------------------------
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
@@ -185,6 +184,7 @@ type Mutation {
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
   createPayment(impUid: String!, amount: Float!): Payment!
+  cancelPayment(impUid: String!): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, files: [Upload!]): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, files: [Upload!]): ProductUgly!
@@ -212,5 +212,3 @@ input CreateAddressUserInput {
   detailedAddress: String!
   postalCode: String!
 }
-=======
->>>>>>> 8b10e86d7dd0e75e4990c39a54bf67e623746fed
