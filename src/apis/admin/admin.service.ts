@@ -43,26 +43,8 @@ export class AdminService {
         email,
         hashedPassword: password,
         directStoreId,
-        isWebMaster,
         files
     }) {
-        if (isWebMaster === true) {
-            const webmaster = await this.adminRepository.findOne({
-                isWebMaster: true,
-            });
-            console.log(webmaster);
-            if (!webmaster) {
-                const newWebMaster = await this.adminRepository.save({
-                    email,
-                    password,
-                    isWebMaster,
-                });
-                return newWebMaster;
-            } else {
-                throw new ConflictException('웹마스터 계정이 이미 존재합니다.');
-            }
-        }
-
         try {
             const theStore = await this.directStoreRepository.findOne({
                 id: directStoreId,
@@ -72,7 +54,6 @@ export class AdminService {
                 email,
                 password,
                 directStore: theStore,
-                isWebMaster,
             });
 
             await this.directStoreRepository.save({
@@ -100,5 +81,11 @@ export class AdminService {
                 '해당 직매장에 관리자를 배치할 수 없습니다.',
             );
         }
+    }
+
+    async findAll() {
+        return await this.adminRepository.find({
+            relations: ['directStore'],
+        });
     }
 }

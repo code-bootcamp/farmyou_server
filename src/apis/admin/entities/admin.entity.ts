@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, FIELD_TYPENAME, ObjectType } from '@nestjs/graphql';
 import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
 import {
     Column,
@@ -16,6 +16,10 @@ export class Admin {
     @PrimaryGeneratedColumn('uuid')
     @Field(() => String)
     id: string;
+
+    @Column({nullable: true, default: null})
+    @Field(() => String, {nullable: true})
+    name: string;
 
     // 이메일
     @Column()
@@ -41,8 +45,4 @@ export class Admin {
     @OneToOne(() => DirectStore)
     @Field(() => DirectStore, {nullable: true})
     directStore?: DirectStore;
-
-    @Column({ default: false })
-    @Field(() => Boolean)
-    isWebMaster: Boolean;
 }
