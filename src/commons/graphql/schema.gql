@@ -10,11 +10,11 @@ type DirectStore {
 
 type Admin {
   id: String!
+  name: String
   email: String!
   type: String!
   createdAt: DateTime!
   directStore: DirectStore
-  isWebMaster: Boolean!
 }
 
 """
@@ -137,6 +137,7 @@ type Query {
   fetchAddress(addressId: String!): AddressUser!
   fetchAddressesOfTheUser(userId: String!): [AddressUser!]!
   fetchAdminOfTheStore(directStoreId: String!): Admin!
+  fetchAdmins: [Admin!]!
   fetchSellers: [Seller!]!
   checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
   fetchTypeOfUserLoggedIn: String!
@@ -164,7 +165,7 @@ type Mutation {
   deleteAddress(id: String!): Boolean!
   updateAddress(addressId: String!, updateAddressUserInput: UpdateAddressUserInput!): AddressUser!
   assignMain(userId: String!, addressId: String!): AddressUser!
-  createAdmin(email: String!, password: String!, directStoreId: String, isWebMaster: Boolean, files: [Upload!]): Admin!
+  createAdmin(email: String!, password: String!, directStoreId: String, files: [Upload!]): Admin!
   uploadFile(files: [Upload!]): [String!]!
   createSeller(name: String!, email: String!, password: String!, phone: String!, files: [Upload!]): Seller!
   updateSeller(email: String, password: String, phone: String): Seller!
