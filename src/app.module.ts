@@ -46,22 +46,17 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({req, res}) => ({req, res}),
-      // cors: {
-      //   Credential: true,
-      //   // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-      //   // allowedHeaders: [
-      //   //   'Access-Control-Allow-Headers',
-      //   //   'Authorization',
-      //   //   'X-Requested-With',
-      //   //   'Content-Type',
-      //   //   'Accept',
-      //   // ],
-      //   origin: 'http://localhost:3000',
-      // },
       cors: {
         origin: ['http://localhost:3000', 'http://127.0.0.1:5500'],
         credentials: true,
       },
+      // cors: {
+      //   origin:[
+      //   'http://localhost:3000', 
+      //   'http://127.0.0.1:5500/frontTest/login/index.html',
+      // ],
+      //   credentials: true,
+      // },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -71,7 +66,7 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
       port: 3306,
       username: 'root',
       password: '12345678',
-    //   password: 'root',
+      // password: 'root',
       database: 'farmyou_server', //인스턴스 sql ID값
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
