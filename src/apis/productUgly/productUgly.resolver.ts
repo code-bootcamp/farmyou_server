@@ -114,7 +114,7 @@ export class ProductUglyResolver {
 
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => ProductUgly)
-    updateUglyProduct(
+    updateProductUgly(
         @Args('productId') productId: string,
         @Args({ name: 'title', nullable: true }) title: string,
         @Args({ name: 'content', nullable: true }) content: string,
