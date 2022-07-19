@@ -111,13 +111,13 @@ export class ProductDirectResolver {
 
     @UseGuards(GqlAuthAccessGuard)
     @Query(() => [ProductDirect])
-    fetchUglyProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
+    fetchDirectProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
         return this.productDirectService.findByUser({ currentUser });
     }
 
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => ProductDirect)
-    updateDirectProduct(
+    updateProductDirect(
         @Args('productId') productId: string,
         @Args({ name: 'title', nullable: true }) title: string,
         @Args({ name: 'content', nullable: true }) content: string,
