@@ -11,6 +11,7 @@ type DirectStore {
 type Admin {
   id: String!
   name: String
+  phone: String
   email: String!
   type: String!
   createdAt: DateTime!
@@ -143,13 +144,15 @@ type Query {
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
   fetchCompletePayments: [Payment!]!
   fetchCanceledPayments: [Payment!]!
-  fetchAllDirectProducts: [ProductDirect!]!
+  fetchDirectProducts(productId: String!): [ProductDirect!]!
+  fetchProductDirect(productId: String!): ProductDirect!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
   fetchDirectProductsSorted(sortBy: String!, directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
-  fetchUglyProductByTitle(title: String!): [ProductUgly!]!
+  fetchDirectProductByTitle(title: String!): [ProductDirect!]!
   fetchDirectProductsByUser: [ProductDirect!]!
-  fetchUglyProducts: [ProductUgly!]!
-  fetchUglyProduct(productId: String!): ProductUgly!
+  fetchUglyProducts(productId: String!): [ProductUgly!]!
+  fetchProductUgly(productId: String!): ProductUgly!
+  fetchUglyProductByTitle(title: String!): [ProductUgly!]!
   fetchUglyProductsSorted(sortBy: String!, page: Float!): [ProductUgly!]!
   fetchUglyProductsByUser: [ProductUgly!]!
   fetchUglyProductsBySeller: [ProductUgly!]!

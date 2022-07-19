@@ -41,14 +41,24 @@ export class ProductDirectService {
         private readonly fileResolver: FileResolver,
     ) {}
 
-    async findAll() {
+    async findAll({productId}) {
         // return await this.productDirectRepository.find({
         //     relations: ['category', 'directStore', 'users', 'admin']
         // });
         return await this.productDirectRepository
             .createQueryBuilder('productDirect')
             .orderBy('productDirect.createdAt', 'DESC')
+            .where('productDirect.id = :id', {
+                id: productId
+            })
             .getMany();
+    }
+
+    async findOne({ productId }) {
+        return await this.productDirectRepository.findOne({
+            where: { id: productId },
+            relations: ['admin', 'users', 'directStore'],
+        });
     }
 
     // ElasticSearch??
