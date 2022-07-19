@@ -58,6 +58,7 @@ export class FileService {
             url: `${resultUrl}`,
         });
 
+        console.log(resultUrl);
         return resultUrl;
     }
 }

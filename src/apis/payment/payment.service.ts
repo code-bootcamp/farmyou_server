@@ -111,7 +111,9 @@ export class PaymentService {
             paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
         });
         // 이미 취소된 건이면 오류 던지기
-        if (payment) throw new ConflictException('이미 취소된 건 입니다.');
+        if (payment) {
+            throw new ConflictException('이미 취소된 건 입니다.');
+        }
     }
 
     // 다른사람의 결제건을 환불 받지 못하게 하기 위해 자신이 결제한 건인지 체크
@@ -122,8 +124,9 @@ export class PaymentService {
             paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
         });
         // 접속한 유저id 와 impUid 가 같지 않은 유저에게는 오류 던지기
-        if (!checkUser)
+        if (!checkUser) {
             throw new UnprocessableEntityException('결제기록이 없습니다.');
+        }
     }
 
     // 페이먼트 테이블에서 결제 취소 데이터 등록하기
@@ -174,5 +177,27 @@ export class PaymentService {
         thePayment.invoice = invoiceNum;
 
         return await this.paymentRepository.save(thePayment);
+    }
+
+    async findCompletePayments(currentUser) {
+        const theUser = await this.userRepository.findOne({
+            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            where: {id: currentUser.id}
+        });
+        return await this.paymentRepository.find({
+            relations: ['user', 'productDirect', 'productUgly'],
+            where: {user: theUser, paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT}
+        });
+    }
+
+    async findCanceledPayments(currentUser) {
+        const theUser = await this.userRepository.findOne({
+            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            where: {id: currentUser.id}
+        });
+        return await this.paymentRepository.find({
+            relations: ['user', 'productDirect', 'productUgly'],
+            where: {user: theUser, paymentComplete: PAYMENT_STATUS_ENUM.CANCEL}
+        });
     }
 }
