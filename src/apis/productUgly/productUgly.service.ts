@@ -2,6 +2,7 @@ import {
     BadRequestException,
     Injectable,
     NotFoundException,
+    UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -87,19 +88,37 @@ export class ProductUglyService {
         }
     }
 
-    async update({ productId, updateProductUglyInput }) {
-        const myproduct = await this.productUglyRepository.findOne({
-            relations: ['seller', 'users'],
-            where: { id: productId },
+    async update({productId, title, content, price, quantity, origin, currentUser}) {
+        const theProduct = await this.productUglyRepository.findOne({
+            relations: ['users', 'seller'],
+            where: {id: productId}
         });
 
-        const newProductUgly = {
-            ...myproduct,
-            where: { id: productId },
-            ...updateProductUglyInput,
-        };
+        if (currentUser.id !== theProduct.seller.id) {
+            throw new UnprocessableEntityException('권한이 없습니다.');
+        }
 
-        return await this.productUglyRepository.save(newProductUgly);
+        if (title) {
+            theProduct.title = title;
+        }
+
+        if (content) {
+            theProduct.content = content;
+        }
+
+        if (price) {
+            theProduct.price = price;
+        }
+
+        if (quantity) {
+            theProduct.quantity = quantity;
+        }
+
+        if (origin) {
+            theProduct.origin = origin;
+        }
+
+        return await this.productUglyRepository.save(theProduct);
     }
 
     async delete({ productId }) {
@@ -159,5 +178,14 @@ export class ProductUglyService {
         //     where: { users: { id: theUser.id } },
         // });
         return theUser.uglyProducts;
+    }
+
+    async findBySeller ({currentUser}) {
+        const theProducts = await this.productUglyRepository.find({
+            relations: ['users', 'seller'],
+            where: {seller: {id: currentUser.id}}
+        });
+
+        return theProducts.filter((product) => product.quantitySold > 0);
     }
 }

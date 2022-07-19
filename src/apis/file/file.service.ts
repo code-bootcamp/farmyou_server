@@ -52,14 +52,12 @@ export class FileService {
             }),
         );
 
-        console.log(resultUrl);
+        // console.log(resultUrl);
 
-        const theImage = await this.fileRepository.save({
+        await this.fileRepository.save({
             url: `${resultUrl}`,
         });
 
-        console.log(theImage.url);
-
-        return theImage.url;
+        return resultUrl;
     }
 }
