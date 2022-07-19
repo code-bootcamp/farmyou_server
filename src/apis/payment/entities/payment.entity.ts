@@ -59,4 +59,9 @@ export class Payment {
     @ManyToOne(() => ProductUgly, {nullable: true})
     @Field(() => ProductUgly, {nullable: true})
     productUgly?: ProductUgly;
+
+    // 송장번호
+    @Column({nullable: true})
+    @Field(() => String, {nullable: true})
+    invoice: string;
 }

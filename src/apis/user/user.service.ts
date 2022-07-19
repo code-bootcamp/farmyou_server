@@ -13,6 +13,7 @@ import { ProductDirect } from '../productDirect/entities/productDirect.entity';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
 import { FileResolver } from '../file/file.resolver';
 import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
+import { FileService } from '../file/file.service';
 
 export enum PRODUCT_TYPE_ENUM {
     UGLY_PRODUCT = 'UGLY_PRODUCT',
@@ -47,6 +48,8 @@ export class UserService {
         private readonly addressUserService: AddressUserService,
 
         private readonly fileResolver: FileResolver,
+
+        private readonly fileService: FileService
     ) {}
 
     async findOne({ email }) {
@@ -115,14 +118,14 @@ export class UserService {
         return thisUser;
     }
 
-    async update({ currentUser, email, password, phone, newAddress }) {
+    async update({ name, password, phone, imageUrl, currentUser }) {
         const loggedUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
             where: {id: currentUser.id},
         });
 
-        if (email) {
-            loggedUser.email = email;
+        if (name) {
+            loggedUser.name = name;
         }
 
         if (password) {
@@ -133,26 +136,21 @@ export class UserService {
             loggedUser.phone = phone;
         }
 
-        if (newAddress) {
-            const loggedUserAddress = await this.addressUserRepository.findOne({
-                relations: ['user'],
-                where: {user: { id: loggedUser.id }},
-            });
+        await this.fileRepository.save({
+            url: imageUrl,
+            seller: loggedUser,
+            type: IMAGE_TYPE_ENUM.USER,
+        });
 
-            if (newAddress.isMain) {
-                loggedUserAddress.isMain = newAddress.isMain;
-            }
-            if (newAddress.address) {
-                loggedUserAddress.address = newAddress.address;
-            }
-            if (newAddress.detailedAddress) {
-                loggedUserAddress.detailedAddress = newAddress.detailedAddress;
-            }
-            if (newAddress.postalCode) {
-                loggedUserAddress.postalCode = newAddress.postalCode;
-            }
-            this.addressUserRepository.save(loggedUserAddress);
-        }
+        // 파일 업로드
+        // const imageUrl = await this.fileService.upload({files});
+
+        // const theImage = await this.fileRepository.findOne({
+        //     relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+        //     where: {url: imageUrl}
+        // })
+
+        // await this.fileRepository.save(theImage);
 
         return await this.userRepository.save(loggedUser);
     }
@@ -225,6 +223,9 @@ export class UserService {
                 relations: ['users', 'seller'],
                 where: {id: productId}
             });
+
+            console.log(theProduct);
+            console.log(theProduct.quantity);
 
             theQuantity = theProduct.quantity;
 

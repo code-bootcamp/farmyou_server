@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
 import { FileResolver } from '../file/file.resolver';
 import { Seller } from '../seller/entities/seller.entity';
+import { User } from '../user/entities/user.entity';
 import { ProductUgly } from './entities/productUgly.entity';
 import { SORT_CONDITION_ENUM } from './productUgly.resolver';
 
@@ -21,6 +22,9 @@ export class ProductUglyService {
 
         @InjectRepository(Seller)
         private readonly sellerRepository: Repository<Seller>,
+
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
 
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
@@ -74,7 +78,7 @@ export class ProductUglyService {
 
                 await this.fileRepository.save(theImage);
             }
-            
+
             return result;
         } else {
             throw new NotFoundException(
@@ -142,5 +146,18 @@ export class ProductUglyService {
             .skip((page - 1) * ELM_PER_PAGE)
             .take(ELM_PER_PAGE)
             .getMany();
+    }
+
+    async findByUser({ currentUser }) {
+        const theUser = await this.userRepository.findOne({
+            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            where: { id: currentUser.id },
+        });
+
+        // return this.productUglyRepository.find({
+        //     relations: ['users', 'seller'],
+        //     where: { users: { id: theUser.id } },
+        // });
+        return theUser.uglyProducts;
     }
 }
