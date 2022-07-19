@@ -12,8 +12,6 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
             clientID: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
             callbackURL: 'http://localhost:3000/users/login/naver',
-
-            // scope: ['name', 'nickname', 'email', 'mobile']
         });
     }
 
@@ -23,10 +21,10 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
         console.log(profile);
         return {
           email: profile.email,
-          password: '12345678', //받아오는것이 없어서 임의로 정의 하는것
+          password: '네이버로그인유저', //받아오는것이 없어서 임의로 정의 하는것
           // name: profile.displayName,
           name: profile.name,
-          phone: '01012345678',
+          phone: '핸드폰번호를 추가해주세요',
           addressUser: null,
           files: null,
         };

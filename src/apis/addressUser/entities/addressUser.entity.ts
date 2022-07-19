@@ -11,7 +11,7 @@ export class AddressUser {
     id: string;
 
     // 기본주소 (도로명 주소)
-    @Column()
+    @Column({nullable: true})
     @Field(() => String)
     address: string;
 
@@ -21,7 +21,7 @@ export class AddressUser {
     detailedAddress: string;
 
     // 우편번호
-    @Column()
+    @Column({nullable: true})
     @Field(() => String)
     postalCode: string;
 
