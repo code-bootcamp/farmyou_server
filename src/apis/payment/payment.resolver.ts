@@ -90,11 +90,27 @@ export class PaymentResolver {
         });
     }
     
-    @UseGuards(GqlAuthAccessGuard)
-    @Query(() => [Payment])
-    async fetchPaymentsByUser(
-        @CurrentUser() currentUser: ICurrentUser,
+    // @UseGuards(GqlAuthAccessGuard)
+    // @Query(() => [Payment])
+    // async fetchUglyPaymentsByUser(
+    //     @CurrentUser() currentUser: ICurrentUser,
+    // ) {
+    //   return await this.paymentService.findUglyByUser({currentUser});
+    // }
+    
+    // @UseGuards(GqlAuthAccessGuard)
+    // @Query(() => [Payment])
+    // async fetchDirectPaymentsByUser(
+    //     @CurrentUser() currentUser: ICurrentUser,
+    // ) {
+    //   return await this.paymentService.findDirectByUser({currentUser});
+    // }
+
+    @Mutation(() => Payment)
+    async updateInvoice(
+        @Args('paymentId') paymentId: string,
+        @Args('invoiceNum') invoiceNum: string
     ) {
-      return await this.paymentService.findAllByUser({currentUser});
+        return await this.paymentService.invoice({paymentId, invoiceNum});
     }
 }

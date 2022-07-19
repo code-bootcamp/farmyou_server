@@ -11,6 +11,7 @@ import { Seller } from './entities/seller.entity';
 import * as bcrypt from 'bcrypt';
 import { FileResolver } from '../file/file.resolver';
 import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class SellerService {
@@ -21,7 +22,9 @@ export class SellerService {
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
 
-        private readonly fileResolver: FileResolver
+        private readonly fileResolver: FileResolver,
+
+        private readonly fileService: FileService
     ) {}
 
     async findOne({ email }) {
@@ -37,7 +40,7 @@ export class SellerService {
         });
     }
 
-    async create({ email, hashedPassword: password, name, phone, files }) {
+    async create({ email, hashedPassword: password, name, phone }) {
         const seller = await this.sellerRepository.findOne({
             relations: ['users'],
             where: { email },
@@ -53,30 +56,30 @@ export class SellerService {
             users: [],
         });
 
-        if (files) {
-            const imageId = await this.fileResolver.uploadFile(files);
-            const theImage = await this.fileRepository.findOne({
-                relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
-                where: {id: imageId}
-            });
-            theImage.type = IMAGE_TYPE_ENUM.SELLER;
-            theImage.seller = thisSeller;
+        // if (files) {
+        //     const imageId = await this.fileResolver.uploadFile(files);
+        //     const theImage = await this.fileRepository.findOne({
+        //         relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+        //         where: {id: imageId}
+        //     });
+        //     theImage.type = IMAGE_TYPE_ENUM.SELLER;
+        //     theImage.seller = thisSeller;
 
-            await this.fileRepository.save(theImage);
-        }
+        //     await this.fileRepository.save(theImage);
+        // }
 
         // return await this.sellerRepository.save({ email, password, name, phone });
         return thisSeller;
     }
 
-    async update({ currentUser, email, password, phone }) {
+    async update({ name, password, phone, imageUrl, currentUser }) {
         const loggedSeller = await this.sellerRepository.findOne({
             relations: ['users'],
-            where: { id: currentUser.id },
+            where: {id: currentUser.id},
         });
 
-        if (email) {
-            loggedSeller.email = email;
+        if (name) {
+            loggedSeller.name = name;
         }
 
         if (password) {
@@ -87,7 +90,23 @@ export class SellerService {
             loggedSeller.phone = phone;
         }
 
-        return this.sellerRepository.save(loggedSeller);
+        await this.fileRepository.save({
+            url: imageUrl,
+            seller: loggedSeller,
+            type: IMAGE_TYPE_ENUM.SELLER,
+        });
+
+        // 파일 업로드
+        // const imageUrl = await this.fileService.upload({files});
+
+        // const theImage = await this.fileRepository.findOne({
+        //     relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+        //     where: {url: imageUrl}
+        // })
+
+        // await this.fileRepository.save(theImage);
+
+        return await this.sellerRepository.save(loggedSeller);
     }
 
     async postBoardDirect({ sellerId, boardDirectNum }) {
