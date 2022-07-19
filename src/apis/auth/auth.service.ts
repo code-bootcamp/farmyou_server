@@ -99,9 +99,9 @@ export class AuthService {
                 hashedPassword,
                 name: req.user.name,
                 phone: req.user.phone,
-                addressUser: null,
+                addressUser: {address: null, detailedAddress: null, postalCode: null, isMain: false},
                 files: null
-        });
+            });
         }
 
         //3. 로그인

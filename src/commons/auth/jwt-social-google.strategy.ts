@@ -22,9 +22,9 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
     console.log(profile);
     return {
       email: profile.emails[0].value,
-      password: '12093812093',      // 임의의 패스워드
+      password: '구글로그인유저',      // 임의의 패스워드
       name: profile.displayName,
-      phone: '01012345678',
+      phone: '핸드폰번호를 추가해주세요',
       addressUser: null,
       files: null,
     };
