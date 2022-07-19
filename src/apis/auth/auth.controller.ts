@@ -9,7 +9,7 @@ interface IOAuthUser {
     user: Pick<User, 'email' | 'password' | 'name' | 'phone' >;
 }
 
-@Controller()
+@Controller('/')
 export class AuthController {
     constructor(
         private readonly userService: UserService,
