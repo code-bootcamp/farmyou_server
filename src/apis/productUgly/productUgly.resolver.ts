@@ -105,4 +105,32 @@ export class ProductUglyResolver {
     fetchUglyProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
         return this.productUglyService.findByUser({ currentUser });
     }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => [ProductUgly])
+    fetchUglyProductsBySeller(@CurrentUser() currentUser: ICurrentUser) {
+        return this.productUglyService.findBySeller({ currentUser });
+    }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Mutation(() => ProductUgly)
+    updateUglyProduct(
+        @Args('productId') productId: string,
+        @Args({ name: 'title', nullable: true }) title: string,
+        @Args({ name: 'content', nullable: true }) content: string,
+        @Args({ name: 'price', nullable: true }) price: number,
+        @Args({ name: 'quantity', nullable: true }) quantity: number,
+        @Args({ name: 'origin', nullable: true }) origin: string,
+        @CurrentUser() currentUser: ICurrentUser
+    ) {
+        return this.productUglyService.update({
+            productId,
+            title,
+            content,
+            price,
+            quantity,
+            origin,
+            currentUser
+        });
+    }
 }
