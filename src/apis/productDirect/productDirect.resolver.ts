@@ -21,8 +21,10 @@ export class ProductDirectResolver {
     constructor(private readonly productDirectService: ProductDirectService) {}
 
     @Query(() => [ProductDirect])
-    fetchAllDirectProducts() {
-        return this.productDirectService.findAll();
+    fetchDirectProducts(
+        @Args('productId') productId: string
+    ) {
+        return this.productDirectService.findAll({productId});
     }
 
     // ElasticSearch??
@@ -33,6 +35,13 @@ export class ProductDirectResolver {
     // ) {
     //   return this.productDirectService.findOne({ title });
     // }
+
+    @Query(() => ProductDirect)
+    fetchProductDirect(
+        @Args('productId') productId: string, //
+    ) {
+        return this.productDirectService.findOne({ productId });
+    }
 
     @Query(() => [ProductDirect])
     fetchDirectProductsByDirectStoreId(
@@ -54,7 +63,7 @@ export class ProductDirectResolver {
     // 7월 14일 승원 타이틀 조회 테스트
     // 상품이름으로 조회
     @Query(() => [ProductDirect])
-    fetchUglyProductByTitle(
+    fetchDirectProductByTitle(
         @Args('title') title: string,
     ): Promise<ProductDirect[]> {
         return this.productDirectService.findByTitle(title);

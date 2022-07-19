@@ -21,6 +21,10 @@ export class Admin {
     @Field(() => String, {nullable: true})
     name: string;
 
+    @Column({nullable: true, default: null})
+    @Field(() => String, {nullable: true})
+    phone: string;
+
     // 이메일
     @Column()
     @Field(() => String)

@@ -29,12 +29,14 @@ export class ProductUglyResolver {
     constructor(private readonly productUglyService: ProductUglyService) {}
 
     @Query(() => [ProductUgly])
-    fetchUglyProducts() {
-        return this.productUglyService.findAll();
+    fetchUglyProducts(
+        @Args('productId') productId: string
+    ) {
+        return this.productUglyService.findAll({productId});
     }
 
     @Query(() => ProductUgly)
-    fetchUglyProduct(
+    fetchProductUgly(
         @Args('productId') productId: string, //
     ) {
         return this.productUglyService.findOne({ productId });
