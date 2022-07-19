@@ -51,7 +51,7 @@ export class AuthService {
         );
         res.setHeader(
             'Set-Cookie',
-            `refreshToken=${refreshToken}; path=/; domain=.garbi.shop; SameSite=None; Secure; httpOnly;`,
+            `refreshToken=${refreshToken}; path=/; domain=.farmback.shop; SameSite=None; Secure; httpOnly;`,
         );
     }
     // 
