@@ -4,7 +4,6 @@ import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
 import { File } from '../file/entities/file.entity';
 import { FileResolver } from '../file/file.resolver';
 import { FileService } from '../file/file.service';
-import { ImageUser } from '../imageUser/entities/imageUser.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
@@ -18,7 +17,6 @@ import { SellerService } from './seller.service';
   imports: [TypeOrmModule.forFeature([
     Seller,
     Payment,
-    ImageUser,
     Inquiry,
     File,
     ProductUgly,

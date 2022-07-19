@@ -8,7 +8,7 @@ import {
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
-import { UseGuards } from '@nestjs/common';
+import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { UpdateAddressUserInput } from '../addressUser/dto/updateAddressUser.input';
@@ -100,25 +100,17 @@ export class UserResolver {
 
     // PasswordCheckModal
     @UseGuards(GqlAuthAccessGuard)
-    @Query(() => Boolean)
+    @Mutation(() => Boolean)
     async checkIfLoggedUser(
         @CurrentUser() currentUser: ICurrentUser,
         @Args('password') password: string,
-        // @Args('passwordSecond') passwordSecond: string,
     ) {
-        // if (password === passwordSecond) {
         const passwordOwner = await this.userRepository.findOne({
             id: currentUser.id,
         });
         const correctPassword = passwordOwner.password;
 
-        // const same = bcrypt.compare(password, correctPassword);
-
-        // return same;
         return bcrypt.compare(password, correctPassword);
-        // } else {
-        // return false;
-        // }
     }
 
     // 좋아유

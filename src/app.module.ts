@@ -5,9 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
 import { CategoryModule } from './apis/category/category.module';
 import { DirectStoreModule } from './apis/directStore/directStore.module';
-import { ImageDirectProductModule } from './apis/imageDirectProduct/imageDirectProduct.module';
-import { ImageUglyProductModule } from './apis/imageUglyProduct/imageUglyProduct.module';
-import { ImageUserModule } from './apis/imageUser/imageUser.module';
 import { InquiryModule } from './apis/inquiry/inquiry.module';
 import { PaymentMoudle } from './apis/payment/payment.module';
 import { ProductDirectModule } from './apis/productDirect/productDirect.module';
@@ -34,9 +31,6 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
     AuthModule,
     CategoryModule,
     DirectStoreModule,
-    ImageDirectProductModule,
-    ImageUglyProductModule,
-    ImageUserModule,
     InquiryModule,
     PaymentMoudle,
     ProductDirectModule,
@@ -62,11 +56,13 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
       type: 'mysql',
       host: '10.36.80.11', // 새로 배포하는 주소 인스턴스 sql 비공개ip주소
       // host: 'localhost',  // 내부에서 테스트로 돌려볼 호스트 주소
+    //   host: 'my-database',
       port: 3306,
       username: 'root',
       // password: '12345678',
       password: 'root',
       database: 'farmyou_server', //인스턴스 sql ID값
+    //   database: 'farmyou_docker', //인스턴스 sql ID값
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,

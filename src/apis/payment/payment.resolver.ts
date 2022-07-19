@@ -4,7 +4,13 @@ import {
     UnprocessableEntityException,
     UseGuards,
 } from '@nestjs/common';
-import { Mutation, Resolver, Query, Args, registerEnumType } from '@nestjs/graphql';
+import {
+    Mutation,
+    Resolver,
+    Query,
+    Args,
+    registerEnumType,
+} from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
@@ -31,7 +37,10 @@ export class PaymentResolver {
         private readonly paymentService: PaymentService,
         private readonly iamportService: IamportService,
 
-        private readonly userService: UserService
+        private readonly userService: UserService,
+
+        @InjectRepository(Payment)
+        private readonly paymentRepository: Repository<Payment>,
     ) {}
 
     @UseGuards(GqlAuthAccessGuard)
@@ -52,9 +61,20 @@ export class PaymentResolver {
         // 2. payment 테이블에는 impUid가 1번만 존재해야 함. (중복 결제 체크)
         await this.paymentService.checkDuplicate({ impUid });
 
-        await this.userService.buy({productType, productId, quantity, currentUser});
+        await this.userService.buy({
+            productType,
+            productId,
+            quantity,
+            currentUser,
+        });
 
-        return this.paymentService.create({ impUid, amount, currentUser, productType, productId });
+        return await this.paymentService.create({
+            impUid,
+            amount,
+            currentUser,
+            productType,
+            productId,
+        });
     }
 
     @UseGuards(GqlAuthAccessGuard)
@@ -63,6 +83,19 @@ export class PaymentResolver {
         @Args('impUid') impUid: string,
         @CurrentUser() currentUser: ICurrentUser,
     ) {
+        // const theUser = await this.userService.findOneById({
+        //     id: currentUser.id
+        // });
+
+        const thePayment = await this.paymentRepository.findOne({
+            relations: ['user', 'productDirect', 'productUgly'],
+            where: {impUid}
+        });
+
+        if (thePayment.user.id !== currentUser.id) {
+            throw new UnprocessableEntityException('권한이 없습니다');
+        }
+
         // 취소하기전 검증로직
         // 1. 이미 취소된 건인지 확인
         await this.paymentService.checkCanceled({ impUid });
@@ -73,7 +106,7 @@ export class PaymentResolver {
             currentUser,
         });
 
-        // 3. 실제로 import 에 취소 요청하기
+        // 3. 실제로 iamport 에 취소 요청하기
         // iamport.service에서 cancel 실행
         const token = await this.iamportService.getToken();
         const canceledAmount = await this.iamportService.cancel({
@@ -89,7 +122,7 @@ export class PaymentResolver {
             currentUser,
         });
     }
-    
+
     // @UseGuards(GqlAuthAccessGuard)
     // @Query(() => [Payment])
     // async fetchUglyPaymentsByUser(
@@ -97,7 +130,7 @@ export class PaymentResolver {
     // ) {
     //   return await this.paymentService.findUglyByUser({currentUser});
     // }
-    
+
     // @UseGuards(GqlAuthAccessGuard)
     // @Query(() => [Payment])
     // async fetchDirectPaymentsByUser(
@@ -107,10 +140,26 @@ export class PaymentResolver {
     // }
 
     @Mutation(() => Payment)
-    async updateInvoice(
+    updateInvoice(
         @Args('paymentId') paymentId: string,
-        @Args('invoiceNum') invoiceNum: string
+        @Args('invoiceNum') invoiceNum: string,
     ) {
-        return await this.paymentService.invoice({paymentId, invoiceNum});
+        return this.paymentService.invoice({ paymentId, invoiceNum });
+    }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => [Payment])
+    fetchCompletePayments(
+        @CurrentUser() currentUser: ICurrentUser,
+    ) {
+        return this.paymentService.findCompletePayments(currentUser);
+    }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => [Payment])
+    fetchCanceledPayments(
+        @CurrentUser() currentUser: ICurrentUser,
+    ) {
+        return this.paymentService.findCanceledPayments(currentUser);
     }
 }

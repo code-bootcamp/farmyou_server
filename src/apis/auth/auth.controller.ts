@@ -6,7 +6,7 @@ import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 
 interface IOAuthUser {
-    user: Pick<User, 'email' | 'password' | 'name' | 'phone'>;
+    user: Pick<User, 'email' | 'password' | 'name' | 'phone' >;
 }
 
 @Controller()

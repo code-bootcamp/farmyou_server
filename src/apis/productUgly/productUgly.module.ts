@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { File } from '../file/entities/file.entity';
 import { FileResolver } from '../file/file.resolver';
 import { FileService } from '../file/file.service';
-import { ImageUglyProduct } from '../imageUglyProduct/entities/imageUglyProduct.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
 import { Seller } from '../seller/entities/seller.entity';
@@ -16,7 +15,6 @@ import { ProductUglyService } from './productUgly.service';
     imports: [
         TypeOrmModule.forFeature([
             ProductUgly,
-            ImageUglyProduct,
             Inquiry,
             Payment,
             Seller,

@@ -6,7 +6,6 @@ import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { File } from '../file/entities/file.entity';
 import { FileResolver } from '../file/file.resolver';
 import { FileService } from '../file/file.service';
-import { ImageUser } from '../imageUser/entities/imageUser.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
@@ -22,7 +21,6 @@ import { UserService } from './user.service';
             User,
             AddressUser,
             Payment,
-            ImageUser,
             Inquiry,
             Seller,
             ProductDirect,

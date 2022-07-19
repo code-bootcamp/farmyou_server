@@ -9,7 +9,7 @@ import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { AuthController } from './auth.controller';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
-// import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
+import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { AddressUser } from '../addressUser/entities/addressUser.entity';
 import { AddressUserService } from '../addressUser/addressUser.service';
 import { SellerService } from '../seller/seller.service';
@@ -42,7 +42,7 @@ import { File } from '../file/entities/file.entity';
         JwtRefreshStrategy,
         JwtGoogleStrategy,
         JwtNaverStrategy,
-        // JwtKakaoStrategy,
+        JwtKakaoStrategy,
         AuthResolver, //
         AuthService,
         UserService,
