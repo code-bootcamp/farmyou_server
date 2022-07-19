@@ -58,8 +58,8 @@ export class FileService {
             url: `${resultUrl}`,
         });
 
-        console.log(theImage.id);
+        console.log(theImage.url);
 
-        return theImage.id;
+        return theImage.url;
     }
 }

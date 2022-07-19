@@ -9,6 +9,7 @@ import {
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
+import { ProductDirectService } from '../productDirect/productDirect.service';
 import { CreateProductUglyInput } from './dto/createProductUgly.input';
 import { ProductUgly } from './entities/productUgly.entity';
 import { ProductUglyService } from './productUgly.service';
@@ -84,7 +85,7 @@ export class ProductUglyResolver {
         @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
         @Args('page') page: number,
     ) {
-        return this.productUglyService.findSorted({sortBy}, page);
+        return this.productUglyService.findSorted({ sortBy }, page);
     }
     //
     //
@@ -98,4 +99,10 @@ export class ProductUglyResolver {
     // ) {
     //   return this.productUglyService.create({ createProductUglyInput, sellerId });
     // }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => [ProductUgly])
+    fetchUglyProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
+        return this.productUglyService.findByUser({ currentUser });
+    }
 }

@@ -141,15 +141,38 @@ export class PaymentService {
         return payment;
     }
 
-    async findAllByUser({currentUser}) {
-        const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {id: currentUser.id}
+    // async findUglyByUser({currentUser}) {
+    //     const theUser = await this.userRepository.findOne({
+    //         relations: ['sellers', 'directProducts', 'uglyProducts'],
+    //         where: {id: currentUser.id}
+    //     });
+
+    //     return await this.paymentRepository.find({
+    //         relations: ['user', 'productDirect', 'productUgly'],
+    //         where: {user: theUser, productDirect: null}
+    //     });
+    // }
+
+    // async findDirectByUser({currentUser}) {
+    //     const theUser = await this.userRepository.findOne({
+    //         relations: ['sellers', 'directProducts', 'uglyProducts'],
+    //         where: {id: currentUser.id}
+    //     });
+
+    //     return await this.paymentRepository.find({
+    //         relations: ['user', 'productUgly', 'productUgly'],
+    //         where: {user: theUser, productUgly: null}
+    //     });
+    // }
+
+    async invoice({paymentId, invoiceNum}) {
+        const thePayment = await this.paymentRepository.findOne({
+            relations: ['user', 'productDirect', 'productUgly'],
+            where: {id: paymentId}
         });
 
-        return await this.paymentRepository.find({
-            relations: ['user', 'productDirect', 'productUgly'],
-            where: {user: theUser}
-        });
+        thePayment.invoice = invoiceNum;
+
+        return await this.paymentRepository.save(thePayment);
     }
 }
