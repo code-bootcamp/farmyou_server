@@ -13,13 +13,13 @@ steps:
           - docker-compose.prod.yaml
           - push
 
-    # 3단계 => kubectl set image deployment/farmyoubackend farmyou-backend-sha256-1=asia.gcr.io/f7b3team01server/farmyou-backend:0.15
+    # 3단계 => kubectl set image deployment/farmyoubackend farmyou-backend-sha256-1=asia.gcr.io/famryouserver/farmyou-backend:0.15
     - name: 'gcr.io/cloud-builders/kubectl'
       args:
           - set
           - image
           - deployment/farmyoubackend
-          - farmyou-backend-sha256-1=asia.gcr.io/f7b3team01server/farmyou-backend:0.53
+          - farmyou-backend-sha256-1=asia.gcr.io/famryouserver/farmyou-backend:0.54
       env:
           - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
-          - CLOUDSDK_CONTAINER_CLUSTER=farmyou-cluster-1
+          - CLOUDSDK_CONTAINER_CLUSTER=farmyou-cluster-2
