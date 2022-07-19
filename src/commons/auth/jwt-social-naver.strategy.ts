@@ -27,6 +27,8 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
           // name: profile.displayName,
           name: profile.name,
           phone: '01012345678',
+          addressUser: null,
+          files: null,
         };
       }
 }
