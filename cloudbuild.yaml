@@ -23,4 +23,3 @@ steps:
       env:
           - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
           - CLOUDSDK_CONTAINER_CLUSTER=farmyou-cluster-2
-#
