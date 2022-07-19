@@ -157,6 +157,7 @@ type Query {
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
   fetchUglyProductsSorted(sortBy: String!, page: Float!): [ProductUgly!]!
+  fetchUglyProductsBySeller: [ProductUgly!]!
   fetchUser: User!
   fetchUsers: [User!]!
   checkIfLoggedUser(password: String!): Boolean!
@@ -191,8 +192,10 @@ type Mutation {
   updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, files: [Upload!]): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
+  updateDirectProduct(productId: String!, title: String, content: String, price: Float, quantity: Float, category: String, isDeleted: Boolean, isSoldout: Boolean): ProductDirect!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, files: [Upload!]): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
+  updateUglyProduct(productId: String!, title: String, content: String, price: Float, quantity: Float, origin: String): ProductUgly!
   createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, files: [Upload!]): User!
   updateUser(name: String, password: String, phone: String, imageUrl: String): User!
   likeYou(userId: String!, sellerId: String!): String!

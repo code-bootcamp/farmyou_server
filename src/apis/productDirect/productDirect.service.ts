@@ -248,4 +248,60 @@ export class ProductDirectService {
         // });
         return theUser.directProducts;
     }
+
+    async update({
+        productId,
+        title,
+        content,
+        price,
+        quantity,
+        category,
+        isDeleted,
+        isSoldout,
+        currentUser
+    }) {
+        const theProduct = await this.productDirectRepository.findOne({
+            relations: ['directStore', 'users', 'admin'],
+            where: { id: productId },
+        });
+
+        console.log(theProduct.admin);
+
+        if (currentUser.id !== theProduct.admin.id) {
+            throw new UnprocessableEntityException('권한이 없습니다.');
+        }
+
+        if (title) {
+            theProduct.title = title;
+        }
+
+        if (content) {
+            theProduct.content = content;
+        }
+
+        if (price) {
+            theProduct.price = price;
+        }
+
+        if (quantity) {
+            theProduct.quantity = quantity;
+            if (theProduct.quantity > 0) {
+                theProduct.isSoldout = false;
+            }
+        }
+
+        if (category) {
+            theProduct.category = category;
+        }
+
+        if (isDeleted) {
+            theProduct.isDeleted = isDeleted;
+        }
+
+        if (isSoldout) {
+            theProduct.isSoldout = isSoldout;
+        }
+
+        return await this.productDirectRepository.save(theProduct);
+    }
 }
