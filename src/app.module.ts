@@ -65,8 +65,8 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
       // host: 'localhost',  // 내부에서 테스트로 돌려볼 호스트 주소
       port: 3306,
       username: 'root',
-      password: '12345678',
-    //   password: 'root',
+      // password: '12345678',
+      password: 'root',
       database: 'farmyou_server', //인스턴스 sql ID값
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
