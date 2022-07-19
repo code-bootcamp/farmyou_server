@@ -126,6 +126,7 @@ type Payment {
   user: User!
   productDirect: ProductDirect
   productUgly: ProductUgly
+  invoice: String
 }
 
 enum PAYMENT_STATUS_ENUM {
@@ -139,7 +140,7 @@ type Query {
   fetchAdminOfTheStore(directStoreId: String!): Admin!
   fetchAdmins: [Admin!]!
   fetchSellers: [Seller!]!
-  checkIfLoggedSeller(passwordFirst: String!, passwordSecond: String!): Boolean!
+  checkIfLoggedSeller(password: String!): Boolean!
   fetchTypeOfUserLoggedIn: String!
   fetchUserLoggedIn: Admin!
   fetchCategory(name: String!): Category!
@@ -148,17 +149,17 @@ type Query {
   fetchDirectStores: [DirectStore!]!
   fetchInquiry(id: String!): Inquiry!
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
-  fetchPaymentsByUser: [Payment!]!
   fetchAllDirectProducts: [ProductDirect!]!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
   fetchDirectProductsSorted(sortBy: String!, directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
   fetchUglyProductByTitle(title: String!): [ProductUgly!]!
+  fetchUglyProductsByUser: [ProductUgly!]!
   fetchUglyProducts: [ProductUgly!]!
   fetchUglyProduct(productId: String!): ProductUgly!
   fetchUglyProductsSorted(sortBy: String!, page: Float!): [ProductUgly!]!
   fetchUser: User!
   fetchUsers: [User!]!
-  checkIfLoggedUser(passwordFirst: String!, passwordSecond: String!): Boolean!
+  checkIfLoggedUser(password: String!): Boolean!
 }
 
 type Mutation {
@@ -168,8 +169,8 @@ type Mutation {
   assignMain(userId: String!, addressId: String!): AddressUser!
   createAdmin(email: String!, password: String!, directStoreId: String, files: [Upload!]): Admin!
   uploadFile(files: [Upload!]): [String!]!
-  createSeller(name: String!, email: String!, password: String!, phone: String!, files: [Upload!]): Seller!
-  updateSeller(email: String, password: String, phone: String): Seller!
+  createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
+  updateSeller(name: String, password: String, phone: String, imageUrl: String): Seller!
   loginUser(email: String!, password: String!): String!
   loginSeller(email: String!, password: String!): String!
   loginAdmin(email: String!, password: String!): String!
@@ -187,12 +188,13 @@ type Mutation {
   deleteInquiry(inquiryId: String!): String!
   createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!): Payment!
   cancelPayment(impUid: String!): Payment!
+  updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, files: [Upload!]): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, files: [Upload!]): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
   createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, files: [Upload!]): User!
-  updateUser(email: String, password: String, phone: String, newAddress: UpdateAddressUserInput): User!
+  updateUser(name: String, password: String, phone: String, imageUrl: String): User!
   likeYou(userId: String!, sellerId: String!): String!
   likeYouNoMore(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
