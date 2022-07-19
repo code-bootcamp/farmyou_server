@@ -33,10 +33,17 @@ export class ProductUglyService {
         private readonly fileResolver: FileResolver,
     ) {}
 
-    async findAll() {
-        return await this.productUglyRepository.find({
-            relations: ['seller', 'users'],
-        });
+    async findAll({productId}) {
+        // return await this.productUglyRepository.find({
+        //     relations: ['seller', 'users'],
+        // });
+        return await this.productUglyRepository
+            .createQueryBuilder('productUgly')
+            .orderBy('productUgly.createdAt', 'DESC')
+            .where('productUgly.id = :id', {
+                id: productId
+            })
+            .getMany();
     }
 
     async findOne({ productId }) {
