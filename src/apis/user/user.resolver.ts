@@ -1,4 +1,10 @@
-import { Args, Mutation, Query, registerEnumType, Resolver } from '@nestjs/graphql';
+import {
+    Args,
+    Mutation,
+    Query,
+    registerEnumType,
+    Resolver,
+} from '@nestjs/graphql';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
@@ -53,7 +59,7 @@ export class UserResolver {
             hashedPassword,
             phone,
             addressUser,
-            files
+            files,
         });
     }
 
@@ -61,19 +67,18 @@ export class UserResolver {
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => User)
     async updateUser(
-        @CurrentUser() currentUser: ICurrentUser,
-        @Args({ name: 'email', nullable: true }) email: string,
+        @Args({ name: 'name', nullable: true }) name: string,
         @Args({ name: 'password', nullable: true }) password: string,
         @Args({ name: 'phone', nullable: true }) phone: string,
-        @Args({ name: 'newAddress', nullable: true })
-        newAddress: UpdateAddressUserInput,
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @CurrentUser() currentUser: ICurrentUser,
     ) {
         return await this.userService.update({
-            currentUser,
-            email,
+            name,
             password,
             phone,
-            newAddress,
+            imageUrl,
+            currentUser,
         });
     }
 
@@ -98,21 +103,22 @@ export class UserResolver {
     @Query(() => Boolean)
     async checkIfLoggedUser(
         @CurrentUser() currentUser: ICurrentUser,
-        @Args('passwordFirst') passwordFirst: string,
-        @Args('passwordSecond') passwordSecond: string,
+        @Args('password') password: string,
+        // @Args('passwordSecond') passwordSecond: string,
     ) {
-        if (passwordFirst === passwordSecond) {
-            const passwordOwner = await this.userRepository.findOne({
-                id: currentUser.id,
-            });
-            const correctPassword = passwordOwner.password;
+        // if (password === passwordSecond) {
+        const passwordOwner = await this.userRepository.findOne({
+            id: currentUser.id,
+        });
+        const correctPassword = passwordOwner.password;
 
-            const same = bcrypt.compare(passwordFirst, correctPassword);
+        // const same = bcrypt.compare(password, correctPassword);
 
-            return same;
-        } else {
-            return false;
-        }
+        // return same;
+        return bcrypt.compare(password, correctPassword);
+        // } else {
+        // return false;
+        // }
     }
 
     // 좋아유
@@ -250,8 +256,13 @@ export class UserResolver {
         @Args('productType') productType: PRODUCT_TYPE_ENUM,
         @Args('productId') productId: string,
         @Args('quantity') quantity: number,
-        @CurrentUser() currentUser: ICurrentUser
+        @CurrentUser() currentUser: ICurrentUser,
     ) {
-        return this.userService.buy({productType, productId, quantity, currentUser});
+        return this.userService.buy({
+            productType,
+            productId,
+            quantity,
+            currentUser,
+        });
     }
 }

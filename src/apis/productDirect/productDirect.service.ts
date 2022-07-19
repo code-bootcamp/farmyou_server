@@ -11,6 +11,7 @@ import { Category } from '../category/entities/category.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
 import { File, IMAGE_TYPE_ENUM } from '../file/entities/file.entity';
 import { FileResolver } from '../file/file.resolver';
+import { User } from '../user/entities/user.entity';
 import { ProductDirect } from './entities/productDirect.entity';
 import { SORT_CONDITION_ENUM } from './productDirect.resolver';
 
@@ -24,6 +25,9 @@ export class ProductDirectService {
 
         @InjectRepository(Admin)
         private readonly adminRepository: Repository<Admin>,
+
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
 
         @InjectRepository(DirectStore)
         private readonly directStoreRepository: Repository<DirectStore>,
@@ -230,5 +234,18 @@ export class ProductDirectService {
             id: productId,
         });
         return result.affected ? true : false;
+    }
+
+    async findByUser({ currentUser }) {
+        const theUser = await this.userRepository.findOne({
+            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            where: { id: currentUser.id },
+        });
+
+        // return this.productUglyRepository.find({
+        //     relations: ['users', 'seller'],
+        //     where: { users: { id: theUser.id } },
+        // });
+        return theUser.directProducts;
     }
 }

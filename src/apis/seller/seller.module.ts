@@ -7,6 +7,9 @@ import { FileService } from '../file/file.service';
 import { ImageUser } from '../imageUser/entities/imageUser.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
+import { ProductUgly } from '../productUgly/entities/productUgly.entity';
+import { ProductUglyService } from '../productUgly/productUgly.service';
+import { User } from '../user/entities/user.entity';
 import { Seller } from './entities/seller.entity';
 import { SellerResolver } from './seller.resolver';
 import { SellerService } from './seller.service';
@@ -17,14 +20,17 @@ import { SellerService } from './seller.service';
     Payment,
     ImageUser,
     Inquiry,
-    File
+    File,
+    ProductUgly,
+    User
   ])],
   providers: [
     JwtAccessStrategy,
     SellerResolver, //
     SellerService,
     FileResolver,
-    FileService
+    FileService,
+    ProductUglyService
   ],
 })
 export class SellerModule {}

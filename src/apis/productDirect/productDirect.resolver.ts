@@ -108,4 +108,10 @@ export class ProductDirectResolver {
     ) {
         return this.productDirectService.delete({ productId });
     }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Query(() => [ProductDirect])
+    fetchUglyProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
+        return this.productDirectService.findByUser({ currentUser });
+    }
 }

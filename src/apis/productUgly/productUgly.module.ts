@@ -7,17 +7,28 @@ import { ImageUglyProduct } from '../imageUglyProduct/entities/imageUglyProduct.
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
 import { Seller } from '../seller/entities/seller.entity';
+import { User } from '../user/entities/user.entity';
 import { ProductUgly } from './entities/productUgly.entity';
 import { ProductUglyResolver } from './productUgly.resolver';
 import { ProductUglyService } from './productUgly.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductUgly, ImageUglyProduct, Inquiry, Payment, Seller, File])],
-  providers: [
-    ProductUglyResolver, //
-    ProductUglyService,
-    FileResolver,
-    FileService
-  ],
+    imports: [
+        TypeOrmModule.forFeature([
+            ProductUgly,
+            ImageUglyProduct,
+            Inquiry,
+            Payment,
+            Seller,
+            User,
+            File,
+        ]),
+    ],
+    providers: [
+        ProductUglyResolver, //
+        ProductUglyService,
+        FileResolver,
+        FileService,
+    ],
 })
 export class ProductUglyModule {}
