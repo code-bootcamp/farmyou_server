@@ -7,6 +7,7 @@ import { User } from 'src/apis/user/entities/user.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 export enum IMAGE_TYPE_ENUM {
+    DEFAULT = 'NOT_SELECTED',
     UGLY_PRODUCT = 'UGLY_PRODUCT',
     DIRECT_PRODUCT = 'DIRECT_PRODUCT',
     USER = 'USER', //구매자

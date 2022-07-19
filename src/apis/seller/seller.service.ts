@@ -90,11 +90,13 @@ export class SellerService {
             loggedSeller.phone = phone;
         }
 
-        await this.fileRepository.save({
+        const theImage = await this.fileRepository.create({
             url: imageUrl,
             seller: loggedSeller,
             type: IMAGE_TYPE_ENUM.SELLER,
         });
+
+        await this.fileRepository.save(theImage);
 
         // 파일 업로드
         // const imageUrl = await this.fileService.upload({files});

@@ -20,7 +20,7 @@ export class SellerResolver {
 
         private readonly sellerService: SellerService, //
 
-        private readonly productUglyService: ProductUglyService
+        private readonly productUglyService: ProductUglyService,
     ) {}
 
     // 회원 생성하기
@@ -48,7 +48,7 @@ export class SellerResolver {
         @Args({ name: 'name', nullable: true }) name: string,
         @Args({ name: 'password', nullable: true }) password: string,
         @Args({ name: 'phone', nullable: true }) phone: string,
-        @Args({ name: 'imageUrl', nullable: true}) imageUrl: string,
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @CurrentUser() currentUser: ICurrentUser,
     ) {
         // const hashedPassword = await bcrypt.hash(password, 10);
@@ -69,25 +69,17 @@ export class SellerResolver {
 
     // PasswordCheckModal
     @UseGuards(GqlAuthAccessGuard)
-    @Query(() => Boolean)
+    @Mutation(() => Boolean)
     async checkIfLoggedSeller(
         @CurrentUser() currentUser: ICurrentUser,
         @Args('password') password: string,
-        // @Args('passwordSecond') passwordSecond: string,
     ) {
-        // if (passwordFirst === passwordSecond) {
-            const passwordOwner = await this.sellerRepository.findOne({
-                id: currentUser.id,
-            });
+        const passwordOwner = await this.sellerRepository.findOne({
+            id: currentUser.id,
+        });
 
-            const correctPassword = passwordOwner.password;
+        const correctPassword = passwordOwner.password;
 
-            // const same = bcrypt.compare(password, correctPassword);
-
-            // return same;
-            return bcrypt.compare(password, correctPassword);
-        // } else {
-        //     return false;
-        // }
+        return bcrypt.compare(password, correctPassword);
     }
 }

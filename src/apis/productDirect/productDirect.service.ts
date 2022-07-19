@@ -222,7 +222,7 @@ export class ProductDirectService {
             where: { id: productId },
         });
 
-        if (product.isSoldout) {
+        if (product.isSoldout || product.quantity <= 0) {
             throw new UnprocessableEntityException(
                 '이미 판매 완료된 상품입니다.',
             );

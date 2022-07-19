@@ -136,11 +136,19 @@ export class UserService {
             loggedUser.phone = phone;
         }
 
-        await this.fileRepository.save({
+        // const theImage = await this.fileRepository.findOne({
+        //     relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+        //     where: {url: imageUrl}
+        // })
+
+        const theImage = await this.fileRepository.create({
             url: imageUrl,
-            seller: loggedUser,
+            customer: loggedUser,
             type: IMAGE_TYPE_ENUM.USER,
-        });
+        })
+        // theImage.customer = loggedUser;
+
+        await this.fileRepository.save(theImage);
 
         // 파일 업로드
         // const imageUrl = await this.fileService.upload({files});

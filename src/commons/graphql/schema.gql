@@ -140,7 +140,6 @@ type Query {
   fetchAdminOfTheStore(directStoreId: String!): Admin!
   fetchAdmins: [Admin!]!
   fetchSellers: [Seller!]!
-  checkIfLoggedSeller(password: String!): Boolean!
   fetchTypeOfUserLoggedIn: String!
   fetchUserLoggedIn: Admin!
   fetchCategory(name: String!): Category!
@@ -149,6 +148,8 @@ type Query {
   fetchDirectStores: [DirectStore!]!
   fetchInquiry(id: String!): Inquiry!
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
+  fetchCompletePayments: [Payment!]!
+  fetchCanceledPayments: [Payment!]!
   fetchAllDirectProducts: [ProductDirect!]!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
   fetchDirectProductsSorted(sortBy: String!, directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
@@ -161,7 +162,6 @@ type Query {
   fetchUglyProductsBySeller: [ProductUgly!]!
   fetchUser: User!
   fetchUsers: [User!]!
-  checkIfLoggedUser(password: String!): Boolean!
 }
 
 type Mutation {
@@ -173,6 +173,7 @@ type Mutation {
   uploadFile(files: [Upload!]): [String!]!
   createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
   updateSeller(name: String, password: String, phone: String, imageUrl: String): Seller!
+  checkIfLoggedSeller(password: String!): Boolean!
   loginUser(email: String!, password: String!): String!
   loginSeller(email: String!, password: String!): String!
   loginAdmin(email: String!, password: String!): String!
@@ -199,6 +200,7 @@ type Mutation {
   updateProductUgly(productId: String!, title: String, content: String, price: Float, quantity: Float, origin: String): ProductUgly!
   createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, files: [Upload!]): User!
   updateUser(name: String, password: String, phone: String, imageUrl: String): User!
+  checkIfLoggedUser(password: String!): Boolean!
   likeYou(userId: String!, sellerId: String!): String!
   likeYouNoMore(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
