@@ -1,8 +1,9 @@
 import { PassportStrategy } from '@nestjs/passport';
-import {Strategy} from 'passport-kakao';
+import { Strategy, Profile } from 'passport-kakao';
 import 'dotenv/config';
+import { Injectable } from '@nestjs/common';
 
-
+@Injectable()
 export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     constructor() {
         const CLIENT_ID = process.env.KAKAO_CLIENT_ID;
@@ -13,7 +14,6 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
             clientID: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
             callbackURL: 'http://localhost:3000/users/login/kakao',
-            scope: ['email', 'profile'],
         });
     }
 
@@ -24,9 +24,9 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         console.log(profile);
         return {
           email: profile._json.kakao_account.email,
-          password: '12345678', //받아오는것이 없어서 임의로 정의 하는것
+          password: '카카오로그인유저', //받아오는것이 없어서 임의로 정의 하는것
           name: profile.displayName,
-          phone: '01012345678',
+          phone: '핸드폰번호를 추가해주세요',
           addressUser: null,
           files: null,
         };
