@@ -111,7 +111,33 @@ export class ProductDirectResolver {
 
     @UseGuards(GqlAuthAccessGuard)
     @Query(() => [ProductDirect])
-    fetchUglyProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
+    fetchDirectProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
         return this.productDirectService.findByUser({ currentUser });
+    }
+
+    @UseGuards(GqlAuthAccessGuard)
+    @Mutation(() => ProductDirect)
+    updateProductDirect(
+        @Args('productId') productId: string,
+        @Args({ name: 'title', nullable: true }) title: string,
+        @Args({ name: 'content', nullable: true }) content: string,
+        @Args({ name: 'price', nullable: true }) price: number,
+        @Args({ name: 'quantity', nullable: true }) quantity: number,
+        @Args({ name: 'category', nullable: true }) category: string,
+        @Args({ name: 'isDeleted', nullable: true }) isDeleted: boolean,
+        @Args({ name: 'isSoldout', nullable: true }) isSoldout: boolean,
+        @CurrentUser() currentUser: ICurrentUser
+    ) {
+        return this.productDirectService.update({
+            productId,
+            title,
+            content,
+            price,
+            quantity,
+            category,
+            isDeleted,
+            isSoldout,
+            currentUser
+        });
     }
 }

@@ -25,6 +25,8 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
       password: '12093812093',      // 임의의 패스워드
       name: profile.displayName,
       phone: '01012345678',
+      addressUser: null,
+      files: null,
     };
   }
 }

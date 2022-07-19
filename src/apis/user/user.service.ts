@@ -213,6 +213,10 @@ export class UserService {
             theUser.directProducts.push(theProduct);
 
             theProduct.quantity -= quantity;
+            if (theProduct.quantity === 0) {
+                theProduct.isSoldout = true;
+            }
+            
             theProduct.quantitySold += quantity;
             theProduct.users.push(theUser);
 
