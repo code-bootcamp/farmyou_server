@@ -6,7 +6,6 @@ import { DirectStore } from '../directStore/entities/directStore.entity';
 import { File } from '../file/entities/file.entity';
 import { FileResolver } from '../file/file.resolver';
 import { FileService } from '../file/file.service';
-import { ImageDirectProduct } from '../imageDirectProduct/entities/imageDirectProduct.entity';
 import { Inquiry } from '../inquiry/entities/inquiry.entity';
 import { Payment } from '../payment/entities/payment.entity';
 import { Seller } from '../seller/entities/seller.entity';
@@ -20,7 +19,6 @@ import { ProductDirectService } from './productDirect.service';
     Admin,
     ProductDirect, 
     Category, 
-    ImageDirectProduct, 
     DirectStore,
     Inquiry,
     Payment,

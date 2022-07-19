@@ -90,13 +90,6 @@ type AddressUser {
   user: User
 }
 
-type ImageUser {
-  id: String!
-  url: String!
-  seller: String!
-  user: String!
-}
-
 type Inquiry {
   id: String!
   title: String!
@@ -181,10 +174,6 @@ type Mutation {
   restoreAccessToken: String!
   createCategory(name: String!): Category!
   createDirectStore(name: String!): DirectStore!
-  uploadImageDirect(files: [Upload!]!): [String!]!
-  uploadImageUgly(files: [Upload!]!): [String!]!
-  uploadImage(user_type: String!, user_id: String!, files: [Upload!]!): [ImageUser!]!
-  uploadImageUser(files: [Upload!]!): [String!]!
   createInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
   postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
