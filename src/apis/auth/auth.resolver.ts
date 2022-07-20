@@ -158,84 +158,84 @@ export class AuthResolver {
     //     }
     // }
 
-    // // from BE1
-    // @UseGuards(GqlAuthRefreshGuard)
-    // @UseGuards(GqlAuthAccessGuard)
-    // @Mutation(() => String)
-    // async logout(@Context() context: any) {
-    //   try {
-    //     let RT = context.req.headers.cookie.split('Token=')[1];
-    //     console.log(RT)
-    //     let AT = context.req.headers.authorization.split(' ')[1];
-    //     // let tem = Math.floor(Date.now() / 1000);
-  
-    //     jwt.verify(RT, 'myRefreshKey', async (err, payload) => {
-    //       if (err) {
-    //         throw err;
-    //       }
-    //       await this.cacheManager.set(`R ${RT}`, 'RefreshToken', {
-    //         ttl: 28800,
-    //       });
-    //     });
-  
-    //     jwt.verify(AT, 'myAccessKey', async (err, payload) => {
-    //       if (err) {
-    //         console.log(err, '*******');
-    //         throw err;
-    //       }
-    //       await this.cacheManager.set(`A ${AT}`, 'AccessToken', {
-    //         ttl: 3600,
-    //       });
-    //     });
-  
-    //     return '로그아웃에 성공했습니다.';
-    //   } catch (error) {
-    //     console.log(error, ' !!! ');
-    //     throw error;
-    //   }
-    // }
-
-
-
-    // 7월 20일 승원 로그아웃 수정
+    // from BE1
+    @UseGuards(GqlAuthRefreshGuard)
     @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => String)
-  async logout(
-    @Context() context: any, //
-  ) {
-    //accessToken값
-    const accessToken = context.req.headers.authorization.replace(
-      'Bearer ',
-      '',
-    );
-    console.log('엑세스 토큰입니다')
-    console.log(accessToken)
-    //refreshToken
-    const refreshToken = context.req.headers.cookie.replace(
-      'refreshToken=',
-      '',
-    );
-    console.log('리프레쉬 토큰입니다')
-    console.log(refreshToken)
-    try {
-      jwt.verify(accessToken, 'myAccessKey');
-      jwt.verify(refreshToken, 'myRefreshKey');
-    } catch {
-      throw new UnauthorizedException();
+    @Mutation(() => String)
+    async logout(@Context() context: any) {
+      try {
+        let RT = context.req.headers.cookie.split('Token=')[1];
+        console.log(RT)
+        let AT = context.req.headers.authorization.split(' ')[1];
+        // let tem = Math.floor(Date.now() / 1000);
+  
+        jwt.verify(RT, 'myRefreshKey', async (err, payload) => {
+          if (err) {
+            throw err;
+          }
+          await this.cacheManager.set(`R ${RT}`, 'RefreshToken', {
+            ttl: 28800,
+          });
+        });
+  
+        jwt.verify(AT, 'myAccessKey', async (err, payload) => {
+          if (err) {
+            console.log(err, '*******');
+            throw err;
+          }
+          await this.cacheManager.set(`A ${AT}`, 'AccessToken', {
+            ttl: 3600,
+          });
+        });
+  
+        return '로그아웃에 성공했습니다.';
+      } catch (error) {
+        console.log(error, ' !!! ');
+        throw error;
+      }
     }
-    await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
-      ttl: 180,
-    });
-    await this.cacheManager.set(
-      `refreshToken:${refreshToken}`,
-      'refreshToken',
-      {
-        ttl: 300,
-      },
-    );
 
-    return '로그아웃에 성공했습니다';
-  }
+
+
+//     // 7월 20일 승원 로그아웃 수정
+//     @UseGuards(GqlAuthAccessGuard)
+//   @Mutation(() => String)
+//   async logout(
+//     @Context() context: any, //
+//   ) {
+//     //accessToken값
+//     const accessToken = context.req.headers.authorization.replace(
+//       'Bearer ',
+//       '',
+//     );
+//     console.log('엑세스 토큰입니다')
+//     console.log(accessToken)
+//     //refreshToken
+//     const refreshToken = context.req.headers.cookie.replace(
+//       'refreshToken=',
+//       '',
+//     );
+//     console.log('리프레쉬 토큰입니다')
+//     console.log(refreshToken)
+//     try {
+//       jwt.verify(accessToken, 'myAccessKey');
+//       jwt.verify(refreshToken, 'myRefreshKey');
+//     } catch {
+//       throw new UnauthorizedException();
+//     }
+//     await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
+//       ttl: 180,
+//     });
+//     await this.cacheManager.set(
+//       `refreshToken:${refreshToken}`,
+//       'refreshToken',
+//       {
+//         ttl: 300,
+//       },
+//     );
+
+//     return '로그아웃에 성공했습니다';
+//   }
 
     // GqlAuthAccessGuard is imported from src/commons/auth/gql-auth.guard.ts
     @UseGuards(GqlAuthRefreshGuard)
