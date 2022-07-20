@@ -36,7 +36,7 @@ export class SellerService {
         });
     }
 
-    async create({ email, hashedPassword: password, name, phone, imageUrl }) {
+    async create({ email, hashedPassword: password, name, phone, createFileInput }) {
         const seller = await this.sellerRepository.findOne({
             relations: ['users'],
             where: { email },
@@ -52,9 +52,9 @@ export class SellerService {
             users: [],
         });
 
-        if (imageUrl) {
+        if (createFileInput) {
             const theImage = await this.fileRepository.create({
-                url: imageUrl,
+                url: createFileInput.imageUrl,
                 seller: thisSeller,
                 type: IMAGE_TYPE_ENUM.SELLER,
             });
@@ -78,7 +78,7 @@ export class SellerService {
         return thisSeller;
     }
 
-    async update({ name, password, phone, imageUrl, currentUser }) {
+    async update({ name, password, phone, createFileInput, currentUser }) {
         const loggedSeller = await this.sellerRepository.findOne({
             relations: ['users'],
             where: {id: currentUser.id},
@@ -96,9 +96,9 @@ export class SellerService {
             loggedSeller.phone = phone;
         }
 
-        if (imageUrl) {
+        if (createFileInput) {
             const theImage = await this.fileRepository.create({
-                url: imageUrl,
+                url: createFileInput.imageUrl,
                 seller: loggedSeller,
                 type: IMAGE_TYPE_ENUM.SELLER,
             });

@@ -11,6 +11,7 @@ import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { ProductDirectService } from '../productDirect/productDirect.service';
 import { CreateProductUglyInput } from './dto/createProductUgly.input';
+// import { CreateProductUglyInput } from './dto/createProductUglyOld.input';
 import { ProductUgly } from './entities/productUgly.entity';
 import { ProductUglyService } from './productUgly.service';
 
@@ -59,7 +60,8 @@ export class ProductUglyResolver {
         @Args('quantity') quantity: number,
         @Args('origin') origin: string,
         @Args('sellerId') sellerId: string,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateProductUglyInput,
         // @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.create({
@@ -69,7 +71,8 @@ export class ProductUglyResolver {
             quantity,
             origin,
             sellerId,
-            imageUrl,
+            // imageUrl,
+            createFileInput
         });
     }
 
@@ -131,7 +134,8 @@ export class ProductUglyResolver {
         @Args({ name: 'price', nullable: true }) price: number,
         @Args({ name: 'quantity', nullable: true }) quantity: number,
         @Args({ name: 'origin', nullable: true }) origin: string,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateProductUglyInput,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.update({
@@ -141,7 +145,8 @@ export class ProductUglyResolver {
             price,
             quantity,
             origin,
-            imageUrl,
+            // imageUrl,
+            createFileInput,
             currentUser
         });
     }
