@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
     my_backend:
-        image: asia.gcr.io/famryouserver/farmyou-backend:0.66
+        image: asia.gcr.io/famryouserver/farmyou-backend:0.67
         platform: linux/x86_64
         build:
             context: .
@@ -11,4 +11,3 @@ services:
         #   - ./.env.prod
         ports:
             - 3000:3000
-#
