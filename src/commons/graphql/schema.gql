@@ -209,6 +209,8 @@ type Mutation {
   createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!): Payment!
   cancelPayment(impUid: String!): Payment!
   updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
+  sendToken(phone: String!): String!
+  checkToken(token: String!): String!
   createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, imageUrl: String): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
   updateProductDirect(productId: String!, title: String, content: String, price: Float, quantity: Float, category: String, isDeleted: Boolean, isSoldout: Boolean, imageUrl: String): ProductDirect!
