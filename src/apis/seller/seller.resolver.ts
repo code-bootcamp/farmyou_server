@@ -30,6 +30,7 @@ export class SellerResolver {
         @Args('email') email: string,
         @Args('password') password: string,
         @Args('phone') phone: string,
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         // console.log(hashedPassword);
@@ -38,6 +39,7 @@ export class SellerResolver {
             email,
             hashedPassword,
             phone,
+            imageUrl
         });
     }
 

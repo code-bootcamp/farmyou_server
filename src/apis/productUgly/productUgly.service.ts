@@ -33,7 +33,7 @@ export class ProductUglyService {
         private readonly fileResolver: FileResolver,
     ) {}
 
-    async findAll({productId}) {
+    async findAll({ productId }) {
         // return await this.productUglyRepository.find({
         //     relations: ['seller', 'users'],
         // });
@@ -41,7 +41,7 @@ export class ProductUglyService {
             .createQueryBuilder('productUgly')
             .orderBy('productUgly.createdAt', 'DESC')
             .where('productUgly.id = :id', {
-                id: productId
+                id: productId,
             })
             .getMany();
     }
@@ -53,7 +53,7 @@ export class ProductUglyService {
         });
     }
 
-    async create({ title, content, price, quantity, origin, sellerId, files }) {
+    async create({ title, content, price, quantity, origin, sellerId, imageUrl }) {
         const theSeller = await this.sellerRepository.findOne({
             relations: ['users'],
             where: { id: sellerId },
@@ -69,21 +69,13 @@ export class ProductUglyService {
                 seller: theSeller,
             });
 
-            if (files) {
-                const imageId = await this.fileResolver.uploadFile(files);
-                const theImage = await this.fileRepository.findOne({
-                    relations: [
-                        'productUgly',
-                        'productDirect',
-                        'customer',
-                        'seller',
-                        'admin',
-                    ],
-                    where: { id: imageId },
+            if (imageUrl) {
+                const theImage = await this.fileRepository.create({
+                    url: imageUrl,
+                    productUgly: result,
+                    type: IMAGE_TYPE_ENUM.UGLY_PRODUCT,
                 });
-                theImage.type = IMAGE_TYPE_ENUM.UGLY_PRODUCT;
-                theImage.productUgly = result;
-
+    
                 await this.fileRepository.save(theImage);
             }
 
@@ -95,10 +87,19 @@ export class ProductUglyService {
         }
     }
 
-    async update({productId, title, content, price, quantity, origin, currentUser}) {
+    async update({
+        productId,
+        title,
+        content,
+        price,
+        quantity,
+        origin,
+        imageUrl,
+        currentUser,
+    }) {
         const theProduct = await this.productUglyRepository.findOne({
             relations: ['users', 'seller'],
-            where: {id: productId}
+            where: { id: productId },
         });
 
         if (currentUser.id !== theProduct.seller.id) {
@@ -123,6 +124,16 @@ export class ProductUglyService {
 
         if (origin) {
             theProduct.origin = origin;
+        }
+
+        if (imageUrl) {
+            const theImage = await this.fileRepository.create({
+                url: imageUrl,
+                productUgly: theProduct,
+                type: IMAGE_TYPE_ENUM.UGLY_PRODUCT,
+            });
+
+            await this.fileRepository.save(theImage);
         }
 
         return await this.productUglyRepository.save(theProduct);
@@ -174,6 +185,12 @@ export class ProductUglyService {
             .getMany();
     }
 
+    async findSortedByTitle({ title, sortBy }, page) {
+        const result = await this.findSorted({ sortBy }, page);
+
+        return result.filter((word) => word.title.includes(title));
+    }
+
     async findByUser({ currentUser }) {
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
@@ -187,10 +204,10 @@ export class ProductUglyService {
         return theUser.uglyProducts;
     }
 
-    async findBySeller ({currentUser}) {
+    async findBySeller({ currentUser }) {
         const theProducts = await this.productUglyRepository.find({
             relations: ['users', 'seller'],
-            where: {seller: {id: currentUser.id}}
+            where: { seller: { id: currentUser.id } },
         });
 
         return theProducts.filter((product) => product.quantitySold > 0);

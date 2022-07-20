@@ -41,7 +41,7 @@ export class ProductDirectService {
         private readonly fileResolver: FileResolver,
     ) {}
 
-    async findAll({productId}) {
+    async findAll({ productId }) {
         // return await this.productDirectRepository.find({
         //     relations: ['category', 'directStore', 'users', 'admin']
         // });
@@ -49,7 +49,7 @@ export class ProductDirectService {
             .createQueryBuilder('productDirect')
             .orderBy('productDirect.createdAt', 'DESC')
             .where('productDirect.id = :id', {
-                id: productId
+                id: productId,
             })
             .getMany();
     }
@@ -143,6 +143,18 @@ export class ProductDirectService {
         }
     }
 
+    async findSortedByTitle(
+        { title, sortBy, directStoreId, categoryId },
+        page,
+    ) {
+        const result = await this.findSorted(
+            { sortBy, directStoreId, categoryId },
+            page,
+        );
+
+        return result.filter((word) => word.title.includes(title));
+    }
+
     // TODO: not working now
     // async findByName({directStoreName}) {
     //     const store = await this.directStoreRepository.find({relations: ['admin'], where: {name: directStoreName}});
@@ -169,7 +181,7 @@ export class ProductDirectService {
         categoryId,
         directStoreId,
         // adminId,
-        files,
+        imageUrl,
         currentUser,
     }) {
         const theAdmin = await this.adminRepository.findOne({
@@ -199,20 +211,30 @@ export class ProductDirectService {
                 admin: theAdmin,
             });
 
-            if (files) {
-                const imageId = await this.fileResolver.uploadFile(files);
-                const theImage = await this.fileRepository.findOne({
-                    relations: [
-                        'productUgly',
-                        'productDirect',
-                        'customer',
-                        'seller',
-                        'admin',
-                    ],
-                    where: { id: imageId },
+            // if (files) {
+            //     const imageId = await this.fileResolver.uploadFile(files);
+            //     const theImage = await this.fileRepository.findOne({
+            //         relations: [
+            //             'productUgly',
+            //             'productDirect',
+            //             'customer',
+            //             'seller',
+            //             'admin',
+            //         ],
+            //         where: { id: imageId },
+            //     });
+            //     theImage.type = IMAGE_TYPE_ENUM.DIRECT_PRODUCT;
+            //     theImage.productDirect = result;
+
+            //     await this.fileRepository.save(theImage);
+            // }
+
+            if (imageUrl) {
+                const theImage = await this.fileRepository.create({
+                    url: imageUrl,
+                    productDirect: result,
+                    type: IMAGE_TYPE_ENUM.DIRECT_PRODUCT,
                 });
-                theImage.type = IMAGE_TYPE_ENUM.DIRECT_PRODUCT;
-                theImage.productDirect = result;
 
                 await this.fileRepository.save(theImage);
             }
@@ -268,7 +290,8 @@ export class ProductDirectService {
         category,
         isDeleted,
         isSoldout,
-        currentUser
+        imageUrl,
+        currentUser,
     }) {
         const theProduct = await this.productDirectRepository.findOne({
             relations: ['directStore', 'users', 'admin'],
@@ -310,6 +333,16 @@ export class ProductDirectService {
 
         if (isSoldout) {
             theProduct.isSoldout = isSoldout;
+        }
+
+        if (imageUrl) {
+            const theImage = await this.fileRepository.create({
+                url: imageUrl,
+                productDirect: theProduct,
+                type: IMAGE_TYPE_ENUM.DIRECT_PRODUCT,
+            });
+
+            await this.fileRepository.save(theImage);
         }
 
         return await this.productDirectRepository.save(theProduct);

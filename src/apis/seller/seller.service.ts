@@ -21,10 +21,6 @@ export class SellerService {
 
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
-
-        private readonly fileResolver: FileResolver,
-
-        private readonly fileService: FileService
     ) {}
 
     async findOne({ email }) {
@@ -40,7 +36,7 @@ export class SellerService {
         });
     }
 
-    async create({ email, hashedPassword: password, name, phone }) {
+    async create({ email, hashedPassword: password, name, phone, imageUrl }) {
         const seller = await this.sellerRepository.findOne({
             relations: ['users'],
             where: { email },
@@ -55,6 +51,16 @@ export class SellerService {
             like: 0,
             users: [],
         });
+
+        if (imageUrl) {
+            const theImage = await this.fileRepository.create({
+                url: imageUrl,
+                seller: thisSeller,
+                type: IMAGE_TYPE_ENUM.SELLER,
+            });
+
+            await this.fileRepository.save(theImage);
+        }
 
         // if (files) {
         //     const imageId = await this.fileResolver.uploadFile(files);
@@ -90,13 +96,15 @@ export class SellerService {
             loggedSeller.phone = phone;
         }
 
-        const theImage = await this.fileRepository.create({
-            url: imageUrl,
-            seller: loggedSeller,
-            type: IMAGE_TYPE_ENUM.SELLER,
-        });
+        if (imageUrl) {
+            const theImage = await this.fileRepository.create({
+                url: imageUrl,
+                seller: loggedSeller,
+                type: IMAGE_TYPE_ENUM.SELLER,
+            });
 
-        await this.fileRepository.save(theImage);
+            await this.fileRepository.save(theImage);
+        }
 
         // 파일 업로드
         // const imageUrl = await this.fileService.upload({files});
