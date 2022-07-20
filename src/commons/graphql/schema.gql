@@ -91,6 +91,27 @@ type AddressUser {
   user: User
 }
 
+type File {
+  id: String!
+  url: String!
+  isMain: Boolean!
+  productUgly: ProductUgly
+  productDirect: ProductDirect
+  customer: User
+  seller: Seller
+  admin: Admin
+  type: IMAGE_TYPE_ENUM!
+}
+
+enum IMAGE_TYPE_ENUM {
+  DEFAULT
+  UGLY_PRODUCT
+  DIRECT_PRODUCT
+  USER
+  SELLER
+  ADMIN
+}
+
 type Inquiry {
   id: String!
   title: String!
@@ -133,6 +154,8 @@ type Query {
   fetchAddressesOfTheUser(userId: String!): [AddressUser!]!
   fetchAdminOfTheStore(directStoreId: String!): Admin!
   fetchAdmins: [Admin!]!
+  fetchFile(fileId: String!): File!
+  fetchFiles: [File!]!
   fetchSellers: [Seller!]!
   fetchTypeOfUserLoggedIn: String!
   fetchUserLoggedIn: Admin!
@@ -148,12 +171,14 @@ type Query {
   fetchProductDirect(productId: String!): ProductDirect!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
   fetchDirectProductsSorted(sortBy: String!, directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchDirectProductsSortedByTitle(title: String!, sortBy: String!, directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
   fetchDirectProductByTitle(title: String!): [ProductDirect!]!
   fetchDirectProductsByUser: [ProductDirect!]!
   fetchUglyProducts(productId: String!): [ProductUgly!]!
   fetchProductUgly(productId: String!): ProductUgly!
   fetchUglyProductByTitle(title: String!): [ProductUgly!]!
   fetchUglyProductsSorted(sortBy: String!, page: Float!): [ProductUgly!]!
+  fetchUglyProductsSortedByTitle(title: String!, sortBy: String!, page: Float!): [ProductUgly!]!
   fetchUglyProductsByUser: [ProductUgly!]!
   fetchUglyProductsBySeller: [ProductUgly!]!
   fetchUser: User!
@@ -167,7 +192,7 @@ type Mutation {
   assignMain(userId: String!, addressId: String!): AddressUser!
   createAdmin(email: String!, password: String!, directStoreId: String, files: [Upload!]): Admin!
   uploadFile(files: [Upload!]): [String!]!
-  createSeller(name: String!, email: String!, password: String!, phone: String!): Seller!
+  createSeller(name: String!, email: String!, password: String!, phone: String!, imageUrl: String): Seller!
   updateSeller(name: String, password: String, phone: String, imageUrl: String): Seller!
   checkIfLoggedSeller(password: String!): Boolean!
   loginUser(email: String!, password: String!): String!
@@ -184,13 +209,13 @@ type Mutation {
   createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!): Payment!
   cancelPayment(impUid: String!): Payment!
   updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
-  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, files: [Upload!]): ProductDirect!
+  createProductDirect(title: String!, content: String!, price: Float!, quantity: Float!, categoryId: String!, directStoreId: String!, imageUrl: String): ProductDirect!
   deleteProductDirect(productId: String!): Boolean!
-  updateProductDirect(productId: String!, title: String, content: String, price: Float, quantity: Float, category: String, isDeleted: Boolean, isSoldout: Boolean): ProductDirect!
-  createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, files: [Upload!]): ProductUgly!
+  updateProductDirect(productId: String!, title: String, content: String, price: Float, quantity: Float, category: String, isDeleted: Boolean, isSoldout: Boolean, imageUrl: String): ProductDirect!
+  createProductUgly(title: String!, content: String!, price: Float!, quantity: Float!, origin: String!, sellerId: String!, imageUrl: String): ProductUgly!
   deleteProductUgly(productId: String!): Boolean!
-  updateProductUgly(productId: String!, title: String, content: String, price: Float, quantity: Float, origin: String): ProductUgly!
-  createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, files: [Upload!]): User!
+  updateProductUgly(productId: String!, title: String, content: String, price: Float, quantity: Float, origin: String, imageUrl: String): ProductUgly!
+  createUser(name: String!, email: String!, password: String!, phone: String!, addressUser: CreateAddressUserInput!, imageUrl: String): User!
   updateUser(name: String, password: String, phone: String, imageUrl: String): User!
   checkIfLoggedUser(password: String!): Boolean!
   likeYou(userId: String!, sellerId: String!): String!

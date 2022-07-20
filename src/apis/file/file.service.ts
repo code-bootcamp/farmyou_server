@@ -18,19 +18,18 @@ export class FileService {
     constructor(
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
+    ) // @InjectRepository(User)
+    // private readonly userRepository: Repository<User>,
 
-        // @InjectRepository(User)
-        // private readonly userRepository: Repository<User>,
+    // @InjectRepository(Seller)
+    // private readonly sellerRepository: Repository<Seller>,
 
-        // @InjectRepository(Seller)
-        // private readonly sellerRepository: Repository<Seller>,
+    // @InjectRepository(ProductDirect)
+    // private readonly productDirect: Repository<ProductDirect>,
 
-        // @InjectRepository(ProductDirect)
-        // private readonly productDirect: Repository<ProductDirect>,
-
-        // @InjectRepository(ProductUgly)
-        // private readonly productUgly: Repository<ProductUgly>,
-    ) {}
+    // @InjectRepository(ProductUgly)
+    // private readonly productUgly: Repository<ProductUgly>,
+    {}
 
     async upload({ files }: IFile) {
         const storage = new Storage({
@@ -60,5 +59,30 @@ export class FileService {
 
         console.log(resultUrl);
         return resultUrl;
+    }
+
+    async find({ fileId }) {
+        return await this.fileRepository.findOne({
+            relations: [
+                'productUgly',
+                'prlductDirect',
+                'customer',
+                'seller',
+                'admin',
+            ],
+            where: { id: fileId },
+        });
+    }
+
+    async findAll() {
+        return await this.fileRepository.findOne({
+            relations: [
+                'productUgly',
+                'prlductDirect',
+                'customer',
+                'seller',
+                'admin',
+            ],
+        });
     }
 }
