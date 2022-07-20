@@ -89,13 +89,9 @@ export class ProductDirectService {
         } else if (sortBy === SORT_CONDITION_ENUM.PRICE_DESC) {
             orderBy = 'productDirect.price';
             orderDirection = 'DESC';
-        } else {
-            throw new BadRequestException(
-                'sortBy 인자값에 최신순/낮은가격순/높은가격순 중 하나를 입력해주세요.',
-            );
         }
 
-        if (!directStoreId) {
+        if (!directStoreId && categoryId) {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
                 .orderBy(orderBy, orderDirection)
@@ -109,7 +105,7 @@ export class ProductDirectService {
                 .skip((page - 1) * ELM_PER_PAGE)
                 .take(ELM_PER_PAGE)
                 .getMany();
-        } else if (!categoryId) {
+        } else if (directStoreId && !categoryId) {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
                 .orderBy(orderBy, orderDirection)
@@ -123,7 +119,7 @@ export class ProductDirectService {
                 .skip((page - 1) * ELM_PER_PAGE)
                 .take(ELM_PER_PAGE)
                 .getMany();
-        } else {
+        } else if (directStoreId && categoryId) {
             return await this.productDirectRepository
                 .createQueryBuilder('productDirect')
                 .orderBy(orderBy, orderDirection)
@@ -140,6 +136,17 @@ export class ProductDirectService {
                 .skip((page - 1) * ELM_PER_PAGE)
                 .take(ELM_PER_PAGE)
                 .getMany();
+        } else {
+            return await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy(orderBy, orderDirection)
+                .leftJoinAndSelect('productDirect.directStore', 'directStore')
+                .leftJoinAndSelect('productDirect.category', 'category')
+                .leftJoinAndSelect('productDirect.admin', 'admin')
+                .leftJoinAndSelect('productDirect.users', 'users')
+                .skip((page - 1) * ELM_PER_PAGE)
+                .take(ELM_PER_PAGE)
+                .getMany();
         }
     }
 
@@ -152,7 +159,11 @@ export class ProductDirectService {
             page,
         );
 
-        return result.filter((word) => word.title.includes(title));
+        if (title) {
+            return result.filter((word) => word.title.includes(title));
+        } else {
+            return result;
+        }
     }
 
     // TODO: not working now

@@ -170,10 +170,6 @@ export class ProductUglyService {
         } else if (sortBy === SORT_CONDITION_ENUM.PRICE_DESC) {
             orderBy = 'productUgly.price';
             orderDirection = 'DESC';
-        } else {
-            throw new BadRequestException(
-                'sortBy 인자값에 최신순/낮은가격순/높은가격순 중 하나를 입력해주세요.',
-            );
         }
 
         return await this.productUglyRepository
@@ -189,7 +185,11 @@ export class ProductUglyService {
     async findSortedByTitle({ title, sortBy }, page) {
         const result = await this.findSorted({ sortBy }, page);
 
-        return result.filter((word) => word.title.includes(title));
+        if (title) {
+            return result.filter((word) => word.title.includes(title));
+        } else {
+            return result;
+        }
     }
 
     async findByUser({ currentUser }) {
