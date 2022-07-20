@@ -3,6 +3,7 @@ import { Args, Mutation, Query, registerEnumType, Resolver } from '@nestjs/graph
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
+import { CreateProductDirectInput } from './dto/createProductDirect.input';
 import { ProductDirect } from './entities/productDirect.entity';
 import { ProductDirectService } from './productDirect.service';
 
@@ -104,7 +105,8 @@ export class ProductDirectResolver {
         @Args('quantity') quantity: number,
         @Args('categoryId') categoryId: string,
         @Args('directStoreId') directStoreId: string,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateProductDirectInput,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.create({
@@ -115,7 +117,8 @@ export class ProductDirectResolver {
             categoryId,
             directStoreId,
             // adminId,
-            imageUrl,
+            // imageUrl,
+            createFileInput,
             currentUser
         });
     }
@@ -144,7 +147,9 @@ export class ProductDirectResolver {
         @Args({ name: 'category', nullable: true }) category: string,
         @Args({ name: 'isDeleted', nullable: true }) isDeleted: boolean,
         @Args({ name: 'isSoldout', nullable: true }) isSoldout: boolean,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateProductDirectInput,
+        // @Args('createFileInput') createFileInput: CreateFileInput,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.update({
@@ -156,7 +161,8 @@ export class ProductDirectResolver {
             category,
             isDeleted,
             isSoldout,
-            imageUrl,
+            // imageUrl,
+            createFileInput,
             currentUser
         });
     }
