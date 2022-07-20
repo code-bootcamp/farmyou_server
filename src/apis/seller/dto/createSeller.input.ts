@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
 
 @InputType()
-export class CreateProductUglyInput {
+export class CreateSellerInput {
     @Field(() => [String])
     imageUrl: [string];
 }

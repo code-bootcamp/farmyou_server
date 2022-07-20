@@ -78,7 +78,8 @@ export class UserService {
         hashedPassword: password,
         phone,
         addressUser,
-        imageUrl,
+        // imageUrl,
+        createFileInput,
     }) {
         const user = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
@@ -102,9 +103,9 @@ export class UserService {
             true, // isMain set to "true" since this is the first address of the user
         );
 
-        if (imageUrl) {
+        if (createFileInput) {
             const theImage = await this.fileRepository.create({
-                url: imageUrl,
+                url: createFileInput.imageUrl,
                 customer: thisUser,
                 type: IMAGE_TYPE_ENUM.USER,
             });
@@ -117,7 +118,7 @@ export class UserService {
         return thisUser;
     }
 
-    async update({ name, password, phone, imageUrl, currentUser }) {
+    async update({ name, password, phone, createFileInput, currentUser }) {
         const loggedUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
             where: { id: currentUser.id },
@@ -135,13 +136,13 @@ export class UserService {
             loggedUser.phone = phone;
         }
 
-        if (imageUrl) {
+        if (createFileInput) {
             const theImage = await this.fileRepository.create({
-                url: imageUrl,
+                url: createFileInput.imageUrl,
                 customer: loggedUser,
                 type: IMAGE_TYPE_ENUM.USER,
             });
-            
+
             await this.fileRepository.save(theImage);
         }
 

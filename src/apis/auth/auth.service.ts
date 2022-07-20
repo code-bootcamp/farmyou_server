@@ -100,7 +100,7 @@ export class AuthService {
                 name: req.user.name,
                 phone: req.user.phone,
                 addressUser: {address: null, detailedAddress: null, postalCode: null, isMain: false},
-                imageUrl: null
+                createFileInput: null
             });
         }
 

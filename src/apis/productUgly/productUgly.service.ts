@@ -53,7 +53,7 @@ export class ProductUglyService {
         });
     }
 
-    async create({ title, content, price, quantity, origin, sellerId, imageUrl }) {
+    async create({ title, content, price, quantity, origin, sellerId, createFileInput }) {
         const theSeller = await this.sellerRepository.findOne({
             relations: ['users'],
             where: { id: sellerId },
@@ -69,9 +69,9 @@ export class ProductUglyService {
                 seller: theSeller,
             });
 
-            if (imageUrl) {
+            if (createFileInput) {
                 const theImage = await this.fileRepository.create({
-                    url: imageUrl,
+                    url: createFileInput.imageUrl,
                     productUgly: result,
                     type: IMAGE_TYPE_ENUM.UGLY_PRODUCT,
                 });
@@ -94,7 +94,8 @@ export class ProductUglyService {
         price,
         quantity,
         origin,
-        imageUrl,
+        // imageUrl,
+        createFileInput,
         currentUser,
     }) {
         const theProduct = await this.productUglyRepository.findOne({
@@ -126,9 +127,9 @@ export class ProductUglyService {
             theProduct.origin = origin;
         }
 
-        if (imageUrl) {
+        if (createFileInput) {
             const theImage = await this.fileRepository.create({
-                url: imageUrl,
+                url: createFileInput.imageUrl,
                 productUgly: theProduct,
                 type: IMAGE_TYPE_ENUM.UGLY_PRODUCT,
             });
