@@ -61,7 +61,7 @@ export class ProductUglyResolver {
         @Args('origin') origin: string,
         @Args('sellerId') sellerId: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateProductUglyInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductUglyInput,
         // @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.create({
@@ -86,7 +86,7 @@ export class ProductUglyResolver {
 
     @Query(() => [ProductUgly])
     fetchUglyProductsSorted(
-        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
+        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
         @Args('page') page: number,
     ) {
         return this.productUglyService.findSorted({ sortBy }, page);
@@ -94,8 +94,8 @@ export class ProductUglyResolver {
 
     @Query(() => [ProductUgly])
     fetchUglyProductsSortedByTitle(
-        @Args('title') title: string,
-        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
+        @Args({name: 'title', nullable: true}) title: string,
+        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
         @Args('page') page: number
     ) {
         return this.productUglyService.findSortedByTitle({title, sortBy}, page);
@@ -135,7 +135,7 @@ export class ProductUglyResolver {
         @Args({ name: 'quantity', nullable: true }) quantity: number,
         @Args({ name: 'origin', nullable: true }) origin: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateProductUglyInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductUglyInput,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.update({

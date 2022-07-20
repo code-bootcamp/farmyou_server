@@ -53,7 +53,7 @@ export class ProductDirectResolver {
 
     @Query(() => [ProductDirect])
     fetchDirectProductsSorted(
-        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
+        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
         @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
         @Args({name: 'categoryId', nullable: true}) categoryId: string,
         @Args('page') page: number
@@ -63,8 +63,8 @@ export class ProductDirectResolver {
 
     @Query(() => [ProductDirect])
     fetchDirectProductsSortedByTitle(
-        @Args('title') title: string,
-        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
+        @Args({name: 'title', nullable: true}) title: string,
+        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
         @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
         @Args({name: 'categoryId', nullable: true}) categoryId: string,
         @Args('page') page: number
@@ -106,7 +106,7 @@ export class ProductDirectResolver {
         @Args('categoryId') categoryId: string,
         @Args('directStoreId') directStoreId: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateProductDirectInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductDirectInput,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.create({
@@ -148,7 +148,7 @@ export class ProductDirectResolver {
         @Args({ name: 'isDeleted', nullable: true }) isDeleted: boolean,
         @Args({ name: 'isSoldout', nullable: true }) isSoldout: boolean,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateProductDirectInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductDirectInput,
         // @Args('createFileInput') createFileInput: CreateFileInput,
         @CurrentUser() currentUser: ICurrentUser
     ) {

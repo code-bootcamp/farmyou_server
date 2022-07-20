@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
+import { File } from 'src/apis/file/entities/file.entity';
 import { Seller } from 'src/apis/seller/entities/seller.entity';
 import {
     Column,
@@ -9,6 +10,7 @@ import {
     CreateDateColumn,
     JoinTable,
     ManyToMany,
+    OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -63,4 +65,9 @@ export class User {
     @ManyToMany(() => ProductUgly, (uglyProducts) => uglyProducts.users)
     @Field(() => [ProductUgly], { nullable: true })
     uglyProducts: ProductUgly[];
+
+    // 이미지 url
+    @OneToMany(() => File, (file) => file.customer)
+    @Field(() => [File], {nullable: true})
+    files: File[];
 }
