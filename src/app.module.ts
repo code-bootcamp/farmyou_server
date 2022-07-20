@@ -19,6 +19,7 @@ import { SellerModule } from './apis/seller/seller.module';
 import { AdminModule } from './apis/admin/admin.module';
 import { FileModule } from './apis/file/file.module';
 import { AddressUserModule } from './apis/addressUser/addressUser.module';
+import { PhoneModule } from './apis/phone/phone.module';
 
 
 
@@ -33,6 +34,7 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
     DirectStoreModule,
     InquiryModule,
     PaymentMoudle,
+    PhoneModule,
     ProductDirectModule,
     ProductUglyModule,
     UserModule,
@@ -70,11 +72,11 @@ import { AddressUserModule } from './apis/addressUser/addressUser.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // CacheModule.register<RedisClientOptions>({
-    //   store: redisStore,
-    //   url: 'redis://my-redis:6379',
-    //   isGlobal: true,
-    // }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: 'redis://my-redis:6379',
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
 })

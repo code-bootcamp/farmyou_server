@@ -6,7 +6,8 @@ import 'dotenv/config';
 @Injectable()
 export class PhoneService {
     checkValidationPhone(myphone) {
-        if (myphone.length !== 10 && myphone.length !== 11) {
+        console.log(myphone)
+        if (myphone.phoneNum.length !== 10 && myphone.phoneNum.length !== 11) {
             console.log('에러 발생!!! 핸드폰 번호를 제대로 입력해 주세요!!!');
             return false;
         } else {
@@ -23,11 +24,12 @@ export class PhoneService {
     }
 
     async sendTokenToSMS(receiver, token) {
+        console.log(process.env.SMS_SENDER)
         const SMS_KEY = process.env.SMS_KEY;
         const SMS_SECRET = process.env.SMS_SECRET;
         const SMS_SENDER = process.env.SMS_SENDER;
 
-        const mysms = coolsms.default;
+        const mysms = coolsms;
         const messageService = new mysms(SMS_KEY, SMS_SECRET);
         const result = await messageService.sendOne({
             to: receiver,
