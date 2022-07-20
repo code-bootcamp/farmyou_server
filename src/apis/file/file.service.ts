@@ -65,7 +65,7 @@ export class FileService {
         return await this.fileRepository.findOne({
             relations: [
                 'productUgly',
-                'prlductDirect',
+                'productDirect',
                 'customer',
                 'seller',
                 'admin',
@@ -75,10 +75,10 @@ export class FileService {
     }
 
     async findAll() {
-        return await this.fileRepository.findOne({
+        return await this.fileRepository.find({
             relations: [
                 'productUgly',
-                'prlductDirect',
+                'productDirect',
                 'customer',
                 'seller',
                 'admin',

@@ -195,51 +195,6 @@ export class AuthResolver {
       }
     }
 
-
-
-  //   // 7월 20일 승원 로그아웃 수정
-  //   @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => String)
-  // async logout(
-  //   @Context() context: any, //
-  // ) {
-  //   //accessToken값
-  //   const accessToken = context.req.headers.authorization.replace(
-  //     'Bearer ',
-  //     '',
-  //   );
-  //   console.log('엑세스 토큰입니다')
-  //   console.log(accessToken)
-  //   //refreshToken
-  //   const refreshToken = context.req.headers.cookie.replace(
-  //     'refreshToken=',
-  //     '',
-  //   );
-  //   console.log('리프레쉬 토큰입니다')
-  //   console.log(refreshToken)
-  //   try {
-  //     jwt.verify(accessToken, 'myAccessKey');
-  //     jwt.verify(refreshToken, 'myRefreshKey');
-  //   } catch {
-  //     throw new UnauthorizedException();
-  //   }
-  //   await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
-  //     ttl: 180,
-  //   });
-  //   await this.cacheManager.set(
-  //     `refreshToken:${refreshToken}`,
-  //     'refreshToken',
-  //     {
-  //       ttl: 300,
-  //     },
-  //   );
-
-  //   console.log(await this.cacheManager.get(`accessToken:${accessToken}`))
-  //   console.log(await this.cacheManager.get(`refreshToken:${refreshToken}`))
-
-  //   return '로그아웃에 성공했습니다';
-  // }
-
     // GqlAuthAccessGuard is imported from src/commons/auth/gql-auth.guard.ts
     @UseGuards(GqlAuthRefreshGuard)
     @Mutation(() => String)
