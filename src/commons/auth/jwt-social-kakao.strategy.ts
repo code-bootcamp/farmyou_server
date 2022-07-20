@@ -13,7 +13,7 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         super({
             clientID: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
-            callbackURL: 'http://localhost:3000/users/login/kakao',
+            callbackURL: 'https://farmback.shop/users/login/kakao',
         });
     }
 
