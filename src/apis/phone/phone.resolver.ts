@@ -32,7 +32,7 @@ export class PhoneResolver {
             await this.cacheManager.set(`token:${token}`, token, { ttl: 180 });
 
             //핸드폰번호에 토큰 전송하기
-            return this.phoneService.sendTokenToSMS(phoneNum, token);
+           this.phoneService.sendTokenToSMS(phoneNum, token);
         }
     }
 
