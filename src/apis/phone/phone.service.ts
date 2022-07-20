@@ -39,4 +39,9 @@ export class PhoneService {
 
         console.log(result);
     }
+
+    // // 승원제작
+    // async sendToToken({phone}){
+
+    // }
 }
