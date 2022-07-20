@@ -58,13 +58,13 @@ import { PhoneModule } from './apis/phone/phone.module';
       type: 'mysql',
       host: '10.36.80.11', // 새로 배포하는 주소 인스턴스 sql 비공개ip주소
       // host: 'localhost',  // 내부에서 테스트로 돌려볼 호스트 주소
-    //   host: 'my-database',
+      // host: 'my-database',
       port: 3306,
       username: 'root',
       // password: '12345678',
       password: 'root',
       database: 'farmyou_server', //인스턴스 sql ID값
-    //   database: 'farmyou_docker', //인스턴스 sql ID값 도커로 띄울때
+      // database: 'farmyou_docker', //인스턴스 sql ID값 도커로 띄울때
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
@@ -74,7 +74,8 @@ import { PhoneModule } from './apis/phone/phone.module';
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
-      url: 'redis://my-redis:6379',
+      // url: 'redis://my-redis:6379',
+      url: 'redis://10.36.81.3:6379',
       isGlobal: true,
     }),
   ],
