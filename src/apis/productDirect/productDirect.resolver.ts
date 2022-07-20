@@ -60,6 +60,17 @@ export class ProductDirectResolver {
         return this.productDirectService.findSorted({sortBy, directStoreId, categoryId}, page);
     }
 
+    @Query(() => [ProductDirect])
+    fetchDirectProductsSortedByTitle(
+        @Args('title') title: string,
+        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
+        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
+        @Args({name: 'categoryId', nullable: true}) categoryId: string,
+        @Args('page') page: number
+    ) {
+        return this.productDirectService.findSortedByTitle({ title, sortBy, directStoreId, categoryId }, page);
+    }
+
     // 7월 14일 승원 타이틀 조회 테스트
     // 상품이름으로 조회
     @Query(() => [ProductDirect])
@@ -93,9 +104,7 @@ export class ProductDirectResolver {
         @Args('quantity') quantity: number,
         @Args('categoryId') categoryId: string,
         @Args('directStoreId') directStoreId: string,
-        // @Args('adminId') adminId: string,
-        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
-        files: FileUpload[],
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.create({
@@ -106,7 +115,7 @@ export class ProductDirectResolver {
             categoryId,
             directStoreId,
             // adminId,
-            files,
+            imageUrl,
             currentUser
         });
     }
@@ -135,6 +144,7 @@ export class ProductDirectResolver {
         @Args({ name: 'category', nullable: true }) category: string,
         @Args({ name: 'isDeleted', nullable: true }) isDeleted: boolean,
         @Args({ name: 'isSoldout', nullable: true }) isSoldout: boolean,
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.update({
@@ -146,6 +156,7 @@ export class ProductDirectResolver {
             category,
             isDeleted,
             isSoldout,
+            imageUrl,
             currentUser
         });
     }

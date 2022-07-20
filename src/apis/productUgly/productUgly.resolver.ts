@@ -59,8 +59,7 @@ export class ProductUglyResolver {
         @Args('quantity') quantity: number,
         @Args('origin') origin: string,
         @Args('sellerId') sellerId: string,
-        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
-        files: FileUpload[],
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         // @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.create({
@@ -70,7 +69,7 @@ export class ProductUglyResolver {
             quantity,
             origin,
             sellerId,
-            files,
+            imageUrl,
         });
     }
 
@@ -88,6 +87,15 @@ export class ProductUglyResolver {
         @Args('page') page: number,
     ) {
         return this.productUglyService.findSorted({ sortBy }, page);
+    }
+
+    @Query(() => [ProductUgly])
+    fetchUglyProductsSortedByTitle(
+        @Args('title') title: string,
+        @Args('sortBy') sortBy: SORT_CONDITION_ENUM,
+        @Args('page') page: number
+    ) {
+        return this.productUglyService.findSortedByTitle({title, sortBy}, page);
     }
     //
     //
@@ -123,6 +131,7 @@ export class ProductUglyResolver {
         @Args({ name: 'price', nullable: true }) price: number,
         @Args({ name: 'quantity', nullable: true }) quantity: number,
         @Args({ name: 'origin', nullable: true }) origin: string,
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.update({
@@ -132,6 +141,7 @@ export class ProductUglyResolver {
             price,
             quantity,
             origin,
+            imageUrl,
             currentUser
         });
     }
