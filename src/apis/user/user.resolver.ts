@@ -52,7 +52,7 @@ export class UserResolver {
         @Args('phone') phone: string,
         @Args('addressUser') addressUser: CreateAddressUserInput,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateUserInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateUserInput,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         return this.userService.create({
@@ -74,7 +74,7 @@ export class UserResolver {
         @Args({ name: 'password', nullable: true }) password: string,
         @Args({ name: 'phone', nullable: true }) phone: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateUserInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateUserInput,
         @CurrentUser() currentUser: ICurrentUser,
     ) {
         return await this.userService.update({

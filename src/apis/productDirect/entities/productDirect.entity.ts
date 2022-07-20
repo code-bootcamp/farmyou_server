@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Admin } from 'src/apis/admin/entities/admin.entity';
 import { Category } from 'src/apis/category/entities/category.entity';
 import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
+import { File } from 'src/apis/file/entities/file.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
     Column,
@@ -11,6 +12,7 @@ import {
     CreateDateColumn,
     ManyToMany,
     DeleteDateColumn,
+    OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -86,4 +88,9 @@ export class ProductDirect {
     @ManyToOne(() => Admin)
     @Field(() => Admin, {nullable: true})
     admin: Admin;
+
+    // 이미지 url
+    @OneToMany(() => File, (file) => file.productDirect)
+    @Field(() => [File], {nullable: true})
+    files: File[];
 }

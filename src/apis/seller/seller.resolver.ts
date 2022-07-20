@@ -32,7 +32,7 @@ export class SellerResolver {
         @Args('password') password: string,
         @Args('phone') phone: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateSellerInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateSellerInput,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         // console.log(hashedPassword);
@@ -54,7 +54,7 @@ export class SellerResolver {
         @Args({ name: 'password', nullable: true }) password: string,
         @Args({ name: 'phone', nullable: true }) phone: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args('createFileInput') createFileInput: CreateSellerInput,
+        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateSellerInput,
         @CurrentUser() currentUser: ICurrentUser,
     ) {
         // const hashedPassword = await bcrypt.hash(password, 10);
