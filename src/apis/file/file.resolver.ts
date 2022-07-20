@@ -2,7 +2,7 @@ import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { FileService } from './file.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { File } from './entities/file.entity';
-import { Query } from '@nestjs/common';
+import { Query } from '@nestjs/graphql';
 
 @Resolver()
 export class FileResolver {
@@ -15,5 +15,17 @@ export class FileResolver {
     @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true }) files: FileUpload[],
   ) {
     return this.fileService.upload({ files });
+  }
+
+  @Query(() => File)
+  fetchFile(
+      @Args('fileId') fileId: string
+  ) {
+      return this.fileService.find({fileId});
+  }
+
+  @Query(() => [File])
+  fetchFiles() {
+      return this.fileService.findAll();
   }
 }

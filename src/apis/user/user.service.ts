@@ -49,26 +49,26 @@ export class UserService {
 
         private readonly fileResolver: FileResolver,
 
-        private readonly fileService: FileService
+        private readonly fileService: FileService,
     ) {}
 
     async findOne({ email }) {
-        return await this.userRepository.findOne({ 
+        return await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {email}
+            where: { email },
         });
     }
 
     async findOneById({ id }) {
-        return await this.userRepository.findOne({ 
+        return await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {id}
+            where: { id },
         });
     }
 
     async findAll() {
         return await this.userRepository.find({
-            relations: ['sellers', 'directProducts', 'uglyProducts']
+            relations: ['sellers', 'directProducts', 'uglyProducts'],
         });
     }
 
@@ -78,11 +78,11 @@ export class UserService {
         hashedPassword: password,
         phone,
         addressUser,
-        files
+        imageUrl,
     }) {
-        const user = await this.userRepository.findOne({ 
+        const user = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {email}
+            where: { email },
         });
         if (user) throw new ConflictException('이미 등록된 이메일 입니다.');
 
@@ -102,17 +102,16 @@ export class UserService {
             true, // isMain set to "true" since this is the first address of the user
         );
 
-        if (files) {
-            const imageId = await this.fileResolver.uploadFile(files);
-            const theImage = await this.fileRepository.findOne({
-                relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
-                where: {id: imageId}
+        if (imageUrl) {
+            const theImage = await this.fileRepository.create({
+                url: imageUrl,
+                customer: thisUser,
+                type: IMAGE_TYPE_ENUM.USER,
             });
-            theImage.type = IMAGE_TYPE_ENUM.USER;
-            theImage.customer = thisUser;
 
             await this.fileRepository.save(theImage);
         }
+        // theImage.customer = loggedUser;
 
         // return await this.userRepository.save({ email, password, name, phone });
         return thisUser;
@@ -121,7 +120,7 @@ export class UserService {
     async update({ name, password, phone, imageUrl, currentUser }) {
         const loggedUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {id: currentUser.id},
+            where: { id: currentUser.id },
         });
 
         if (name) {
@@ -136,19 +135,15 @@ export class UserService {
             loggedUser.phone = phone;
         }
 
-        // const theImage = await this.fileRepository.findOne({
-        //     relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
-        //     where: {url: imageUrl}
-        // })
-
-        const theImage = await this.fileRepository.create({
-            url: imageUrl,
-            customer: loggedUser,
-            type: IMAGE_TYPE_ENUM.USER,
-        })
-        // theImage.customer = loggedUser;
-
-        await this.fileRepository.save(theImage);
+        if (imageUrl) {
+            const theImage = await this.fileRepository.create({
+                url: imageUrl,
+                customer: loggedUser,
+                type: IMAGE_TYPE_ENUM.USER,
+            });
+            
+            await this.fileRepository.save(theImage);
+        }
 
         // 파일 업로드
         // const imageUrl = await this.fileService.upload({files});
@@ -196,12 +191,12 @@ export class UserService {
     //     return productInCart;
     // }
 
-    async buy({productType, productId, quantity, currentUser}) {
+    async buy({ productType, productId, quantity, currentUser }) {
         // console.log("CURRENT USER IS ", currentUser);
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {id: currentUser.id}
-        })
+            where: { id: currentUser.id },
+        });
 
         let theProduct;
         let theQuantity;
@@ -209,13 +204,15 @@ export class UserService {
         if (productType === PRODUCT_TYPE_ENUM.DIRECT_PRODUCT) {
             theProduct = await this.productDirectRepository.findOne({
                 relations: ['category', 'directStore', 'users', 'admin'],
-                where: {id: productId}
+                where: { id: productId },
             });
 
             theQuantity = theProduct.quantity;
 
             if (quantity > theQuantity) {
-                throw new UnprocessableEntityException('요청하신 구매수량이 너무 많습니다.');
+                throw new UnprocessableEntityException(
+                    '요청하신 구매수량이 너무 많습니다.',
+                );
             }
 
             theUser.directProducts.push(theProduct);
@@ -224,16 +221,15 @@ export class UserService {
             if (theProduct.quantity === 0) {
                 theProduct.isSoldout = true;
             }
-            
+
             theProduct.quantitySold += quantity;
             theProduct.users.push(theUser);
 
             await this.productDirectRepository.save(theProduct);
-
         } else if (productType === PRODUCT_TYPE_ENUM.UGLY_PRODUCT) {
             theProduct = await this.productUglyRepository.findOne({
                 relations: ['users', 'seller'],
-                where: {id: productId}
+                where: { id: productId },
             });
 
             console.log(theProduct);
@@ -242,7 +238,9 @@ export class UserService {
             theQuantity = theProduct.quantity;
 
             if (quantity > theQuantity) {
-                throw new UnprocessableEntityException('요청하신 구매수량이 너무 많습니다.');
+                throw new UnprocessableEntityException(
+                    '요청하신 구매수량이 너무 많습니다.',
+                );
             }
 
             theUser.uglyProducts.push(theProduct);

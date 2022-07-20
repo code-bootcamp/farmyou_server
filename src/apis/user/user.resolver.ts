@@ -49,8 +49,7 @@ export class UserResolver {
         @Args('password') password: string,
         @Args('phone') phone: string,
         @Args('addressUser') addressUser: CreateAddressUserInput,
-        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
-        files: FileUpload[],
+        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         return this.userService.create({
@@ -59,7 +58,7 @@ export class UserResolver {
             hashedPassword,
             phone,
             addressUser,
-            files,
+            imageUrl,
         });
     }
 
