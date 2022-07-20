@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { File } from 'src/apis/file/entities/file.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
     Column,
@@ -63,4 +64,9 @@ export class Seller {
     @ManyToMany(() => User, (users) => users.sellers)
     @Field(() => [User], { nullable: true })
     users: User[];
+
+    // 이미지 url
+    @OneToMany(() => File, (file) => file.seller)
+    @Field(() => [File], {nullable: true})
+    files: File[];
 }
