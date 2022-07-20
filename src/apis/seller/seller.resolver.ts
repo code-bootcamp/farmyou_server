@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
 import { ProductUglyService } from '../productUgly/productUgly.service';
+import { CreateSellerInput } from './dto/createSeller.input';
 
 @Resolver()
 export class SellerResolver {
@@ -30,7 +31,8 @@ export class SellerResolver {
         @Args('email') email: string,
         @Args('password') password: string,
         @Args('phone') phone: string,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateSellerInput,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         // console.log(hashedPassword);
@@ -39,7 +41,8 @@ export class SellerResolver {
             email,
             hashedPassword,
             phone,
-            imageUrl
+            // imageUrl
+            createFileInput
         });
     }
 
@@ -50,7 +53,8 @@ export class SellerResolver {
         @Args({ name: 'name', nullable: true }) name: string,
         @Args({ name: 'password', nullable: true }) password: string,
         @Args({ name: 'phone', nullable: true }) phone: string,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateSellerInput,
         @CurrentUser() currentUser: ICurrentUser,
     ) {
         // const hashedPassword = await bcrypt.hash(password, 10);
@@ -58,7 +62,8 @@ export class SellerResolver {
             name,
             password,
             phone,
-            imageUrl,
+            // imageUrl,
+            createFileInput,
             currentUser,
         });
     }

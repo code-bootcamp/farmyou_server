@@ -181,7 +181,8 @@ export class ProductDirectService {
         categoryId,
         directStoreId,
         // adminId,
-        imageUrl,
+        // imageUrl,
+        createFileInput,
         currentUser,
     }) {
         const theAdmin = await this.adminRepository.findOne({
@@ -229,15 +230,25 @@ export class ProductDirectService {
             //     await this.fileRepository.save(theImage);
             // }
 
-            if (imageUrl) {
+            if (createFileInput) {
                 const theImage = await this.fileRepository.create({
-                    url: imageUrl,
+                    url: createFileInput.imageUrl,
                     productDirect: result,
                     type: IMAGE_TYPE_ENUM.DIRECT_PRODUCT,
                 });
 
                 await this.fileRepository.save(theImage);
             }
+
+            // if (imageUrl) {
+            //     const theImage = await this.fileRepository.create({
+            //         url: imageUrl,
+            //         productDirect: result,
+            //         type: IMAGE_TYPE_ENUM.DIRECT_PRODUCT,
+            //     });
+
+            //     await this.fileRepository.save(theImage);
+            // }
 
             return result;
         } else {
@@ -290,7 +301,8 @@ export class ProductDirectService {
         category,
         isDeleted,
         isSoldout,
-        imageUrl,
+        // imageUrl,
+        createFileInput,
         currentUser,
     }) {
         const theProduct = await this.productDirectRepository.findOne({
@@ -335,9 +347,9 @@ export class ProductDirectService {
             theProduct.isSoldout = isSoldout;
         }
 
-        if (imageUrl) {
+        if (createFileInput) {
             const theImage = await this.fileRepository.create({
-                url: imageUrl,
+                url: createFileInput.imageUrl,
                 productDirect: theProduct,
                 type: IMAGE_TYPE_ENUM.DIRECT_PRODUCT,
             });

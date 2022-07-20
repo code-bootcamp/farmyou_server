@@ -19,6 +19,8 @@ import { Seller } from '../seller/entities/seller.entity';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import { CreateUserInput } from './dto/createUser.input';
+// import { CreateFileInput } from '../productDirect/dto/createProductDirect.input';
 
 export enum PRODUCT_TYPE_ENUM {
     UGLY_PRODUCT = 'UGLY_PRODUCT',
@@ -49,7 +51,8 @@ export class UserResolver {
         @Args('password') password: string,
         @Args('phone') phone: string,
         @Args('addressUser') addressUser: CreateAddressUserInput,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateUserInput,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         return this.userService.create({
@@ -58,7 +61,8 @@ export class UserResolver {
             hashedPassword,
             phone,
             addressUser,
-            imageUrl,
+            // imageUrl,
+            createFileInput
         });
     }
 
@@ -69,14 +73,16 @@ export class UserResolver {
         @Args({ name: 'name', nullable: true }) name: string,
         @Args({ name: 'password', nullable: true }) password: string,
         @Args({ name: 'phone', nullable: true }) phone: string,
-        @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
+        @Args('createFileInput') createFileInput: CreateUserInput,
         @CurrentUser() currentUser: ICurrentUser,
     ) {
         return await this.userService.update({
             name,
             password,
             phone,
-            imageUrl,
+            // imageUrl,
+            createFileInput,
             currentUser,
         });
     }

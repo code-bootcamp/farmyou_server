@@ -45,4 +45,12 @@ export class PhoneResolver {
             throw new UnprocessableEntityException('잘못된 토큰 정보입니다');
         }
     }
+
+    // // 승원제작
+    // @Mutation(() => String)
+    // async sendToke(
+    //     @Args('phone') phone: string
+    // ){
+    //     return this.phoneService.sendToToken({phone})
+    // }
 }
