@@ -200,6 +200,7 @@ export class ProductUglyService {
                 .orderBy(orderBy, orderDirection)
                 .leftJoinAndSelect('productUgly.users', 'users')
                 .leftJoinAndSelect('productUgly.seller', 'seller')
+                .leftJoinAndSelect('productUgly.files', 'files')
                 .getMany();
         } else {
             return await this.productUglyRepository
@@ -207,6 +208,7 @@ export class ProductUglyService {
                 .orderBy(orderBy, orderDirection)
                 .leftJoinAndSelect('productUgly.users', 'users')
                 .leftJoinAndSelect('productUgly.seller', 'seller')
+                .leftJoinAndSelect('productUgly.files', 'files')
                 .skip((page - 1) * ELM_PER_PAGE)
                 .take(ELM_PER_PAGE)
                 .getMany();
