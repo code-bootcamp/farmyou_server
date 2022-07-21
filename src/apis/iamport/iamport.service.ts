@@ -101,7 +101,14 @@ export class IamportService {
             {imp_uid: impUid,}, 
             {headers: {Authorization: token}}
             );
-            // return result.data.response.cancel_amount; 
+            console.log('============================')
+            console.log(result)
+            console.log('============================')
+            console.log(result.data)
+            console.log('============================')
+            console.log(result.data.response)
+            console.log('============================')
+            return result.data?.response?.cancel_amount; 
         }catch(error){
             // 만약 에러 메세지가 있거나 없을때 조건
             if(error?.response?.data?.message){

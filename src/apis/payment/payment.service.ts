@@ -81,7 +81,7 @@ export class PaymentService {
                 productDirect: theProduct,
                 paymentComplete,
             });
-        } else {
+        } else { 
             throw new UnprocessableEntityException('올바른 productType을 입력해주세요.');
         }
         console.log(payment);
@@ -132,17 +132,29 @@ export class PaymentService {
     // 페이먼트 테이블에서 결제 취소 데이터 등록하기
     // cancel 이란 데이터를 추가로 만드는것이고 payment의 상태를 바꾸는 것이 아님
     // 위의 create를 재활용 합니다.
-    async cancel({ impUid, amount, currentUser }) {
-        const payment = await this.create({
-            impUid,
-            amount: -amount,
-            currentUser,
-            productType: null,
-            productId: null,
-            paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
-        });
-        return payment;
-    }
+    // async cancel({ impUid, amount, currentUser }) {
+        // const payment = await this.create({
+        //     impUid,
+        //     amount: -amount,
+        //     currentUser,
+        //     productType: null,
+        //     productId: null,
+        //     paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
+        // });
+        // return payment;
+
+        // const payment = await this.paymentRepository.findOne({
+        //     impUid,
+        //     amount: -amount,
+        //     user: currentUser,
+        //     paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
+        // });
+        // await this.paymentRepository.save(payment)
+
+        // // const user = await this.userRepository.findOne({id: currentUser.id})
+        // // await this.userRepository.update
+        // return payment 
+    // }
 
     // async findUglyByUser({currentUser}) {
     //     const theUser = await this.userRepository.findOne({
