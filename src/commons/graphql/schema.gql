@@ -164,6 +164,7 @@ type Query {
   fetchFiles: [File!]!
   fetchFilesByProductUglyId(productUglyId: String!): [File!]!
   fetchSellers: [Seller!]!
+  fetchSellerByEmail(email: String!): Seller!
   fetchTypeOfUserLoggedIn: String!
   fetchUserLoggedIn: Admin!
   fetchCategory(name: String!): Category!
@@ -193,6 +194,7 @@ type Query {
   """판매자가 판매하는 못난이 상품 조회"""
   fetchUglyProductsBySeller: [ProductUgly!]!
   fetchUser(id: String!): User!
+  fetchUserByEmail(email: String!): Seller!
   fetchUsers: [User!]!
 }
 
@@ -206,6 +208,7 @@ type Mutation {
   createSeller(name: String!, email: String!, password: String!, phone: String!, createFileInput: CreateSellerInput): Seller!
   updateSeller(name: String, password: String, phone: String, createFileInput: CreateSellerInput): Seller!
   checkIfLoggedSeller(password: String!): Boolean!
+  updateSellerPassword(email: String!, newPassword: String!): Seller!
   loginUser(email: String!, password: String!): String!
   loginSeller(email: String!, password: String!): String!
   loginAdmin(email: String!, password: String!): String!
@@ -236,6 +239,7 @@ type Mutation {
   deleteUser(email: String!): Boolean!
   deleteLoginUser: User!
   buyProduct(productType: String!, productId: String!, quantity: Float!): User!
+  updateUserPassword(email: String!, newPassword: String!): User!
 }
 
 input UpdateAddressUserInput {
