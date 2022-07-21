@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
 import { AddressUserService } from '../addressUser/addressUser.service';
@@ -25,7 +25,7 @@ import { FileService } from '../file/file.service';
             Seller,
             DirectStore,
             User,
-            File
+            File,
         ]),
     ],
     providers: [
@@ -34,7 +34,7 @@ import { FileService } from '../file/file.service';
         AdminService,
         AddressUserService,
         FileResolver,
-        FileService
+        FileService,
     ],
 })
 export class AdminModule {}
