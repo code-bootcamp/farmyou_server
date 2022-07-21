@@ -126,13 +126,15 @@ export class ProductUglyResolver {
     // }
 
     @UseGuards(GqlAuthAccessGuard)
-    @Query(() => [ProductUgly])
+    @Query(() => [ProductUgly],
+    { description: '구매자가 구매한 못난이 상품 조회' },)
     fetchUglyProductsByUser(@CurrentUser() currentUser: ICurrentUser) {
         return this.productUglyService.findByUser({ currentUser });
     }
 
     @UseGuards(GqlAuthAccessGuard)
-    @Query(() => [ProductUgly])
+    @Query(() => [ProductUgly],
+    { description: '판매자가 판매하는 못난이 상품 조회' },)
     fetchUglyProductsBySeller(@CurrentUser() currentUser: ICurrentUser) {
         return this.productUglyService.findBySeller({ currentUser });
     }

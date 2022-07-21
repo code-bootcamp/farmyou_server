@@ -28,7 +28,7 @@ export class PhoneResolver {
             // 핸드폰번호에 토큰 전송하기
             // 주석처리 풀어야 실제 작동하고 ↓ 
             // 주석 처리 하면 테스트 모드 입니다.
-            // await this.phoneService.sendTokenToSMS({phone, token});
+            await this.phoneService.sendTokenToSMS({phone, token});
             return `토큰받았쥬?  토큰 번호는: ${token} 에유`
         }
     }

@@ -101,13 +101,18 @@ export class IamportService {
             {imp_uid: impUid,}, 
             {headers: {Authorization: token}}
             );
-            return result.data.response.cancel_amount; 
+            // return result.data.response.cancel_amount; 
         }catch(error){
-            throw new HttpException(
-                //import 에서 받아온 메세지가 존재할때 메세지를 그대로 보여주기
-                error.response.data.message,
-                error.response.status,
-            )
+            // 만약 에러 메세지가 있거나 없을때 조건
+            if(error?.response?.data?.message){
+                throw new HttpException(
+                    //import 에서 받아온 메세지가 존재할때 메세지를 그대로 보여주기
+                    error.response.data.message,
+                    error.response.status,
+                )
+            } else {
+                throw error
+            }
         }
     }
 
