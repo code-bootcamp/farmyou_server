@@ -19,7 +19,7 @@ steps:
           - set
           - image
           - deployment/farmyoubackend
-          - farmyou-backend-sha256-1=asia.gcr.io/famryouserver/farmyou-backend:0.69
+          - farmyou-backend-sha256-1=asia.gcr.io/famryouserver/farmyou-backend:0.71
       env:
           - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
           - CLOUDSDK_CONTAINER_CLUSTER=farmyou-cluster-1
