@@ -1,5 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule, CACHE_MODULE_OPTIONS, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
@@ -61,7 +61,7 @@ import { PhoneModule } from './apis/phone/phone.module';
       host: 'my-database',
       port: 3306,
       username: 'root',
-      // password: '12345678',   //yarn start:dev  할때 사용
+    //   password: '12345678',   //yarn start:dev  할때 사용
       password: 'root',         //docker 나 배포 할때 사용
       // database: 'farmyou_server', //인스턴스 sql ID값  배포나 yarn start:dev
       database: 'farmyou_docker', //도커로 띄울때

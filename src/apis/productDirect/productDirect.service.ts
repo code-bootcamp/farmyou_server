@@ -96,6 +96,7 @@ export class ProductDirectService {
         .orderBy(orderBy, orderDirection)
         .leftJoinAndSelect('productDirect.directStore', 'directStore')
         .leftJoinAndSelect('productDirect.category', 'category')
+        .leftJoinAndSelect('productDirect.files', 'files')
         .leftJoinAndSelect('productDirect.admin', 'admin')
         .leftJoinAndSelect('productDirect.users', 'users');
 
