@@ -74,8 +74,8 @@ import { PhoneModule } from './apis/phone/phone.module';
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
-      url: 'redis://my-redis:6379',
-      // url: 'redis://10.36.81.3:6379',
+      // url: 'redis://my-redis:6379', // 로컬로 돌릴때
+      url: 'redis://10.36.81.3:6379', //배포할때
       isGlobal: true,
     }),
   ],
