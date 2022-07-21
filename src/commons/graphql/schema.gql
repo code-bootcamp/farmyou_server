@@ -183,7 +183,11 @@ type Query {
   fetchUglyProductByTitle(title: String!): [ProductUgly!]!
   fetchUglyProductsSorted(sortBy: String = "최신순", page: Float!): [ProductUgly!]!
   fetchUglyProductsSortedByTitle(title: String, sortBy: String = "최신순", page: Float!): [ProductUgly!]!
+
+  """구매자가 구매한 못난이 상품 조회"""
   fetchUglyProductsByUser: [ProductUgly!]!
+
+  """판매자가 판매하는 못난이 상품 조회"""
   fetchUglyProductsBySeller: [ProductUgly!]!
   fetchUser: User!
   fetchUsers: [User!]!

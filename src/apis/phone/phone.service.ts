@@ -47,7 +47,7 @@ export class PhoneService {
         const result = await messageService.sendOne({
             to: phone,
             from: SMS_SENDER,
-            text: `[farmyou] 언제나 신선함이 당신곁에 있어유, 우리는 팜유에유 요청하신 인증번호는 [${token}] 에유.`,
+            text: `[farmyou] 언제나 신선함이 당신곁에 있어유, 우리는 팜유입니다. 요청하신 인증번호를 보내드립니다. 번호는: [${token}] .`,
             autoTypeDetect: true,
         })
         console.log(result) //await 를 지우면 promis <{pandding}>이 나온다
