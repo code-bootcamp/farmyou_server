@@ -87,13 +87,12 @@ export class UserResolver {
         });
     }
 
-    @UseGuards(GqlAuthAccessGuard)
     @Query(() => User)
     fetchUser(
-        @CurrentUser() currentUser: ICurrentUser, //
+        @Args('id') id: string, //
     ) {
-        const id = currentUser.id;
-        console.log(id);
+        // const id = currentUser.id;
+        // console.log(id);
         return this.userService.findOneById({ id });
     }
 
@@ -111,7 +110,8 @@ export class UserResolver {
         @Args('password') password: string,
     ) {
         const passwordOwner = await this.userRepository.findOne({
-            id: currentUser.id,
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
+            where: {id: currentUser.id},
         });
         const correctPassword = passwordOwner.password;
 
@@ -126,12 +126,15 @@ export class UserResolver {
     ) {
         const likedSeller = await this.sellerRepository.findOne({
             where: { id: sellerId },
-            relations: ['users'],
+            relations: ['users', 'files'],
         });
         const thisUser = await this.userRepository.findOne({
             where: { id: userId },
-            relations: ['sellers'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
         });
+
+        console.log(thisUser);
+        console.log(typeof thisUser);
 
         let addSeller: boolean = true;
 
@@ -181,11 +184,11 @@ export class UserResolver {
     ) {
         const likedSeller = await this.sellerRepository.findOne({
             where: { id: sellerId },
-            relations: ['users'],
+            relations: ['users', 'files'],
         });
         const thisUser = await this.userRepository.findOne({
             where: { id: userId },
-            relations: ['sellers'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
         });
 
         for (let i = 0; i < thisUser.sellers.length; i++) {

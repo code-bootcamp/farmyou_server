@@ -49,13 +49,21 @@ export class ProductUglyService {
     async findOne({ productId }) {
         return await this.productUglyRepository.findOne({
             where: { id: productId },
-            relations: ['seller', 'users'],
+            relations: ['seller', 'users', 'files'],
         });
     }
 
-    async create({ title, content, price, quantity, origin, sellerId, createFileInput }) {
+    async create({
+        title,
+        content,
+        price,
+        quantity,
+        origin,
+        sellerId,
+        createFileInput,
+    }) {
         const theSeller = await this.sellerRepository.findOne({
-            relations: ['users'],
+            relations: ['users', 'files'],
             where: { id: sellerId },
         });
 
@@ -66,20 +74,30 @@ export class ProductUglyService {
                 price,
                 quantity,
                 origin,
+                users: [],
                 seller: theSeller,
+                files: [],
             });
+
+            // console.log("type of result is", typeof result);
+            // const theProduct = await this.productUglyRepository.findOne({
+            //     where: {title: result.title, price: result.price}
+            // })
 
             if (createFileInput) {
                 const theImage = await this.fileRepository.create({
-                    url: createFileInput.imageUrl,
+                    url: String(createFileInput.imageUrl),
                     productUgly: result,
                     type: IMAGE_TYPE_ENUM.UGLY_PRODUCT,
                 });
-    
+
                 await this.fileRepository.save(theImage);
+
+                result.files.push(theImage);
+                // await this.productUglyRepository.save(result);
             }
 
-            return result;
+            return await this.productUglyRepository.save(result);
         } else {
             throw new NotFoundException(
                 '로그인 된 계정은 판매자 계정이 아닙니다.',
@@ -99,7 +117,7 @@ export class ProductUglyService {
         currentUser,
     }) {
         const theProduct = await this.productUglyRepository.findOne({
-            relations: ['users', 'seller'],
+            relations: ['users', 'seller', 'files'],
             where: { id: productId },
         });
 
@@ -135,6 +153,10 @@ export class ProductUglyService {
             });
 
             await this.fileRepository.save(theImage);
+            // await theProduct.files.push(theImage);
+
+            theProduct.files.push(theImage);
+            // await this.productUglyRepository.save(theProduct);
         }
 
         return await this.productUglyRepository.save(theProduct);
@@ -151,7 +173,7 @@ export class ProductUglyService {
     // 상품이름으로 조회
     async findByTitle(title: string): Promise<ProductUgly[]> {
         const searchData = await this.productUglyRepository.find({
-            relations: ['seller', 'users'],
+            relations: ['seller', 'users', 'files'],
         });
         let result = searchData.filter((word) => word.title.includes(title));
         return result;
@@ -172,14 +194,23 @@ export class ProductUglyService {
             orderDirection = 'DESC';
         }
 
-        return await this.productUglyRepository
-            .createQueryBuilder('productUgly')
-            .orderBy(orderBy, orderDirection)
-            .leftJoinAndSelect('productUgly.users', 'users')
-            .leftJoinAndSelect('productUgly.seller', 'seller')
-            .skip((page - 1) * ELM_PER_PAGE)
-            .take(ELM_PER_PAGE)
-            .getMany();
+        if (!page) {
+            return await this.productUglyRepository
+                .createQueryBuilder('productUgly')
+                .orderBy(orderBy, orderDirection)
+                .leftJoinAndSelect('productUgly.users', 'users')
+                .leftJoinAndSelect('productUgly.seller', 'seller')
+                .getMany();
+        } else {
+            return await this.productUglyRepository
+                .createQueryBuilder('productUgly')
+                .orderBy(orderBy, orderDirection)
+                .leftJoinAndSelect('productUgly.users', 'users')
+                .leftJoinAndSelect('productUgly.seller', 'seller')
+                .skip((page - 1) * ELM_PER_PAGE)
+                .take(ELM_PER_PAGE)
+                .getMany();
+        }
     }
 
     async findSortedByTitle({ title, sortBy }, page) {
@@ -194,7 +225,7 @@ export class ProductUglyService {
 
     async findByUser({ currentUser }) {
         const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { id: currentUser.id },
         });
 
@@ -207,7 +238,7 @@ export class ProductUglyService {
 
     async findBySeller({ currentUser }) {
         const theProducts = await this.productUglyRepository.find({
-            relations: ['users', 'seller'],
+            relations: ['users', 'seller', 'files'],
             where: { seller: { id: currentUser.id } },
         });
 

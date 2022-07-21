@@ -1,5 +1,6 @@
 import { Field, FIELD_TYPENAME, ObjectType } from '@nestjs/graphql';
 import { DirectStore } from 'src/apis/directStore/entities/directStore.entity';
+import { File } from 'src/apis/file/entities/file.entity';
 import {
     Column,
     Entity,
@@ -7,6 +8,7 @@ import {
     CreateDateColumn,
     JoinColumn,
     OneToOne,
+    OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -35,6 +37,11 @@ export class Admin {
     // @Field(() => String) 비밀번호 노출 금지!!
     password: string;
 
+    // 좋아유
+    @Column({nullable: true, default: -1})
+    @Field(() => Number)
+    like: number;
+
     // 계정타입
     @Column({ default: 'admin' })
     @Field(() => String)
@@ -49,4 +56,9 @@ export class Admin {
     @OneToOne(() => DirectStore)
     @Field(() => DirectStore, {nullable: true})
     directStore?: DirectStore;
+
+    // 이미지 url
+    @OneToMany(() => File, (file) => file.admin)
+    @Field((type) => [File], {nullable: true})
+    files: File[];
 }

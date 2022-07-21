@@ -57,7 +57,7 @@ export class ProductDirectService {
     async findOne({ productId }) {
         return await this.productDirectRepository.findOne({
             where: { id: productId },
-            relations: ['admin', 'users', 'directStore'],
+            relations: ['category', 'admin', 'users', 'directStore', 'files'],
         });
     }
 
@@ -71,7 +71,7 @@ export class ProductDirectService {
 
     async findById({ directStoreId }) {
         return await this.productDirectRepository.find({
-            relations: ['category', 'directStore', 'users', 'admin'],
+            relations: ['category', 'directStore', 'users', 'admin', 'files'],
             where: { directStore: { id: directStoreId } },
         });
     }
@@ -91,62 +91,74 @@ export class ProductDirectService {
             orderDirection = 'DESC';
         }
 
-        if (!directStoreId && categoryId) {
-            return await this.productDirectRepository
-                .createQueryBuilder('productDirect')
-                .orderBy(orderBy, orderDirection)
-                .leftJoinAndSelect('productDirect.directStore', 'directStore')
-                .leftJoinAndSelect('productDirect.category', 'category')
-                .leftJoinAndSelect('productDirect.admin', 'admin')
-                .leftJoinAndSelect('productDirect.users', 'users')
-                .where('productDirect.category = :category', {
-                    category: categoryId,
-                })
-                .skip((page - 1) * ELM_PER_PAGE)
-                .take(ELM_PER_PAGE)
-                .getMany();
-        } else if (directStoreId && !categoryId) {
-            return await this.productDirectRepository
-                .createQueryBuilder('productDirect')
-                .orderBy(orderBy, orderDirection)
-                .leftJoinAndSelect('productDirect.directStore', 'directStore')
-                .leftJoinAndSelect('productDirect.category', 'category')
-                .leftJoinAndSelect('productDirect.admin', 'admin')
-                .leftJoinAndSelect('productDirect.users', 'users')
-                .where('productDirect.directStore = :directStore', {
-                    directStore: directStoreId,
-                })
-                .skip((page - 1) * ELM_PER_PAGE)
-                .take(ELM_PER_PAGE)
-                .getMany();
-        } else if (directStoreId && categoryId) {
-            return await this.productDirectRepository
-                .createQueryBuilder('productDirect')
-                .orderBy(orderBy, orderDirection)
-                .leftJoinAndSelect('productDirect.directStore', 'directStore')
-                .leftJoinAndSelect('productDirect.category', 'category')
-                .leftJoinAndSelect('productDirect.admin', 'admin')
-                .leftJoinAndSelect('productDirect.users', 'users')
-                .where('productDirect.directStore = :directStore', {
-                    directStore: directStoreId,
-                })
-                .andWhere('productDirect.category = :category', {
-                    category: categoryId,
-                })
-                .skip((page - 1) * ELM_PER_PAGE)
-                .take(ELM_PER_PAGE)
-                .getMany();
+        const thisQuery = await this.productDirectRepository
+        .createQueryBuilder('productDirect')
+        .orderBy(orderBy, orderDirection)
+        .leftJoinAndSelect('productDirect.directStore', 'directStore')
+        .leftJoinAndSelect('productDirect.category', 'category')
+        .leftJoinAndSelect('productDirect.admin', 'admin')
+        .leftJoinAndSelect('productDirect.users', 'users');
+
+        if (!page) {
+            if (!directStoreId && categoryId) {
+                return thisQuery
+                    .where('productDirect.category = :category', {
+                        category: categoryId,
+                    })
+                    .getMany();
+            } else if (directStoreId && !categoryId) {
+                return thisQuery
+                    .where('productDirect.directStore = :directStore', {
+                        directStore: directStoreId,
+                    })
+                    .getMany();
+            } else if (directStoreId && categoryId) {
+                return thisQuery
+                    .where('productDirect.directStore = :directStore', {
+                        directStore: directStoreId,
+                    })
+                    .andWhere('productDirect.category = :category', {
+                        category: categoryId,
+                    })
+                    .getMany();
+            } else {
+                return thisQuery
+                    .getMany();
+            }
         } else {
-            return await this.productDirectRepository
-                .createQueryBuilder('productDirect')
-                .orderBy(orderBy, orderDirection)
-                .leftJoinAndSelect('productDirect.directStore', 'directStore')
-                .leftJoinAndSelect('productDirect.category', 'category')
-                .leftJoinAndSelect('productDirect.admin', 'admin')
-                .leftJoinAndSelect('productDirect.users', 'users')
-                .skip((page - 1) * ELM_PER_PAGE)
-                .take(ELM_PER_PAGE)
-                .getMany();
+            if (!directStoreId && categoryId) {
+                return thisQuery
+                    .where('productDirect.category = :category', {
+                        category: categoryId,
+                    })
+                    .skip((page - 1) * ELM_PER_PAGE)
+                    .take(ELM_PER_PAGE)
+                    .getMany();
+            } else if (directStoreId && !categoryId) {
+                return thisQuery
+                    .where('productDirect.directStore = :directStore', {
+                        directStore: directStoreId,
+                    })
+                    .skip((page - 1) * ELM_PER_PAGE)
+                    .take(ELM_PER_PAGE)
+                    .getMany();
+            } else if (directStoreId && categoryId) {
+                return thisQuery
+                    .where('productDirect.directStore = :directStore', {
+                        directStore: directStoreId,
+                    })
+                    .andWhere('productDirect.category = :category', {
+                        category: categoryId,
+                    })
+                    .skip((page - 1) * ELM_PER_PAGE)
+                    .take(ELM_PER_PAGE)
+                    .getMany();
+            } else {
+                return thisQuery
+                    .skip((page - 1) * ELM_PER_PAGE)
+                    .take(ELM_PER_PAGE)
+                    .getMany();
+            }
         }
     }
 
@@ -177,7 +189,7 @@ export class ProductDirectService {
     // 상품이름으로 조회
     async findByTitle(title: string): Promise<ProductDirect[]> {
         const searchData = await this.productDirectRepository.find({
-            relations: ['directStore', 'users', 'admin'],
+            relations: ['category', 'directStore', 'users', 'admin', 'files'],
         });
         let result = searchData.filter((word) => word.title.includes(title));
         return result;
@@ -220,7 +232,9 @@ export class ProductDirectService {
                 quantity,
                 category: theCategory,
                 directStore: theStore,
+                users: [],
                 admin: theAdmin,
+                files: []
             });
 
             // if (files) {
@@ -229,7 +243,7 @@ export class ProductDirectService {
             //         relations: [
             //             'productUgly',
             //             'productDirect',
-            //             'customer',
+            //             'user',
             //             'seller',
             //             'admin',
             //         ],
@@ -249,6 +263,8 @@ export class ProductDirectService {
                 });
 
                 await this.fileRepository.save(theImage);
+
+                result.files.push(theImage);
             }
 
             // if (imageUrl) {
@@ -261,7 +277,7 @@ export class ProductDirectService {
             //     await this.fileRepository.save(theImage);
             // }
 
-            return result;
+            return await this.productDirectRepository.save(result);
         } else {
             throw new UnprocessableEntityException(
                 '로그인 된 계정은 권한이 없습니다.',
@@ -272,7 +288,7 @@ export class ProductDirectService {
     // 이건 왜 여기있지???
     async checkSoldout({ productId }) {
         const product = await this.productDirectRepository.findOne({
-            relations: ['categoryId', 'directStore', 'users', 'admin'],
+            relations: ['categoryId', 'directStore', 'users', 'admin', 'files'],
             where: { id: productId },
         });
 
@@ -292,7 +308,7 @@ export class ProductDirectService {
 
     async findByUser({ currentUser }) {
         const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { id: currentUser.id },
         });
 
@@ -317,7 +333,7 @@ export class ProductDirectService {
         currentUser,
     }) {
         const theProduct = await this.productDirectRepository.findOne({
-            relations: ['directStore', 'users', 'admin'],
+            relations: ['category', 'directStore', 'users', 'admin', 'files'],
             where: { id: productId },
         });
 
@@ -366,6 +382,8 @@ export class ProductDirectService {
             });
 
             await this.fileRepository.save(theImage);
+
+            theProduct.files.push(theImage);
         }
 
         return await this.productDirectRepository.save(theProduct);
