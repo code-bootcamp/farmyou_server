@@ -33,8 +33,8 @@ export class AdminResolver {
         @Args('email') email: string,
         @Args('password') password: string,
         @Args({ name: 'directStoreId', nullable: true }) directStoreId: string,
-        @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
-        files: FileUpload[],
+        // @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+        // files: FileUpload[],
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
         // console.log(hashedPassword);
@@ -42,7 +42,7 @@ export class AdminResolver {
             email,
             hashedPassword,
             directStoreId,
-            files
+            // files
         });
     }
 

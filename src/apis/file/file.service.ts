@@ -66,7 +66,7 @@ export class FileService {
             relations: [
                 'productUgly',
                 'productDirect',
-                'customer',
+                'user',
                 'seller',
                 'admin',
             ],
@@ -79,10 +79,23 @@ export class FileService {
             relations: [
                 'productUgly',
                 'productDirect',
-                'customer',
+                'user',
                 'seller',
                 'admin',
             ],
+        });
+    }
+
+    async findAllProductUgly({productUglyId}) {
+        return await this.fileRepository.find({
+            relations: [
+                'productUgly',
+                'productDirect',
+                'user',
+                'seller',
+                'admin',
+            ],
+            where: {productUgly: {id: productUglyId}}
         });
     }
 }

@@ -56,7 +56,7 @@ export class ProductDirectResolver {
         @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
         @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
         @Args({name: 'categoryId', nullable: true}) categoryId: string,
-        @Args('page') page: number
+        @Args({name: 'page', nullable: true}) page: number
     ) {
         return this.productDirectService.findSorted({sortBy, directStoreId, categoryId}, page);
     }
@@ -67,7 +67,7 @@ export class ProductDirectResolver {
         @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
         @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
         @Args({name: 'categoryId', nullable: true}) categoryId: string,
-        @Args('page') page: number
+        @Args({name: 'page', nullable: true}) page: number
     ) {
         return this.productDirectService.findSortedByTitle({ title, sortBy, directStoreId, categoryId }, page);
     }

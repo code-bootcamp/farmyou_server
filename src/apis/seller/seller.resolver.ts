@@ -82,7 +82,8 @@ export class SellerResolver {
         @Args('password') password: string,
     ) {
         const passwordOwner = await this.sellerRepository.findOne({
-            id: currentUser.id,
+            relations: ['users', 'files'],
+            where: {id: currentUser.id},
         });
 
         const correctPassword = passwordOwner.password;

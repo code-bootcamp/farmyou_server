@@ -67,6 +67,15 @@ export class ProductUgly {
 
     // 이미지 url
     @OneToMany(() => File, (file) => file.productUgly)
-    @Field(() => [File], {nullable: true})
+    @Field((type) => [File], {nullable: true})
     files: File[];
+    // @Column()
+    // @Field(() => [String])
+    // images: string[];
+    // @Column()
+    // @Field(() => String)
+    // images: string;
+    // @Column()
+    // @Field(() => [File])
+    // images: File[];
 }

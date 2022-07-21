@@ -115,6 +115,7 @@ export class AuthService {
 
         try {
             const thisUser = await this.userRepository.findOne({
+                relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
                 where: {
                     id: currentUser.id,
                 },
@@ -123,6 +124,7 @@ export class AuthService {
         } catch (err) {
             try {
                 const thisSeller = await this.sellerRepository.findOne({
+                    relations: ['users', 'files'],
                     where: {
                         id: currentUser.id,
                     },
@@ -131,6 +133,7 @@ export class AuthService {
             } catch (err) {
                 try {
                     const thisAdmin = await this.adminRepository.findOne({
+                        relations: ['directStore'],
                         where: {
                             id: currentUser.id,
                         },
@@ -156,7 +159,7 @@ export class AuthService {
     async findLoggedIn({ currentUser }) {
         try {
             const thisUser = await this.userRepository.findOne({
-                relations:['sellers', 'directProducts', 'uglyProducts'],
+                relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
                 where: {
                     id: currentUser.id,
                 },
@@ -168,7 +171,7 @@ export class AuthService {
         } catch (err) {
             try {
                 const thisSeller = await this.sellerRepository.findOne({
-                    relations:['users'],
+                    relations: ['users', 'files'],
                     where: {
                         id: currentUser.id,
                     },
@@ -180,7 +183,7 @@ export class AuthService {
             } catch (err) {
                 try {
                     const thisAdmin = await this.adminRepository.findOne({
-                        relations:['directStore'],
+                        relations: ['directStore'],
                         where: {
                             id: currentUser.id,
                         },

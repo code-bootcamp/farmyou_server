@@ -47,10 +47,10 @@ export class File {
   @Field(() => ProductDirect, {nullable: true})
   productDirect?: ProductDirect;
 
-  // 구매자 (customer)
+  // 구매자 (user)
   @ManyToOne(() => User)
   @Field(() => User, {nullable: true})
-  customer?: User;
+  user?: User;
 
   // 판매자 (seller)
   @ManyToOne(() => Seller)

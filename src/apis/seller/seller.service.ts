@@ -25,20 +25,20 @@ export class SellerService {
 
     async findOne({ email }) {
         return await this.sellerRepository.findOne({
-            relations: ['users'],
+            relations: ['users', 'files'],
             where: { email: email },
         });
     }
 
     async findAll() {
         return await this.sellerRepository.find({
-            relations: ['users'],
+            relations: ['users', 'files'],
         });
     }
 
     async create({ email, hashedPassword: password, name, phone, createFileInput }) {
         const seller = await this.sellerRepository.findOne({
-            relations: ['users'],
+            relations: ['users', 'files'],
             where: { email },
         });
         if (seller) throw new ConflictException('이미 등록된 이메일 입니다.');
@@ -50,6 +50,7 @@ export class SellerService {
             phone,
             like: 0,
             users: [],
+            files: []
         });
 
         if (createFileInput) {
@@ -60,12 +61,14 @@ export class SellerService {
             });
 
             await this.fileRepository.save(theImage);
+
+            thisSeller.files.push(theImage);
         }
 
         // if (files) {
         //     const imageId = await this.fileResolver.uploadFile(files);
         //     const theImage = await this.fileRepository.findOne({
-        //         relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+        //         relations: ['productUgly', 'productDirect', 'user', 'seller', 'admin'],
         //         where: {id: imageId}
         //     });
         //     theImage.type = IMAGE_TYPE_ENUM.SELLER;
@@ -75,12 +78,12 @@ export class SellerService {
         // }
 
         // return await this.sellerRepository.save({ email, password, name, phone });
-        return thisSeller;
+        return await this.sellerRepository.save(thisSeller);
     }
 
     async update({ name, password, phone, createFileInput, currentUser }) {
         const loggedSeller = await this.sellerRepository.findOne({
-            relations: ['users'],
+            relations: ['users', 'files'],
             where: {id: currentUser.id},
         });
 
@@ -104,13 +107,15 @@ export class SellerService {
             });
 
             await this.fileRepository.save(theImage);
+
+            loggedSeller.files.push(theImage);
         }
 
         // 파일 업로드
         // const imageUrl = await this.fileService.upload({files});
 
         // const theImage = await this.fileRepository.findOne({
-        //     relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
+        //     relations: ['productUgly', 'productDirect', 'user', 'seller', 'admin'],
         //     where: {url: imageUrl}
         // })
 

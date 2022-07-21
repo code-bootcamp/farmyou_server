@@ -8,26 +8,6 @@ type DirectStore {
   admin: Admin
 }
 
-type Admin {
-  id: String!
-  name: String
-  phone: String
-  email: String!
-  type: String!
-  createdAt: DateTime!
-  directStore: DirectStore
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Category {
-  id: String!
-  name: String!
-}
-
 type Seller {
   id: String!
   name: String!
@@ -40,6 +20,11 @@ type Seller {
   users: [User!]
   files: [File!]
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type ProductUgly {
   id: String!
@@ -61,7 +46,7 @@ type File {
   isMain: Boolean!
   productUgly: ProductUgly
   productDirect: ProductDirect
-  customer: User
+  user: User
   seller: Seller
   admin: Admin
   type: IMAGE_TYPE_ENUM!
@@ -74,6 +59,23 @@ enum IMAGE_TYPE_ENUM {
   USER
   SELLER
   ADMIN
+}
+
+type Admin {
+  id: String!
+  name: String
+  phone: String
+  email: String!
+  like: Float!
+  type: String!
+  createdAt: DateTime!
+  directStore: DirectStore
+  files: [File!]
+}
+
+type Category {
+  id: String!
+  name: String!
 }
 
 type ProductDirect {
@@ -160,6 +162,7 @@ type Query {
   fetchAdmins: [Admin!]!
   fetchFile(fileId: String!): File!
   fetchFiles: [File!]!
+  fetchFilesByProductUglyId(productUglyId: String!): [File!]!
   fetchSellers: [Seller!]!
   fetchTypeOfUserLoggedIn: String!
   fetchUserLoggedIn: Admin!
@@ -174,18 +177,18 @@ type Query {
   fetchDirectProducts(productId: String!): [ProductDirect!]!
   fetchProductDirect(productId: String!): ProductDirect!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
-  fetchDirectProductsSorted(sortBy: String = "최신순", directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
-  fetchDirectProductsSortedByTitle(title: String, sortBy: String = "최신순", directStoreId: String, categoryId: String, page: Float!): [ProductDirect!]!
+  fetchDirectProductsSorted(sortBy: String = "최신순", directStoreId: String, categoryId: String, page: Float): [ProductDirect!]!
+  fetchDirectProductsSortedByTitle(title: String, sortBy: String = "최신순", directStoreId: String, categoryId: String, page: Float): [ProductDirect!]!
   fetchDirectProductByTitle(title: String!): [ProductDirect!]!
   fetchDirectProductsByUser: [ProductDirect!]!
   fetchUglyProducts(productId: String!): [ProductUgly!]!
   fetchProductUgly(productId: String!): ProductUgly!
   fetchUglyProductByTitle(title: String!): [ProductUgly!]!
-  fetchUglyProductsSorted(sortBy: String = "최신순", page: Float!): [ProductUgly!]!
-  fetchUglyProductsSortedByTitle(title: String, sortBy: String = "최신순", page: Float!): [ProductUgly!]!
+  fetchUglyProductsSorted(sortBy: String = "최신순", page: Float): [ProductUgly!]!
+  fetchUglyProductsSortedByTitle(title: String, sortBy: String = "최신순", page: Float): [ProductUgly!]!
   fetchUglyProductsByUser: [ProductUgly!]!
   fetchUglyProductsBySeller: [ProductUgly!]!
-  fetchUser: User!
+  fetchUser(id: String!): User!
   fetchUsers: [User!]!
 }
 
@@ -194,7 +197,7 @@ type Mutation {
   deleteAddress(id: String!): Boolean!
   updateAddress(addressId: String!, updateAddressUserInput: UpdateAddressUserInput!): AddressUser!
   assignMain(userId: String!, addressId: String!): AddressUser!
-  createAdmin(email: String!, password: String!, directStoreId: String, files: [Upload!]): Admin!
+  createAdmin(email: String!, password: String!, directStoreId: String): Admin!
   uploadFile(files: [Upload!]): [String!]!
   createSeller(name: String!, email: String!, password: String!, phone: String!, createFileInput: CreateSellerInput): Seller!
   updateSeller(name: String, password: String, phone: String, createFileInput: CreateSellerInput): Seller!
@@ -241,15 +244,15 @@ input UpdateAddressUserInput {
 scalar Upload
 
 input CreateSellerInput {
-  imageUrl: [String!]!
+  imageUrl: String!
 }
 
 input CreateProductDirectInput {
-  imageUrl: [String!]!
+  imageUrl: String!
 }
 
 input CreateProductUglyInput {
-  imageUrl: [String!]!
+  imageUrl: String!
 }
 
 input CreateAddressUserInput {
@@ -259,5 +262,5 @@ input CreateAddressUserInput {
 }
 
 input CreateUserInput {
-  imageUrl: [String!]!
+  imageUrl: String!
 }
