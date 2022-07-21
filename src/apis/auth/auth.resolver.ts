@@ -158,41 +158,76 @@ export class AuthResolver {
     //     }
     // }
 
-    // from BE1
+    // // from BE1
+    // @UseGuards(GqlAuthRefreshGuard)
+    // @UseGuards(GqlAuthAccessGuard)
+    // @Mutation(() => String)
+    // async logout(@Context() context: any) {
+    //   try {
+    //     let RT = context.req.headers.cookie.split('Token=')[1];
+    //     console.log(RT)
+    //     let AT = context.req.headers.authorization.split(' ')[1];
+    //     // let tem = Math.floor(Date.now() / 1000);
+  
+    //     jwt.verify(RT, 'myRefreshKey', async (err, payload) => {
+    //       if (err) {
+    //         throw err;
+    //       }
+    //       await this.cacheManager.set(`R ${RT}`, 'RefreshToken', {
+    //         ttl: 28800,
+    //       });
+    //     });
+  
+    //     jwt.verify(AT, 'myAccessKey', async (err, payload) => {
+    //       if (err) {
+    //         console.log(err, '*******');
+    //         throw err;
+    //       }
+    //       await this.cacheManager.set(`A ${AT}`, 'AccessToken', {
+    //         ttl: 3600,
+    //       });
+    //     });
+  
+    //     return '로그아웃에 성공했습니다.';
+    //   } catch (error) {
+    //     console.log(error, ' !!! ');
+    //     throw error;
+    //   }
+    // }
+
     @UseGuards(GqlAuthRefreshGuard)
-    @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => String)
-    async logout(@Context() context: any) {
-      try {
-        let RT = context.req.headers.cookie.split('Token=')[1];
-        console.log(RT)
-        let AT = context.req.headers.authorization.split(' ')[1];
-        // let tem = Math.floor(Date.now() / 1000);
-  
-        jwt.verify(RT, 'myRefreshKey', async (err, payload) => {
-          if (err) {
-            throw err;
-          }
-          await this.cacheManager.set(`R ${RT}`, 'RefreshToken', {
-            ttl: 28800,
-          });
-        });
-  
-        jwt.verify(AT, 'myAccessKey', async (err, payload) => {
-          if (err) {
-            console.log(err, '*******');
-            throw err;
-          }
-          await this.cacheManager.set(`A ${AT}`, 'AccessToken', {
-            ttl: 3600,
-          });
-        });
-  
-        return '로그아웃에 성공했습니다.';
-      } catch (error) {
-        console.log(error, ' !!! ');
-        throw error;
-      }
+    async logout(
+        @Context() context: any, //
+    ) {
+        try{
+            //accessToken값
+        const accessToken = context.req.headers.authorization.replace(
+        'Bearer ',
+        '',
+        );
+        //refreshToken
+        const refreshToken = context.req.headers.cookie.replace(
+        'refreshToken=',
+        '',
+        );
+        try {
+        jwt.verify(accessToken, 'myAccessKey');
+        jwt.verify(refreshToken, 'myRefreshKey');
+        } catch {
+        throw new UnauthorizedException();
+        }
+        await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {ttl: 180});
+        console.log(refreshToken)
+        await this.cacheManager.set(`refreshToken:${refreshToken}`,'refreshToken', { ttl: 300 });
+
+        return '로그아웃에 성공했습니다';
+        }catch(error){
+
+        }
+            
+        
+        
     }
 
     // GqlAuthAccessGuard is imported from src/commons/auth/gql-auth.guard.ts
@@ -215,7 +250,7 @@ export class AuthResolver {
     //     return this.authService.findLoggedIn({ currentUser });
     // }
 
-    @UseGuards(GqlAuthAccessGuard)
+    @UseGuards(GqlAuthRefreshGuard)
     // @Query(() => User || Seller || Admin)
     @Query(() => Admin || Seller || User)
     fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
