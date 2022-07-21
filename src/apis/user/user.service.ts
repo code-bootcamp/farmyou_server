@@ -154,6 +154,17 @@ export class UserService {
         return await this.userRepository.save(loggedUser);
     }
 
+    async updatePassword({email, newPassword}) {
+        const theUser = await this.userRepository.findOne({
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
+            where: {email}
+        });
+
+        theUser.password = await bcrypt.hash(newPassword, 10.2);
+
+        return await this.userRepository.save(theUser);
+    }
+
     async delete({ email }) {
         const result = await this.userRepository.delete({ email });
         return result.affected ? true : false;
@@ -249,5 +260,12 @@ export class UserService {
         }
 
         return theUser;
+    }
+
+    async findByEmail({email}) {
+        return await this.userRepository.findOne({
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
+            where: {email}
+        })
     }
 }

@@ -74,6 +74,13 @@ export class SellerResolver {
         return this.sellerService.findAll();
     }
 
+    @Query(() => Seller)
+    fetchSellerByEmail(
+        @Args('email') email: string
+    ) {
+        return this.sellerService.findByEmail({email});
+    }
+
     // PasswordCheckModal
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => Boolean)
@@ -89,5 +96,13 @@ export class SellerResolver {
         const correctPassword = passwordOwner.password;
 
         return bcrypt.compare(password, correctPassword);
+    }
+
+    @Mutation(() => Seller)
+    async updateSellerPassword(
+        @Args('email') email: string,
+        @Args('newPassword') newPassword: string
+    ) {
+        return this.sellerService.updatePassword({email, newPassword});
     }
 }

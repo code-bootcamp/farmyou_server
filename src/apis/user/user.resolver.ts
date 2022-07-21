@@ -96,6 +96,13 @@ export class UserResolver {
         return this.userService.findOneById({ id });
     }
 
+    @Query(() => Seller)
+    fetchUserByEmail(
+        @Args('email') email: string
+    ) {
+        return this.userService.findByEmail({email});
+    }
+
     // 관리자페이지에서 모든유저 조회할때 사용 하게 될 듯
     @Query(() => [User])
     fetchUsers() {
@@ -233,7 +240,7 @@ export class UserResolver {
     // 로그인한 유저가 자기자신을 삭제
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => User)
-    async deleteLoginUser(
+    deleteLoginUser(
         @CurrentUser() currentUser: ICurrentUser, //
     ) {
         const result = this.userService.deleteUser({ currentUser });
@@ -252,7 +259,7 @@ export class UserResolver {
 
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => User)
-    async buyProduct(
+    buyProduct(
         @Args('productType') productType: PRODUCT_TYPE_ENUM,
         @Args('productId') productId: string,
         @Args('quantity') quantity: number,
@@ -264,5 +271,13 @@ export class UserResolver {
             quantity,
             currentUser,
         });
+    }
+
+    @Mutation(() => User)
+    async updateUserPassword(
+        @Args('email') email: string,
+        @Args('newPassword') newPassword: string
+    ) {
+        return this.userService.updatePassword({email, newPassword});
     }
 }

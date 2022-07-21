@@ -125,9 +125,27 @@ export class SellerService {
     }
 
     async postBoardDirect({ sellerId, boardDirectNum }) {
-        return this.sellerRepository.save({
+        return await this.sellerRepository.save({
             id: sellerId,
             boardDirectNum,
         });
+    }
+
+    async findByEmail({email}) {
+        return await this.sellerRepository.findOne({
+            relations: ['users', 'files'],
+            where: {email}
+        })
+    }
+
+    async updatePassword({email, newPassword}) {
+        const theSeller = await this.sellerRepository.findOne({
+            relations: ['users', 'files'],
+            where: {email}
+        });
+
+        theSeller.password = await bcrypt.hash(newPassword, 10.2);
+
+        return await this.sellerRepository.save(theSeller);
     }
 }
