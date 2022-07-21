@@ -43,7 +43,7 @@ export class AdminService {
         email,
         hashedPassword: password,
         directStoreId,
-        files
+        // files
     }) {
         try {
             const theStore = await this.directStoreRepository.findOne({
@@ -62,17 +62,17 @@ export class AdminService {
                 admin: thisAdmin,
             });
 
-            if (files) {
-                const imageId = await this.fileResolver.uploadFile(files);
-                const theImage = await this.fileRepository.findOne({
-                    relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
-                    where: {id: imageId}
-                });
-                theImage.type = IMAGE_TYPE_ENUM.ADMIN;
-                theImage.admin = thisAdmin;
+            // if (files) {
+            //     const imageId = await this.fileResolver.uploadFile(files);
+            //     const theImage = await this.fileRepository.findOne({
+            //         relations: ['productUgly', 'productDirect', 'user', 'seller', 'admin'],
+            //         where: {id: imageId}
+            //     });
+            //     theImage.type = IMAGE_TYPE_ENUM.ADMIN;
+            //     theImage.admin = thisAdmin;
     
-                await this.fileRepository.save(theImage);
-            }
+            //     await this.fileRepository.save(theImage);
+            // }
 
             // return await this.adminRepository.save({ email, password, name, phone });
             return thisAdmin;

@@ -54,21 +54,21 @@ export class UserService {
 
     async findOne({ email }) {
         return await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { email },
         });
     }
 
     async findOneById({ id }) {
         return await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { id },
         });
     }
 
     async findAll() {
         return await this.userRepository.find({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
         });
     }
 
@@ -82,7 +82,7 @@ export class UserService {
         createFileInput,
     }) {
         const user = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { email },
         });
         if (user) throw new ConflictException('이미 등록된 이메일 입니다.');
@@ -93,6 +93,9 @@ export class UserService {
             password,
             phone,
             sellers: [],
+            directProducts: [],
+            uglyProducts: [],
+            files: []
         });
 
         await this.addressUserService.create(
@@ -106,21 +109,21 @@ export class UserService {
         if (createFileInput) {
             const theImage = await this.fileRepository.create({
                 url: createFileInput.imageUrl,
-                customer: thisUser,
+                user: thisUser,
                 type: IMAGE_TYPE_ENUM.USER,
             });
 
             await this.fileRepository.save(theImage);
-        }
-        // theImage.customer = loggedUser;
 
-        // return await this.userRepository.save({ email, password, name, phone });
-        return thisUser;
+            thisUser.files.push(theImage);
+        }
+
+        return await this.userRepository.save(thisUser);
     }
 
     async update({ name, password, phone, createFileInput, currentUser }) {
         const loggedUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { id: currentUser.id },
         });
 
@@ -139,22 +142,14 @@ export class UserService {
         if (createFileInput) {
             const theImage = await this.fileRepository.create({
                 url: createFileInput.imageUrl,
-                customer: loggedUser,
+                user: loggedUser,
                 type: IMAGE_TYPE_ENUM.USER,
             });
 
             await this.fileRepository.save(theImage);
+
+            loggedUser.files.push(theImage);
         }
-
-        // 파일 업로드
-        // const imageUrl = await this.fileService.upload({files});
-
-        // const theImage = await this.fileRepository.findOne({
-        //     relations: ['productUgly', 'productDirect', 'customer', 'seller', 'admin'],
-        //     where: {url: imageUrl}
-        // })
-
-        // await this.fileRepository.save(theImage);
 
         return await this.userRepository.save(loggedUser);
     }
@@ -195,7 +190,7 @@ export class UserService {
     async buy({ productType, productId, quantity, currentUser }) {
         // console.log("CURRENT USER IS ", currentUser);
         const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { id: currentUser.id },
         });
 
@@ -204,7 +199,7 @@ export class UserService {
 
         if (productType === PRODUCT_TYPE_ENUM.DIRECT_PRODUCT) {
             theProduct = await this.productDirectRepository.findOne({
-                relations: ['category', 'directStore', 'users', 'admin'],
+                relations: ['category', 'directStore', 'users', 'admin', 'files'],
                 where: { id: productId },
             });
 
@@ -229,7 +224,7 @@ export class UserService {
             await this.productDirectRepository.save(theProduct);
         } else if (productType === PRODUCT_TYPE_ENUM.UGLY_PRODUCT) {
             theProduct = await this.productUglyRepository.findOne({
-                relations: ['users', 'seller'],
+                relations: ['users', 'seller', 'files'],
                 where: { id: productId },
             });
 

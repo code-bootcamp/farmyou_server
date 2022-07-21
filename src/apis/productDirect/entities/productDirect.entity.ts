@@ -91,6 +91,6 @@ export class ProductDirect {
 
     // 이미지 url
     @OneToMany(() => File, (file) => file.productDirect)
-    @Field(() => [File], {nullable: true})
+    @Field((type) => [File], {nullable: true})
     files: File[];
 }

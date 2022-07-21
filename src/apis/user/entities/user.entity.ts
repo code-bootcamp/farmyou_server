@@ -67,7 +67,7 @@ export class User {
     uglyProducts: ProductUgly[];
 
     // 이미지 url
-    @OneToMany(() => File, (file) => file.customer)
-    @Field(() => [File], {nullable: true})
+    @OneToMany(() => File, (file) => file.user)
+    @Field((type) => [File], {nullable: true})
     files: File[];
 }
