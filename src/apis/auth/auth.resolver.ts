@@ -26,15 +26,6 @@ import { Admin } from '../admin/entities/admin.entity';
 @Resolver()
 export class AuthResolver {
     constructor(
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>,
-
-        @InjectRepository(Seller)
-        private readonly sellerRepository: Repository<Seller>,
-
-        @InjectRepository(Admin)
-        private readonly adminRepository: Repository<Admin>,
-
         private readonly userService: UserService, //
         private readonly authService: AuthService,
         private readonly sellerService: SellerService,
