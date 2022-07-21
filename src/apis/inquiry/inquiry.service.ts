@@ -27,12 +27,12 @@ export class InquiryService {
 
     async findByProduct(productId) {
         const direct = await this.productDirectRepository.findOne({
-            relations: ['admin', 'users'],
+            relations: ['category', 'directStore', 'admin', 'users', 'files'],
             where: {id: productId}
         });
 
         const ugly = await this.productUglyRepository.findOne({
-            relations: ['seller', 'users'],
+            relations: ['seller', 'users', 'files'],
             where: {id: productId}
         });
 
@@ -94,7 +94,7 @@ export class InquiryService {
 
     async create(title, question, productDirectId, productUglyId, currentUser) {
         const writer = await this.userRepository.findOne({
-            relations: ['directProducts', 'uglyProducts'],
+            relations: ['directProducts', 'uglyProducts', 'sellers', 'files'],
             where: { id: currentUser.id },
         });
 
@@ -158,12 +158,12 @@ export class InquiryService {
         if (thisInquiry && !thisInquiry.productDirect) {
             theProduct = await this.productUglyRepository.findOne({
                 where: { id: thisInquiry.productUgly.id },
-                relations: ['users', 'seller'],
+                relations: ['users', 'seller', 'files'],
             });
         } else if (thisInquiry && !thisInquiry.productUgly) {
             theProduct = await this.productDirectRepository.findOne({
                 where: { id: thisInquiry.productDirect.id },
-                relations: ['category', 'directStore', 'admin'],
+                relations: ['category', 'directStore', 'users', 'admin', 'files'],
             });
         }
 

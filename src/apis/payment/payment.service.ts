@@ -48,7 +48,7 @@ export class PaymentService {
         paymentComplete = PAYMENT_STATUS_ENUM.PAYMENT,
     }) {
         const thisUser = await this.userRepository.findOne({
-            // relations: ['sellers', 'directProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: { id: currentUser.id },
         });
 
@@ -57,7 +57,7 @@ export class PaymentService {
 
         if (productType === PRODUCT_TYPE_ENUM.UGLY_PRODUCT) {
             theProduct = await this.productUglyRepository.findOne({
-                relations: ['users', 'seller'],
+                relations: ['users', 'seller', 'files'],
                 where: {id: productId}
             });
             // 1. 거래기록 1줄 생성 해야함
@@ -70,7 +70,7 @@ export class PaymentService {
             });
         } else if (productType === PRODUCT_TYPE_ENUM.DIRECT_PRODUCT) {
             theProduct = await this.productDirectRepository.findOne({
-                relations: ['category', 'directStore', 'users', 'admin'],
+                relations: ['category', 'directStore', 'users', 'admin', 'files'],
                 where: {id: productId}
             });
             // 1. 거래기록 1줄 생성 해야함
@@ -181,7 +181,7 @@ export class PaymentService {
 
     async findCompletePayments(currentUser) {
         const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: {id: currentUser.id}
         });
         return await this.paymentRepository.find({
@@ -192,7 +192,7 @@ export class PaymentService {
 
     async findCanceledPayments(currentUser) {  
         const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
+            relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             where: {id: currentUser.id}
         });
         return await this.paymentRepository.find({

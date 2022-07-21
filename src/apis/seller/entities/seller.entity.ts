@@ -67,6 +67,6 @@ export class Seller {
 
     // 이미지 url
     @OneToMany(() => File, (file) => file.seller)
-    @Field(() => [File], {nullable: true})
+    @Field((type) => [File], {nullable: true})
     files: File[];
 }

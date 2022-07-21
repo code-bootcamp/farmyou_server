@@ -28,4 +28,11 @@ export class FileResolver {
   fetchFiles() {
       return this.fileService.findAll();
   }
+
+  @Query(() => [File])
+  fetchFilesByProductUglyId(
+      @Args('productUglyId') productUglyId: string
+  ) {
+      return this.fileService.findAllProductUgly({productUglyId});
+  }
 }

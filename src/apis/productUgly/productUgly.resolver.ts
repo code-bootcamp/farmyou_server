@@ -30,10 +30,8 @@ export class ProductUglyResolver {
     constructor(private readonly productUglyService: ProductUglyService) {}
 
     @Query(() => [ProductUgly])
-    fetchUglyProducts(
-        @Args('productId') productId: string
-    ) {
-        return this.productUglyService.findAll({productId});
+    fetchUglyProducts(@Args('productId') productId: string) {
+        return this.productUglyService.findAll({ productId });
     }
 
     @Query(() => ProductUgly)
@@ -61,7 +59,8 @@ export class ProductUglyResolver {
         @Args('origin') origin: string,
         @Args('sellerId') sellerId: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductUglyInput,
+        @Args({ name: 'createFileInput', nullable: true })
+        createFileInput: CreateProductUglyInput,
         // @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.create({
@@ -72,7 +71,7 @@ export class ProductUglyResolver {
             origin,
             sellerId,
             // imageUrl,
-            createFileInput
+            createFileInput,
         });
     }
 
@@ -86,19 +85,32 @@ export class ProductUglyResolver {
 
     @Query(() => [ProductUgly])
     fetchUglyProductsSorted(
-        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
-        @Args('page') page: number,
+        @Args({
+            name: 'sortBy',
+            nullable: true,
+            defaultValue: SORT_CONDITION_ENUM.MOST_RECENT,
+        })
+        sortBy: SORT_CONDITION_ENUM,
+        @Args({ name: 'page', nullable: true }) page: number,
     ) {
         return this.productUglyService.findSorted({ sortBy }, page);
     }
 
     @Query(() => [ProductUgly])
     fetchUglyProductsSortedByTitle(
-        @Args({name: 'title', nullable: true}) title: string,
-        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
-        @Args('page') page: number
+        @Args({ name: 'title', nullable: true }) title: string,
+        @Args({
+            name: 'sortBy',
+            nullable: true,
+            defaultValue: SORT_CONDITION_ENUM.MOST_RECENT,
+        })
+        sortBy: SORT_CONDITION_ENUM,
+        @Args({ name: 'page', nullable: true }) page: number,
     ) {
-        return this.productUglyService.findSortedByTitle({title, sortBy}, page);
+        return this.productUglyService.findSortedByTitle(
+            { title, sortBy },
+            page,
+        );
     }
     //
     //
@@ -135,8 +147,9 @@ export class ProductUglyResolver {
         @Args({ name: 'quantity', nullable: true }) quantity: number,
         @Args({ name: 'origin', nullable: true }) origin: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductUglyInput,
-        @CurrentUser() currentUser: ICurrentUser
+        @Args({ name: 'createFileInput', nullable: true })
+        createFileInput: CreateProductUglyInput,
+        @CurrentUser() currentUser: ICurrentUser,
     ) {
         return this.productUglyService.update({
             productId,
@@ -147,7 +160,7 @@ export class ProductUglyResolver {
             origin,
             // imageUrl,
             createFileInput,
-            currentUser
+            currentUser,
         });
     }
 }
