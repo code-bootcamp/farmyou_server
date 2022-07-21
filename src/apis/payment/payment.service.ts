@@ -190,7 +190,7 @@ export class PaymentService {
         });
     }
 
-    async findCanceledPayments(currentUser) {
+    async findCanceledPayments(currentUser) {  
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
             where: {id: currentUser.id}
