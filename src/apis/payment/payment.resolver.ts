@@ -111,7 +111,6 @@ export class PaymentResolver {
             impUid,
             currentUser,
         });
-        
 
         // 3. 실제로 iamport 에 취소 요청하기
         // iamport.service에서 cancel 실행
@@ -122,12 +121,12 @@ export class PaymentResolver {
         });
 
         // 4. payment 테이블에 결제 취소등록하기
-        // // payment.service에서 cancel 실행
-        // return await this.paymentService.cancel({
-        //     impUid,
-        //     amount: canceledAmount,
-        //     currentUser,
-        // });
+        // payment.service에서 cancel 실행
+        return await this.paymentService.cancel({
+            impUid,
+            amount: canceledAmount,
+            currentUser,
+        });
     }
 
     // @UseGuards(GqlAuthAccessGuard)
