@@ -1,4 +1,5 @@
 import { Int, ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import { ItemBought } from 'src/apis/itemBought/entities/itemBought.entity';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';
@@ -8,6 +9,7 @@ import {
     PrimaryGeneratedColumn,
     ManyToOne,
     CreateDateColumn,
+    OneToMany,
 } from 'typeorm';
 
 export enum PAYMENT_STATUS_ENUM {
@@ -64,4 +66,8 @@ export class Payment {
     @Column({nullable: true})
     @Field(() => String, {nullable: true})
     invoice: string;
+
+    @OneToMany(() => ItemBought, (itemBought) => itemBought.payment)
+    @Field((type) => [ItemBought], {nullable: true})
+    itemsBought: ItemBought[];
 }

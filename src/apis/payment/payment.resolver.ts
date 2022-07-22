@@ -31,12 +31,6 @@ registerEnumType(PRODUCT_TYPE_ENUM, {
     name: 'PRODUCT_TYPE_ENUM',
 });
 
-const item = {
-    type: null,
-    productId: null,
-    
-}
-
 @Resolver()
 export class PaymentResolver {
     constructor(
