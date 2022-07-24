@@ -6,12 +6,9 @@ import {
     registerEnumType,
     Resolver,
 } from '@nestjs/graphql';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
-import { ProductDirectService } from '../productDirect/productDirect.service';
 import { CreateProductUglyInput } from './dto/createProductUgly.input';
-// import { CreateProductUglyInput } from './dto/createProductUglyOld.input';
 import { ProductUgly } from './entities/productUgly.entity';
 import { ProductUglyService } from './productUgly.service';
 
@@ -58,10 +55,8 @@ export class ProductUglyResolver {
         @Args('quantity') quantity: number,
         @Args('origin') origin: string,
         @Args('sellerId') sellerId: string,
-        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @Args({ name: 'createFileInput', nullable: true })
         createFileInput: CreateProductUglyInput,
-        // @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productUglyService.create({
             title,
@@ -70,7 +65,6 @@ export class ProductUglyResolver {
             quantity,
             origin,
             sellerId,
-            // imageUrl,
             createFileInput,
         });
     }
@@ -112,18 +106,6 @@ export class ProductUglyResolver {
             page,
         );
     }
-    //
-    //
-    //-=-=-=-=-=-=-==-=-=-=-=-=-===-=-=-=-=-=-=-=--=-=-=-=-=-=
-    // 7월 15일 승원 못난이상품 생성 이미지까지 담아보기 테스트
-    // @Mutation(() => ProductUgly)
-    // createProductUgly(
-    //   @Args('createProductUglyInput') createProductUglyInput: CreateProductUglyInput,
-    //   @Args('sellerId') sellerId: string,
-    //   // @CurrentUser() currentUser: ICurrentUser
-    // ) {
-    //   return this.productUglyService.create({ createProductUglyInput, sellerId });
-    // }
 
     @UseGuards(GqlAuthAccessGuard)
     @Query(() => [ProductUgly],
@@ -148,7 +130,6 @@ export class ProductUglyResolver {
         @Args({ name: 'price', nullable: true }) price: number,
         @Args({ name: 'quantity', nullable: true }) quantity: number,
         @Args({ name: 'origin', nullable: true }) origin: string,
-        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @Args({ name: 'createFileInput', nullable: true })
         createFileInput: CreateProductUglyInput,
         @CurrentUser() currentUser: ICurrentUser,
@@ -160,7 +141,6 @@ export class ProductUglyResolver {
             price,
             quantity,
             origin,
-            // imageUrl,
             createFileInput,
             currentUser,
         });

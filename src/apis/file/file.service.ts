@@ -18,18 +18,7 @@ export class FileService {
     constructor(
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
-    ) // @InjectRepository(User)
-    // private readonly userRepository: Repository<User>,
-
-    // @InjectRepository(Seller)
-    // private readonly sellerRepository: Repository<Seller>,
-
-    // @InjectRepository(ProductDirect)
-    // private readonly productDirect: Repository<ProductDirect>,
-
-    // @InjectRepository(ProductUgly)
-    // private readonly productUgly: Repository<ProductUgly>,
-    {}
+    ) {}
 
     async upload({ files }: IFile) {
         const storage = new Storage({
@@ -50,8 +39,6 @@ export class FileService {
                 });
             }),
         );
-
-        // console.log(resultUrl);
 
         await this.fileRepository.save({
             url: `${resultUrl}`,

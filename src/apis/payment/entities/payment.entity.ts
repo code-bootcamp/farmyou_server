@@ -1,6 +1,8 @@
 import { Int, ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import { Admin } from 'src/apis/admin/entities/admin.entity';
 import { ProductDirect } from 'src/apis/productDirect/entities/productDirect.entity';
 import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
+import { Seller } from 'src/apis/seller/entities/seller.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
     Column,
@@ -8,6 +10,7 @@ import {
     PrimaryGeneratedColumn,
     ManyToOne,
     CreateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 
 export enum PAYMENT_STATUS_ENUM {
@@ -36,6 +39,11 @@ export class Payment {
     @Field(() => Int)
     amount: number;
 
+    // 주문수량
+    @Column()
+    @Field(() => Int)
+    quantity: number;
+
     // 결제완료
     @Column({ type: 'enum', enum: PAYMENT_STATUS_ENUM })
     @Field(() => PAYMENT_STATUS_ENUM)
@@ -45,10 +53,30 @@ export class Payment {
     @Field(() => Date)
     createdAt: Date;
 
+    // 삭제여부
+    @Column({default: false})
+    @Field(() => Boolean)
+    isDeleted: boolean;
+
+    // 삭제일자
+    @DeleteDateColumn()
+    @Field(() => Date, {nullable: true})
+    deletedAt: Date;
+
     // 회원
     @ManyToOne(() => User)
     @Field(() => User)
     user: User;
+
+    // (못난이상품) 판매자
+    @ManyToOne(() => Seller, {nullable: true})
+    @Field(() => Seller, {nullable: true})
+    seller: Seller;
+
+    // (직매장상품) 판매자
+    @ManyToOne(() => Admin, {nullable: true})
+    @Field(() => Admin, {nullable: true})
+    admin: Admin;
 
     // 직매장상품
     @ManyToOne(() => ProductDirect, {nullable: true})

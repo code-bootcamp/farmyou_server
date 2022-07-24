@@ -31,11 +31,9 @@ export class SellerResolver {
         @Args('email') email: string,
         @Args('password') password: string,
         @Args('phone') phone: string,
-        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateSellerInput,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
-        // console.log(hashedPassword);
         return this.sellerService.create({
             name,
             email,
@@ -53,22 +51,18 @@ export class SellerResolver {
         @Args({ name: 'name', nullable: true }) name: string,
         @Args({ name: 'password', nullable: true }) password: string,
         @Args({ name: 'phone', nullable: true }) phone: string,
-        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateSellerInput,
         @CurrentUser() currentUser: ICurrentUser,
     ) {
-        // const hashedPassword = await bcrypt.hash(password, 10);
         return await this.sellerService.update({
             name,
             password,
             phone,
-            // imageUrl,
             createFileInput,
             currentUser,
         });
     }
 
-    // 쓸모 없을 듯
     @Query(() => [Seller])
     fetchSellers() {
         return this.sellerService.findAll();

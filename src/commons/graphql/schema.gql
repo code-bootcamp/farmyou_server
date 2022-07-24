@@ -142,9 +142,14 @@ type Payment {
   id: String!
   impUid: String!
   amount: Int!
+  quantity: Int!
   paymentComplete: PAYMENT_STATUS_ENUM!
   createdAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
   user: User!
+  seller: Seller
+  admin: Admin
   productDirect: ProductDirect
   productUgly: ProductUgly
   invoice: String
@@ -173,8 +178,12 @@ type Query {
   fetchDirectStores: [DirectStore!]!
   fetchInquiry(id: String!): Inquiry!
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
-  fetchCompletePayments: [Payment!]!
-  fetchCanceledPayments: [Payment!]!
+  fetchCompletedPaymentsOfUser(userId: String!): [Payment!]!
+  fetchCanceledPaymentsOfUser(userId: String!): [Payment!]!
+  fetchCompletedPaymentsForSeller(sellerId: String!): [Payment!]!
+  fetchCanceledPaymentsForSeller(sellerId: String!): [Payment!]!
+  fetchCompletedPaymentsForAdmin(adminId: String!): [Payment!]!
+  fetchCanceledPaymentsForAdmin(adminId: String!): [Payment!]!
   fetchDirectProducts(productId: String!): [ProductDirect!]!
   fetchProductDirect(productId: String!): ProductDirect!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
@@ -221,7 +230,7 @@ type Mutation {
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
   createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!): Payment!
-  cancelPayment(impUid: String!): Payment!
+  cancelPayment(paymentId: String!): Payment!
   updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
   sendToken(phone: String!): String!
   checkToken(phone: String!, token: String!): String!

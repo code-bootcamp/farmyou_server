@@ -95,7 +95,7 @@ export class UserService {
             sellers: [],
             directProducts: [],
             uglyProducts: [],
-            files: []
+            files: [],
         });
 
         await this.addressUserService.create(
@@ -154,10 +154,10 @@ export class UserService {
         return await this.userRepository.save(loggedUser);
     }
 
-    async updatePassword({email, newPassword}) {
+    async updatePassword({ email, newPassword }) {
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
-            where: {email}
+            where: { email },
         });
 
         theUser.password = await bcrypt.hash(newPassword, 10.2);
@@ -177,31 +177,12 @@ export class UserService {
         return result.affected ? true : false;
     }
 
-    // async place(productType, productId, quantity) {
-    //     let theProduct;
-
-    //     if (productType === 'UGLY_PRODUCT') {
-    //         theProduct = await this.productUglyRepository.findOne({
-    //             relations: ['sellers', 'directProducts', 'uglyProducts'],
-    //             where: {id: productId}
-    //         });
-    //     } else {
-    //         theProduct = await this.productDirectRepository.findOne({
-    //             relations: ['sellers', 'directProducts', 'uglyProducts'],
-    //             where: {id: productId}
-    //         });
-    //     }
-
-    //     productInCart.product = theProduct;
-    //     productInCart.quantity = quantity;
-
-    //     return productInCart;
-    // }
-
     async buy({ productType, productId, quantity, currentUser }) {
+        console.log('우선 여기 도착');
         // console.log("CURRENT USER IS ", currentUser);
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
+            // where: { id: currentUser.id },
             where: { id: currentUser.id },
         });
 
@@ -210,7 +191,13 @@ export class UserService {
 
         if (productType === PRODUCT_TYPE_ENUM.DIRECT_PRODUCT) {
             theProduct = await this.productDirectRepository.findOne({
-                relations: ['category', 'directStore', 'users', 'admin', 'files'],
+                relations: [
+                    'category',
+                    'directStore',
+                    'users',
+                    'admin',
+                    'files',
+                ],
                 where: { id: productId },
             });
 
@@ -239,9 +226,6 @@ export class UserService {
                 where: { id: productId },
             });
 
-            console.log(theProduct);
-            console.log(theProduct.quantity);
-
             theQuantity = theProduct.quantity;
 
             if (quantity > theQuantity) {
@@ -262,10 +246,10 @@ export class UserService {
         return theUser;
     }
 
-    async findByEmail({email}) {
+    async findByEmail({ email }) {
         return await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
-            where: {email}
-        })
+            where: { email },
+        });
     }
 }

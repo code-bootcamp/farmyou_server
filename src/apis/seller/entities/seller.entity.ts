@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field,  ObjectType } from '@nestjs/graphql';
 import { File } from 'src/apis/file/entities/file.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
@@ -6,7 +6,6 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     CreateDateColumn,
-    ManyToOne,
     OneToMany,
     JoinTable,
     ManyToMany,
