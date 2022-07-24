@@ -58,6 +58,10 @@ export class PaymentService {
         let theProduct: ProductDirect | ProductUgly;
         let payment: Payment;
 
+        if (!productType && !productId){
+
+        }
+
         if (productType === PRODUCT_TYPE_ENUM.UGLY_PRODUCT) {
             theProduct = await this.productUglyRepository.findOne({
                 relations: ['users', 'seller'],

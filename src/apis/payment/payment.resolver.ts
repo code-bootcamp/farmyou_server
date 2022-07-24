@@ -153,18 +153,28 @@ export class PaymentResolver {
             // currentUser,
             userId
         });
-        
 
         // 3. 실제로 iamport 에 취소 요청하기
         // const impUid = thePayment.impUid;
         // const token = await this.iamportService.getToken();
         // const requestedAmount = thePayment.amount;
 
+
         // await this.iamportService.cancel({
         //     impUid,
         //     token,
         //     requestedAmount
         // });
+
+        // 4. payment 테이블에 결제 취소등록하기
+        // payment.service에서 cancel 실행
+        return await this.paymentService.cancel({
+            impUid,
+            amount: canceledAmount,
+            currentUser,
+        });
+    }
+
 
         // 4. payment 테이블에 결제 취소등록하기
         // payment.service에서 cancel 실행
