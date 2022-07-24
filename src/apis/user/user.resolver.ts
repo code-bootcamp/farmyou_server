@@ -81,7 +81,6 @@ export class UserResolver {
             name,
             password,
             phone,
-            // imageUrl,
             createFileInput,
             currentUser,
         });
@@ -91,8 +90,6 @@ export class UserResolver {
     fetchUser(
         @Args('id') id: string, //
     ) {
-        // const id = currentUser.id;
-        // console.log(id);
         return this.userService.findOneById({ id });
     }
 
@@ -247,31 +244,20 @@ export class UserResolver {
         if (result) return '로그인한 계정이 삭제되었습니다.';
     }
 
-    // @Mutation(() => ProductDirect || ProductUgly)
-    // @Mutation(() => String)
-    // async placeProductInCart(
-    //     @Args('productType') productType: PRODUCT_TYPE_ENUM,
-    //     @Args('productId') productId: string,
-    //     @Args('quantity') quantity: number,
-    // ) {
-    //     return this.userService.place(productType, productId, quantity);
-    // }
-
-    // @UseGuards(GqlAuthAccessGuard)
+    @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => User)
     buyProduct(
         @Args('productType') productType: PRODUCT_TYPE_ENUM,
         @Args('productId') productId: string,
         @Args('quantity') quantity: number,
-        // @CurrentUser() currentUser: ICurrentUser,
-        @Args('userId') userId: string
+        @CurrentUser() currentUser: ICurrentUser,
     ) {
         return this.userService.buy({
             productType,
             productId,
             quantity,
             // currentUser,
-            userId
+            currentUser
         });
     }
 

@@ -42,9 +42,6 @@ export class ProductDirectService {
     ) {}
 
     async findAll({ productId }) {
-        // return await this.productDirectRepository.find({
-        //     relations: ['category', 'directStore', 'users', 'admin']
-        // });
         return await this.productDirectRepository
             .createQueryBuilder('productDirect')
             .orderBy('productDirect.createdAt', 'DESC')
@@ -60,14 +57,6 @@ export class ProductDirectService {
             relations: ['category', 'admin', 'users', 'directStore', 'files'],
         });
     }
-
-    // ElasticSearch??
-    // contains/partial
-    // async findOne({ title }) {
-    //     return await this.productDirectRepository.findOne({
-    //         where: { title },
-    //     });
-    // }
 
     async findById({ directStoreId }) {
         return await this.productDirectRepository.find({
@@ -179,15 +168,6 @@ export class ProductDirectService {
         }
     }
 
-    // TODO: not working now
-    // async findByName({directStoreName}) {
-    //     const store = await this.directStoreRepository.find({relations: ['admin'], where: {name: directStoreName}});
-    //     console.log(store);
-    //     return await this.productDirectRepository.find({where: {name: directStoreName}});
-    // }
-
-    // 7월 14일 승원 타이틀 조회 테스트
-    // 상품이름으로 조회
     async findByTitle(title: string): Promise<ProductDirect[]> {
         const searchData = await this.productDirectRepository.find({
             relations: ['category', 'directStore', 'users', 'admin', 'files'],
@@ -238,24 +218,6 @@ export class ProductDirectService {
                 files: []
             });
 
-            // if (files) {
-            //     const imageId = await this.fileResolver.uploadFile(files);
-            //     const theImage = await this.fileRepository.findOne({
-            //         relations: [
-            //             'productUgly',
-            //             'productDirect',
-            //             'user',
-            //             'seller',
-            //             'admin',
-            //         ],
-            //         where: { id: imageId },
-            //     });
-            //     theImage.type = IMAGE_TYPE_ENUM.DIRECT_PRODUCT;
-            //     theImage.productDirect = result;
-
-            //     await this.fileRepository.save(theImage);
-            // }
-
             if (createFileInput) {
                 const theImage = await this.fileRepository.create({
                     url: createFileInput.imageUrl,
@@ -268,16 +230,6 @@ export class ProductDirectService {
                 result.files.push(theImage);
             }
 
-            // if (imageUrl) {
-            //     const theImage = await this.fileRepository.create({
-            //         url: imageUrl,
-            //         productDirect: result,
-            //         type: IMAGE_TYPE_ENUM.DIRECT_PRODUCT,
-            //     });
-
-            //     await this.fileRepository.save(theImage);
-            // }
-
             return await this.productDirectRepository.save(result);
         } else {
             throw new UnprocessableEntityException(
@@ -286,7 +238,6 @@ export class ProductDirectService {
         }
     }
 
-    // 이건 왜 여기있지???
     async checkSoldout({ productId }) {
         const product = await this.productDirectRepository.findOne({
             relations: ['categoryId', 'directStore', 'users', 'admin', 'files'],
@@ -313,10 +264,6 @@ export class ProductDirectService {
             where: { id: currentUser.id },
         });
 
-        // return this.productUglyRepository.find({
-        //     relations: ['users', 'seller'],
-        //     where: { users: { id: theUser.id } },
-        // });
         return theUser.directProducts;
     }
 

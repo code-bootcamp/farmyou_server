@@ -69,13 +69,4 @@ export class ProductUgly {
     @OneToMany(() => File, (file) => file.productUgly)
     @Field((type) => [File], {nullable: true})
     files: File[];
-    // @Column()
-    // @Field(() => [String])
-    // images: string[];
-    // @Column()
-    // @Field(() => String)
-    // images: string;
-    // @Column()
-    // @Field(() => [File])
-    // images: File[];
 }
