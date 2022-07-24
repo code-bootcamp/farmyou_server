@@ -28,15 +28,6 @@ export class ProductDirectResolver {
         return this.productDirectService.findAll({productId});
     }
 
-    // ElasticSearch??
-    // contains/partial
-    // @Query(() => ProductDirect)
-    // fetchDirectProduct(
-    //   @Args('title') title: string, //
-    // ) {
-    //   return this.productDirectService.findOne({ title });
-    // }
-
     @Query(() => ProductDirect)
     fetchProductDirect(
         @Args('productId') productId: string, //
@@ -81,21 +72,6 @@ export class ProductDirectResolver {
         return this.productDirectService.findByTitle(title);
     }
 
-    // TODO: not working now
-    // @Query(() => [ProductDirect])
-    // fetchDirectProductsByDirectStoreName(
-    //     @Args('directStoreName') directStoreName: string,
-    // ) {
-    //     return this.productDirectService.findByName({ directStoreName });
-    // }
-
-    // @Query(() => Boolean)
-    // checkSoldout(
-    //     @Args('productId') productId: string
-    // ) {
-    //     return this.productDirectService.checkSoldout({productId});
-    // }
-
     @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => ProductDirect)
     createProductDirect(
@@ -116,8 +92,6 @@ export class ProductDirectResolver {
             quantity,
             categoryId,
             directStoreId,
-            // adminId,
-            // imageUrl,
             createFileInput,
             currentUser
         });
@@ -147,9 +121,7 @@ export class ProductDirectResolver {
         @Args({ name: 'category', nullable: true }) category: string,
         @Args({ name: 'isDeleted', nullable: true }) isDeleted: boolean,
         @Args({ name: 'isSoldout', nullable: true }) isSoldout: boolean,
-        // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
         @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductDirectInput,
-        // @Args('createFileInput') createFileInput: CreateFileInput,
         @CurrentUser() currentUser: ICurrentUser
     ) {
         return this.productDirectService.update({
@@ -161,7 +133,6 @@ export class ProductDirectResolver {
             category,
             isDeleted,
             isSoldout,
-            // imageUrl,
             createFileInput,
             currentUser
         });

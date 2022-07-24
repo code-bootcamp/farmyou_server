@@ -8,9 +8,7 @@ import { FileResolver } from '../file/file.resolver';
 import { FileService } from '../file/file.service';
 import { IamportService } from '../iamport/iamport.service';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
-import { ProductDirectService } from '../productDirect/productDirect.service';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
-import { ProductUglyService } from '../productUgly/productUgly.service';
 import { Seller } from '../seller/entities/seller.entity';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
@@ -37,8 +35,6 @@ import { PaymentService } from './payment.service';
     AddressUserService,
     FileResolver,
     FileService
-    // ProductUglyService,
-    // ProductDirectService
   ],
 })
 export class PaymentMoudle {}

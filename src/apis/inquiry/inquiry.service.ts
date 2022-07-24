@@ -43,20 +43,6 @@ export class InquiryService {
             throw new NotFoundException('해당 제품에 대한 문의글이 없습니다');
         }
 
-        // if (!direct) {
-        //     return await this.inquiryRepository.find({
-        //         relations: ['productUgly', 'user'],
-        //         where: {productUgly: productId}
-        //     });
-        // }
-
-        // if (!ugly) {
-        //     return await this.inquiryRepository.find({
-        //         relations: ['productDirect', 'user'],
-        //         where: {productDirect: productId}
-        //     });
-        // }
-
         if (!direct) {
             return await this.inquiryRepository
                 .createQueryBuilder('inquiry')
@@ -87,10 +73,6 @@ export class InquiryService {
             where: { id },
         });
     }
-
-    // async findAll() {
-
-    // }
 
     async create(title, question, productDirectId, productUglyId, currentUser) {
         const writer = await this.userRepository.findOne({
