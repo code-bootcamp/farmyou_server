@@ -149,9 +149,14 @@ type Payment {
   id: String!
   impUid: String!
   amount: Int!
+  quantity: Int!
   paymentComplete: PAYMENT_STATUS_ENUM!
   createdAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
   user: User!
+  seller: Seller
+  admin: Admin
   productDirect: ProductDirect
   productUgly: ProductUgly
   invoice: String
@@ -181,8 +186,12 @@ type Query {
   fetchDirectStores: [DirectStore!]!
   fetchInquiry(id: String!): Inquiry!
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
-  fetchCompletePayments: [Payment!]!
-  fetchCanceledPayments: [Payment!]!
+  fetchCompletedPaymentsOfUser(userId: String!): [Payment!]!
+  fetchCanceledPaymentsOfUser(userId: String!): [Payment!]!
+  fetchCompletedPaymentsForSeller(sellerId: String!): [Payment!]!
+  fetchCanceledPaymentsForSeller(sellerId: String!): [Payment!]!
+  fetchCompletedPaymentsForAdmin(adminId: String!): [Payment!]!
+  fetchCanceledPaymentsForAdmin(adminId: String!): [Payment!]!
   fetchDirectProducts(productId: String!): [ProductDirect!]!
   fetchProductDirect(productId: String!): ProductDirect!
   fetchDirectProductsByDirectStoreId(directStoreId: String!): [ProductDirect!]!
@@ -228,8 +237,8 @@ type Mutation {
   postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
-  createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!): Payment!
-  cancelPayment(impUid: String!): Payment!
+  createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!, userId: String!): Payment!
+  cancelPayment(paymentId: String!, userId: String!): Payment!
   updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
   sendToken(phone: String!): String!
   checkToken(phone: String!, token: String!): String!
@@ -246,7 +255,7 @@ type Mutation {
   likeYouNoMore(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
   deleteLoginUser: User!
-  buyProduct(productType: String!, productId: String!, quantity: Float!): User!
+  buyProduct(productType: String!, productId: String!, quantity: Float!, userId: String!): User!
   updateUserPassword(email: String!, newPassword: String!): User!
 }
 
