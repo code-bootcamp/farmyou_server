@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import { Payment, PAYMENT_STATUS_ENUM } from './entities/payment.entity';
-import { IamportService } from '../iamport/iamport.service';
 import { PRODUCT_TYPE_ENUM } from './payment.resolver';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
@@ -43,7 +42,6 @@ export class PaymentService {
         impUid,
         amount,
         currentUser,
-        // userId,
         productType,
         productId,
         quantity,
@@ -83,6 +81,7 @@ export class PaymentService {
                 relations: ['category', 'directStore', 'users', 'admin'],
                 where: { id: productId },
             });
+
             // 1. 거래기록 1줄 생성 해야함
             payment = this.paymentRepository.create({
                 impUid: impUid,
@@ -99,11 +98,7 @@ export class PaymentService {
             );
         }
 
-        // 2. 유저의 돈 찾아오기
-        // const user = await this.userRepository.findOne({ id: currentUser.id });
-
-        console.log('ALSO GOT HERE');
-        // 4. 프론트엔드에 최종결과 돌려주기
+        // 2. 프론트엔드에 최종결과 돌려주기
         return await this.paymentRepository.save(payment);
     }
 
@@ -123,7 +118,6 @@ export class PaymentService {
     async checkUserPayment({ paymentId, currentUser }) {
         const checkUser = await this.paymentRepository.findOne({
             id: paymentId,
-            // user: { id: userId },
             user: { id: currentUser.id },
             paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
         });
@@ -154,8 +148,6 @@ export class PaymentService {
             );
         }
 
-        // const theAmount = payment.amount;
-        // payment.amount -= amount;
         let productType;
         let theProduct;
 

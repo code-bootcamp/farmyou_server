@@ -65,19 +65,6 @@ export class SellerService {
             thisSeller.files.push(theImage);
         }
 
-        // if (files) {
-        //     const imageId = await this.fileResolver.uploadFile(files);
-        //     const theImage = await this.fileRepository.findOne({
-        //         relations: ['productUgly', 'productDirect', 'user', 'seller', 'admin'],
-        //         where: {id: imageId}
-        //     });
-        //     theImage.type = IMAGE_TYPE_ENUM.SELLER;
-        //     theImage.seller = thisSeller;
-
-        //     await this.fileRepository.save(theImage);
-        // }
-
-        // return await this.sellerRepository.save({ email, password, name, phone });
         return await this.sellerRepository.save(thisSeller);
     }
 
@@ -110,16 +97,6 @@ export class SellerService {
 
             loggedSeller.files.push(theImage);
         }
-
-        // 파일 업로드
-        // const imageUrl = await this.fileService.upload({files});
-
-        // const theImage = await this.fileRepository.findOne({
-        //     relations: ['productUgly', 'productDirect', 'user', 'seller', 'admin'],
-        //     where: {url: imageUrl}
-        // })
-
-        // await this.fileRepository.save(theImage);
 
         return await this.sellerRepository.save(loggedSeller);
     }

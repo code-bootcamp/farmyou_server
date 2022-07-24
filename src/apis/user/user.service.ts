@@ -177,34 +177,13 @@ export class UserService {
         return result.affected ? true : false;
     }
 
-    // async place(productType, productId, quantity) {
-    //     let theProduct;
-
-    //     if (productType === 'UGLY_PRODUCT') {
-    //         theProduct = await this.productUglyRepository.findOne({
-    //             relations: ['sellers', 'directProducts', 'uglyProducts'],
-    //             where: {id: productId}
-    //         });
-    //     } else {
-    //         theProduct = await this.productDirectRepository.findOne({
-    //             relations: ['sellers', 'directProducts', 'uglyProducts'],
-    //             where: {id: productId}
-    //         });
-    //     }
-
-    //     productInCart.product = theProduct;
-    //     productInCart.quantity = quantity;
-
-    //     return productInCart;
-    // }
-
-    async buy({ productType, productId, quantity, userId }) {
+    async buy({ productType, productId, quantity, currentUser }) {
         console.log('우선 여기 도착');
         // console.log("CURRENT USER IS ", currentUser);
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts', 'files'],
             // where: { id: currentUser.id },
-            where: { id: userId },
+            where: { id: currentUser.id },
         });
 
         let theProduct;
@@ -246,9 +225,6 @@ export class UserService {
                 relations: ['users', 'seller', 'files'],
                 where: { id: productId },
             });
-
-            console.log(theProduct);
-            console.log(theProduct.quantity);
 
             theQuantity = theProduct.quantity;
 

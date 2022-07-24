@@ -92,8 +92,4 @@ export class Payment {
     @Column({nullable: true})
     @Field(() => String, {nullable: true})
     invoice: string;
-
-    // @OneToMany(() => ItemBought, (itemBought) => itemBought.payment)
-    // @Field((type) => [ItemBought], {nullable: true})
-    // itemsBought: ItemBought[];
 }

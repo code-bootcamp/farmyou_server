@@ -34,9 +34,6 @@ export class ProductUglyService {
     ) {}
 
     async findAll({ productId }) {
-        // return await this.productUglyRepository.find({
-        //     relations: ['seller', 'users'],
-        // });
         return await this.productUglyRepository
             .createQueryBuilder('productUgly')
             .orderBy('productUgly.createdAt', 'DESC')
@@ -79,11 +76,6 @@ export class ProductUglyService {
                 files: [],
             });
 
-            // console.log("type of result is", typeof result);
-            // const theProduct = await this.productUglyRepository.findOne({
-            //     where: {title: result.title, price: result.price}
-            // })
-
             if (createFileInput) {
                 const theImage = await this.fileRepository.create({
                     url: String(createFileInput.imageUrl),
@@ -94,7 +86,6 @@ export class ProductUglyService {
                 await this.fileRepository.save(theImage);
 
                 result.files.push(theImage);
-                // await this.productUglyRepository.save(result);
             }
 
             return await this.productUglyRepository.save(result);
@@ -112,7 +103,6 @@ export class ProductUglyService {
         price,
         quantity,
         origin,
-        // imageUrl,
         createFileInput,
         currentUser,
     }) {
@@ -231,10 +221,6 @@ export class ProductUglyService {
             where: { id: currentUser.id },
         });
 
-        // return this.productUglyRepository.find({
-        //     relations: ['users', 'seller'],
-        //     where: { users: { id: theUser.id } },
-        // });
         return theUser.uglyProducts;
     }
 

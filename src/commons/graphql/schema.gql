@@ -247,7 +247,7 @@ type Mutation {
   likeYouNoMore(userId: String!, sellerId: String!): String!
   deleteUser(email: String!): Boolean!
   deleteLoginUser: User!
-  buyProduct(productType: String!, productId: String!, quantity: Float!, userId: String!): User!
+  buyProduct(productType: String!, productId: String!, quantity: Float!): User!
   updateUserPassword(email: String!, newPassword: String!): User!
 }
 
