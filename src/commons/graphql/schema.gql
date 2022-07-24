@@ -138,6 +138,13 @@ enum INQUIRY_STATUS_ENUM {
   ANSWERED
 }
 
+type ItemBought {
+  id: String!
+  payment: Payment!
+  productDirect: ProductDirect
+  productUgly: ProductUgly
+}
+
 type Payment {
   id: String!
   impUid: String!
@@ -148,6 +155,7 @@ type Payment {
   productDirect: ProductDirect
   productUgly: ProductUgly
   invoice: String
+  itemsBought: [ItemBought!]
 }
 
 enum PAYMENT_STATUS_ENUM {
