@@ -138,13 +138,6 @@ enum INQUIRY_STATUS_ENUM {
   ANSWERED
 }
 
-type ItemBought {
-  id: String!
-  payment: Payment!
-  productDirect: ProductDirect
-  productUgly: ProductUgly
-}
-
 type Payment {
   id: String!
   impUid: String!
@@ -160,7 +153,6 @@ type Payment {
   productDirect: ProductDirect
   productUgly: ProductUgly
   invoice: String
-  itemsBought: [ItemBought!]
 }
 
 enum PAYMENT_STATUS_ENUM {
@@ -237,8 +229,8 @@ type Mutation {
   postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
   deleteInquiry(inquiryId: String!): String!
-  createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!, userId: String!): Payment!
-  cancelPayment(paymentId: String!, userId: String!): Payment!
+  createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!): Payment!
+  cancelPayment(paymentId: String!): Payment!
   updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
   sendToken(phone: String!): String!
   checkToken(phone: String!, token: String!): String!
