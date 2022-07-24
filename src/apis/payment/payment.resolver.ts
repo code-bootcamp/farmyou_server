@@ -78,7 +78,7 @@ export class PaymentResolver {
     //     });
     // }
 
-    // @UseGuards(GqlAuthAccessGuard)
+    @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => Payment)
     async createPayment(
         @Args('impUid') impUid: string,
@@ -86,8 +86,8 @@ export class PaymentResolver {
         @Args('productType') productType: string,
         @Args('productId') productId: string,
         @Args('quantity') quantity: number,
-        // @CurrentUser() currentUser: ICurrentUser,
-        @Args('userId') userId: string
+        @CurrentUser() currentUser: ICurrentUser,
+        // @Args('userId') userId: string
     ) {
         console.log("시작점");
         // 검증로직
@@ -98,32 +98,32 @@ export class PaymentResolver {
         // 2. payment 테이블에는 impUid가 1번만 존재해야 함. (중복 결제 체크)
         // await this.paymentService.checkDuplicate({ impUid });
 
-        await this.userService.buy({
-            productType,
-            productId,
-            quantity,
-            // currentUser,
-            userId
-        });
+        // await this.userService.buy({
+        //     productType,
+        //     productId,
+        //     quantity,
+        //     currentUser,
+        //     // userId
+        // });
 
         return await this.paymentService.create({
             impUid,
             amount,
-            // currentUser,
-            userId,
+            currentUser,
+            // userId,
             productType,
             productId,
             quantity
         });
     }
 
-    // @UseGuards(GqlAuthAccessGuard)
+    @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => Payment)
     async cancelPayment(
         // @Args('impUid') impUid: string,
         @Args('paymentId') paymentId: string,
-        // @CurrentUser() currentUser: ICurrentUser,
-        @Args('userId') userId: string
+        @CurrentUser() currentUser: ICurrentUser,
+        // @Args('userId') userId: string
     ) {
         // const theUser = await this.userService.findOneById({
         //     id: currentUser.id
@@ -150,15 +150,15 @@ export class PaymentResolver {
         // 2. 본인의 결제건이 맞는지 체크
         await this.paymentService.checkUserPayment({
             paymentId,
-            // currentUser,
-            userId
+            currentUser,
+            // userId
         });
-        
 
         // 3. 실제로 iamport 에 취소 요청하기
         // const impUid = thePayment.impUid;
         // const token = await this.iamportService.getToken();
         // const requestedAmount = thePayment.amount;
+
 
         // await this.iamportService.cancel({
         //     impUid,
@@ -168,12 +168,22 @@ export class PaymentResolver {
 
         // 4. payment 테이블에 결제 취소등록하기
         // payment.service에서 cancel 실행
+    //     return await this.paymentService.cancel({
+    //         impUid,
+    //         amount: canceledAmount,
+    //         currentUser,
+    //     });
+    // }
+
+
+        // 4. payment 테이블에 결제 취소등록하기
+        // payment.service에서 cancel 실행
         return await this.paymentService.cancel({
             // impUid,
             paymentId,
             // amount: canceledAmount,
-            // currentUser,
-            userId
+            currentUser,
+            // userId
         });
     }
 

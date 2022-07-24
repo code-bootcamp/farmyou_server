@@ -42,8 +42,8 @@ export class PaymentService {
     async create({
         impUid,
         amount,
-        // currentUser,
-        userId,
+        currentUser,
+        // userId,
         productType,
         productId,
         quantity,
@@ -51,12 +51,16 @@ export class PaymentService {
     }) {
         const thisUser = await this.userRepository.findOne({
             // relations: ['sellers', 'directProducts'],
-            // where: { id: currentUser.id },
-            where: { id: userId },
+            where: { id: currentUser.id },
+            // where: { id: userId },
         });
 
         let theProduct: ProductDirect | ProductUgly;
         let payment: Payment;
+
+        if (!productType && !productId){
+
+        }
 
         if (productType === PRODUCT_TYPE_ENUM.UGLY_PRODUCT) {
             theProduct = await this.productUglyRepository.findOne({
@@ -116,11 +120,11 @@ export class PaymentService {
     }
 
     // 다른사람의 결제건을 환불 받지 못하게 하기 위해 자신이 결제한 건인지 체크
-    async checkUserPayment({ paymentId, userId }) {
+    async checkUserPayment({ paymentId, currentUser }) {
         const checkUser = await this.paymentRepository.findOne({
             id: paymentId,
-            user: { id: userId },
-            // user: { id: currentUser.id },
+            // user: { id: userId },
+            user: { id: currentUser.id },
             paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
         });
         // 접속한 유저id 와 impUid 가 같지 않은 유저에게는 오류 던지기
@@ -132,7 +136,7 @@ export class PaymentService {
     // 페이먼트 테이블에서 결제 취소 데이터 등록하기
     // cancel 이란 데이터를 추가로 만드는것이고 payment의 상태를 바꾸는 것이 아님
     // 위의 create를 재활용 합니다.
-    async cancel({ paymentId, userId }) {
+    async cancel({ paymentId, currentUser }) {
         const payment = await this.paymentRepository.findOne({
             where: { id: paymentId },
             relations: [
@@ -172,7 +176,7 @@ export class PaymentService {
         const newCanceledPayment = await this.create({
             impUid: payment.impUid,
             amount: -payment.amount,
-            userId,
+            currentUser,
             productType,
             productId: theProduct.id,
             quantity: payment.quantity,
