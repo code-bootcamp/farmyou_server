@@ -257,19 +257,21 @@ export class UserResolver {
     //     return this.userService.place(productType, productId, quantity);
     // }
 
-    @UseGuards(GqlAuthAccessGuard)
+    // @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => User)
     buyProduct(
         @Args('productType') productType: PRODUCT_TYPE_ENUM,
         @Args('productId') productId: string,
         @Args('quantity') quantity: number,
-        @CurrentUser() currentUser: ICurrentUser,
+        // @CurrentUser() currentUser: ICurrentUser,
+        @Args('userId') userId: string
     ) {
         return this.userService.buy({
             productType,
             productId,
             quantity,
-            currentUser,
+            // currentUser,
+            userId
         });
     }
 
