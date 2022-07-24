@@ -11,6 +11,8 @@ import { IamportService } from '../iamport/iamport.service';
 import { PRODUCT_TYPE_ENUM } from './payment.resolver';
 import { ProductUgly } from '../productUgly/entities/productUgly.entity';
 import { ProductDirect } from '../productDirect/entities/productDirect.entity';
+import { Seller } from '../seller/entities/seller.entity';
+import { Admin } from '../admin/entities/admin.entity';
 
 @Injectable()
 export class PaymentService {
@@ -22,6 +24,12 @@ export class PaymentService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
 
+        @InjectRepository(Seller)
+        private readonly sellerRepository: Repository<Seller>,
+
+        @InjectRepository(Admin)
+        private readonly adminRepository: Repository<Admin>,
+
         @InjectRepository(ProductUgly)
         private readonly productUglyRepository: Repository<ProductUgly>,
 
@@ -31,77 +39,68 @@ export class PaymentService {
         private readonly connection: Connection,
     ) {}
 
-    // 중복체크
-    async checkDuplicate({ impUid }) {
-        const result = await this.paymentRepository.findOne({ impUid });
-        if (result) {
-            throw new ConflictException('이미 결제된 아이디 입니다.');
-        }
-    }
-
     async create({
         impUid,
         amount,
-        currentUser,
+        // currentUser,
+        userId,
         productType,
         productId,
+        quantity,
         paymentComplete = PAYMENT_STATUS_ENUM.PAYMENT,
     }) {
         const thisUser = await this.userRepository.findOne({
             // relations: ['sellers', 'directProducts'],
-            where: { id: currentUser.id },
+            // where: { id: currentUser.id },
+            where: { id: userId },
         });
 
-        let theProduct;
-        let payment;
+        let theProduct: ProductDirect | ProductUgly;
+        let payment: Payment;
 
         if (productType === PRODUCT_TYPE_ENUM.UGLY_PRODUCT) {
             theProduct = await this.productUglyRepository.findOne({
                 relations: ['users', 'seller'],
-                where: {id: productId}
+                where: { id: productId },
             });
+
             // 1. 거래기록 1줄 생성 해야함
             payment = this.paymentRepository.create({
                 impUid: impUid,
                 amount: amount,
                 user: thisUser,
+                seller: theProduct.seller,
                 productUgly: theProduct,
                 paymentComplete,
+                quantity,
             });
         } else if (productType === PRODUCT_TYPE_ENUM.DIRECT_PRODUCT) {
             theProduct = await this.productDirectRepository.findOne({
                 relations: ['category', 'directStore', 'users', 'admin'],
-                where: {id: productId}
+                where: { id: productId },
             });
             // 1. 거래기록 1줄 생성 해야함
             payment = this.paymentRepository.create({
                 impUid: impUid,
                 amount: amount,
                 user: thisUser,
+                admin: theProduct.admin,
                 productDirect: theProduct,
                 paymentComplete,
+                quantity,
             });
-        } else { 
-            throw new UnprocessableEntityException('올바른 productType을 입력해주세요.');
+        } else {
+            throw new UnprocessableEntityException(
+                '올바른 productType을 입력해주세요.',
+            );
         }
-        console.log(payment);
-        await this.paymentRepository.save(payment);
 
         // 2. 유저의 돈 찾아오기
         // const user = await this.userRepository.findOne({ id: currentUser.id });
 
-        //========================================================
-        // 3. 유저의 돈(포인트) 업데이트
-        // 하지만 우리 프로젝트 내에선 유저가 돈이나 포인트를 모아두는 것이 없음
-        // 그러므로 유저의 돈은 업데이트 할 필요가 없음
-        // await this.userRepository.update(
-        //   {id: user.id},
-        //   {}
-        // )
-        // //========================================================
-
+        console.log('ALSO GOT HERE');
         // 4. 프론트엔드에 최종결과 돌려주기
-        return payment;
+        return await this.paymentRepository.save(payment);
     }
 
     // 취소된 건인지 확인
@@ -117,10 +116,11 @@ export class PaymentService {
     }
 
     // 다른사람의 결제건을 환불 받지 못하게 하기 위해 자신이 결제한 건인지 체크
-    async checkUserPayment({ impUid, currentUser }) {
+    async checkUserPayment({ paymentId, userId }) {
         const checkUser = await this.paymentRepository.findOne({
-            impUid,
-            user: { id: currentUser.id },
+            id: paymentId,
+            user: { id: userId },
+            // user: { id: currentUser.id },
             paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
         });
         // 접속한 유저id 와 impUid 가 같지 않은 유저에게는 오류 던지기
@@ -132,58 +132,73 @@ export class PaymentService {
     // 페이먼트 테이블에서 결제 취소 데이터 등록하기
     // cancel 이란 데이터를 추가로 만드는것이고 payment의 상태를 바꾸는 것이 아님
     // 위의 create를 재활용 합니다.
-    // async cancel({ impUid, amount, currentUser }) {
-        // const payment = await this.create({
-        //     impUid,
-        //     amount: -amount,
-        //     currentUser,
-        //     productType: null,
-        //     productId: null,
-        //     paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
-        // });
+    async cancel({ paymentId, userId }) {
+        const payment = await this.paymentRepository.findOne({
+            where: { id: paymentId },
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+        });
+
+        if (!payment) {
+            throw new UnprocessableEntityException(
+                '결제내용이 존재하지 않습니다',
+            );
+        }
+
+        // const theAmount = payment.amount;
+        // payment.amount -= amount;
+        let productType;
+        let theProduct;
+
+        if (!payment.productUgly) {
+            console.log('in direct product');
+            productType = PRODUCT_TYPE_ENUM.DIRECT_PRODUCT;
+            theProduct = payment.productDirect;
+        } else if (!payment.productDirect) {
+            console.log('in ugly product');
+            productType = PRODUCT_TYPE_ENUM.UGLY_PRODUCT;
+            theProduct = payment.productUgly;
+        } else {
+            throw new ConflictException('Something is wrong.');
+        }
+
+        console.log('the product: ', theProduct);
+
+        const newCanceledPayment = await this.create({
+            impUid: payment.impUid,
+            amount: -payment.amount,
+            userId,
+            productType,
+            productId: theProduct.id,
+            quantity: payment.quantity,
+            paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
+        });
         // return payment;
 
-        // const payment = await this.paymentRepository.findOne({
-        //     impUid,
-        //     amount: -amount,
-        //     user: currentUser,
-        //     paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
-        // });
-        // await this.paymentRepository.save(payment)
+        theProduct.quantity += payment.quantity;
+        theProduct.quantitySold -= payment.quantity;
+        theProduct.isSoldout = false;
 
-        // // const user = await this.userRepository.findOne({id: currentUser.id})
-        // // await this.userRepository.update
-        // return payment 
-    // }
+        await this.paymentRepository.softRemove(payment);
+        // await this.userRepository.update
+        return await this.paymentRepository.save(newCanceledPayment);
+    }
 
-    // async findUglyByUser({currentUser}) {
-    //     const theUser = await this.userRepository.findOne({
-    //         relations: ['sellers', 'directProducts', 'uglyProducts'],
-    //         where: {id: currentUser.id}
-    //     });
-
-    //     return await this.paymentRepository.find({
-    //         relations: ['user', 'productDirect', 'productUgly'],
-    //         where: {user: theUser, productDirect: null}
-    //     });
-    // }
-
-    // async findDirectByUser({currentUser}) {
-    //     const theUser = await this.userRepository.findOne({
-    //         relations: ['sellers', 'directProducts', 'uglyProducts'],
-    //         where: {id: currentUser.id}
-    //     });
-
-    //     return await this.paymentRepository.find({
-    //         relations: ['user', 'productUgly', 'productUgly'],
-    //         where: {user: theUser, productUgly: null}
-    //     });
-    // }
-
-    async invoice({paymentId, invoiceNum}) {
+    async invoice({ paymentId, invoiceNum }) {
         const thePayment = await this.paymentRepository.findOne({
-            relations: ['user', 'productDirect', 'productUgly'],
-            where: {id: paymentId}
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+            where: { id: paymentId },
         });
 
         thePayment.invoice = invoiceNum;
@@ -191,25 +206,125 @@ export class PaymentService {
         return await this.paymentRepository.save(thePayment);
     }
 
-    async findCompletePayments(currentUser) {
+    async findCompletedPayments(userId) {
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {id: currentUser.id}
+            // where: { id: currentUser.id },
+            where: { id: userId },
         });
         return await this.paymentRepository.find({
-            relations: ['user', 'productDirect', 'productUgly'],
-            where: {user: theUser, paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT}
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+            where: {
+                user: theUser,
+                paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
+            },
         });
     }
 
-    async findCanceledPayments(currentUser) {  
+    async findCanceledPayments(userId) {
         const theUser = await this.userRepository.findOne({
             relations: ['sellers', 'directProducts', 'uglyProducts'],
-            where: {id: currentUser.id}
+            // where: { id: currentUser.id },
+            where: { id: userId },
         });
         return await this.paymentRepository.find({
-            relations: ['user', 'productDirect', 'productUgly'],
-            where: {user: theUser, paymentComplete: PAYMENT_STATUS_ENUM.CANCEL}
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+            where: {
+                user: theUser,
+                paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
+            },
+        });
+    }
+
+    async findPaymentsForSeller(sellerId) {
+        const theSeller = await this.sellerRepository.findOne({
+            relations: ['users'],
+            where: { id: sellerId },
+        });
+        return await this.paymentRepository.find({
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+            where: {
+                seller: theSeller,
+                paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
+            },
+        });
+    }
+
+    async findCancellationsForSeller(sellerId) {
+        const theSeller = await this.sellerRepository.findOne({
+            relations: ['users'],
+            where: { id: sellerId },
+        });
+        return await this.paymentRepository.find({
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+            where: {
+                seller: theSeller,
+                paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
+            },
+        });
+    }
+
+    async findPaymentsForAdmin(adminId) {
+        const theAdmin = await this.adminRepository.findOne({
+            relations: ['directStore'],
+            where: { id: adminId },
+        });
+        return await this.paymentRepository.find({
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+            where: {
+                admin: theAdmin,
+                paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
+            },
+        });
+    }
+
+    async findCancellationsForAdmin(adminId) {
+        const theAdmin = await this.adminRepository.findOne({
+            relations: ['directStore'],
+            where: { id: adminId },
+        });
+        return await this.paymentRepository.find({
+            relations: [
+                'user',
+                'seller',
+                'admin',
+                'productDirect',
+                'productUgly',
+            ],
+            where: {
+                admin: theAdmin,
+                paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
+            },
         });
     }
 }

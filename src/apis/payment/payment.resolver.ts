@@ -18,7 +18,6 @@ import { Repository } from 'typeorm';
 import { IamportService } from '../iamport/iamport.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentService } from './payment.service';
-import { response } from 'express';
 import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
 
@@ -43,7 +42,43 @@ export class PaymentResolver {
         private readonly paymentRepository: Repository<Payment>,
     ) {}
 
-    @UseGuards(GqlAuthAccessGuard)
+    // @UseGuards(GqlAuthAccessGuard)
+    // @Mutation(() => Payment)
+    // async createPayment(
+    //     @Args('impUid') impUid: string,
+    //     @Args('amount') amount: number,
+    //     @Args('productType') productType: string,
+    //     @Args('productId') productId: string,
+    //     @Args('quantity') quantity: number,
+    //     @CurrentUser() currentUser: ICurrentUser,
+    // ) {
+    //     console.log("시작점");
+    //     // 검증로직
+    //     // 1. iamport 에 요청해서 결제 완료 기록이 존재하는지 확인필요
+    //     // const token = await this.iamportService.getToken();
+    //     // await this.iamportService.checkPaid({ impUid, token, amount });
+
+    //     // 2. payment 테이블에는 impUid가 1번만 존재해야 함. (중복 결제 체크)
+    //     // await this.paymentService.checkDuplicate({ impUid });
+
+    //     await this.userService.buy({
+    //         productType,
+    //         productId,
+    //         quantity,
+    //         currentUser,
+    //     });
+
+    //     return await this.paymentService.create({
+    //         impUid,
+    //         amount,
+    //         currentUser,
+    //         productType,
+    //         productId,
+    //         // quantity
+    //     });
+    // }
+
+    // @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => Payment)
     async createPayment(
         @Args('impUid') impUid: string,
@@ -51,94 +86,96 @@ export class PaymentResolver {
         @Args('productType') productType: string,
         @Args('productId') productId: string,
         @Args('quantity') quantity: number,
-        @CurrentUser() currentUser: ICurrentUser,
+        // @CurrentUser() currentUser: ICurrentUser,
+        @Args('userId') userId: string
     ) {
+        console.log("시작점");
         // 검증로직
         // 1. iamport 에 요청해서 결제 완료 기록이 존재하는지 확인필요
         // const token = await this.iamportService.getToken();
         // await this.iamportService.checkPaid({ impUid, token, amount });
 
         // 2. payment 테이블에는 impUid가 1번만 존재해야 함. (중복 결제 체크)
-        await this.paymentService.checkDuplicate({ impUid });
+        // await this.paymentService.checkDuplicate({ impUid });
 
         await this.userService.buy({
             productType,
             productId,
             quantity,
-            currentUser,
+            // currentUser,
+            userId
         });
 
         return await this.paymentService.create({
             impUid,
             amount,
-            currentUser,
+            // currentUser,
+            userId,
             productType,
             productId,
+            quantity
         });
     }
 
-    @UseGuards(GqlAuthAccessGuard)
+    // @UseGuards(GqlAuthAccessGuard)
     @Mutation(() => Payment)
     async cancelPayment(
-        @Args('impUid') impUid: string,
-        @CurrentUser() currentUser: ICurrentUser,
+        // @Args('impUid') impUid: string,
+        @Args('paymentId') paymentId: string,
+        // @CurrentUser() currentUser: ICurrentUser,
+        @Args('userId') userId: string
     ) {
         // const theUser = await this.userService.findOneById({
         //     id: currentUser.id
         // });
 
+        // const thePayment = await this.paymentRepository.findOne({
+        //     relations: ['user', 'productDirect', 'productUgly'],
+        //     where: {impUid}
+        // });
         const thePayment = await this.paymentRepository.findOne({
-            relations: ['user', 'productDirect', 'productUgly'],
-            where: {impUid}
+            relations: ['user', 'seller', 'admin', 'productDirect', 'productUgly'],
+            where: {id: paymentId}
         });
 
-        if (thePayment.user.id !== currentUser.id) {
-            throw new UnprocessableEntityException('권한이 없습니다');
-        }
+        // if (thePayment.user.id !== currentUser.id) {
+        //     throw new UnprocessableEntityException('권한이 없습니다');
+        // }
 
         // 취소하기전 검증로직
         // 1. 이미 취소된 건인지 확인
-        await this.paymentService.checkCanceled({ impUid });
+        await this.paymentService.checkCanceled({ impUid: thePayment.impUid });
+        // await this.paymentService.checkCanceled({ paymentId });
 
         // 2. 본인의 결제건이 맞는지 체크
         await this.paymentService.checkUserPayment({
-            impUid,
-            currentUser,
+            paymentId,
+            // currentUser,
+            userId
         });
         
 
         // 3. 실제로 iamport 에 취소 요청하기
-        // iamport.service에서 cancel 실행
-        const token = await this.iamportService.getToken();
-        const canceledAmount = await this.iamportService.cancel({
-            impUid,
-            token,
-        });
+        // const impUid = thePayment.impUid;
+        // const token = await this.iamportService.getToken();
+        // const requestedAmount = thePayment.amount;
+
+        // await this.iamportService.cancel({
+        //     impUid,
+        //     token,
+        //     requestedAmount
+        // });
 
         // 4. payment 테이블에 결제 취소등록하기
-        // // payment.service에서 cancel 실행
-        // return await this.paymentService.cancel({
-        //     impUid,
-        //     amount: canceledAmount,
-        //     currentUser,
-        // });
+        // payment.service에서 cancel 실행
+        return await this.paymentService.cancel({
+            // impUid,
+            paymentId,
+            // amount: canceledAmount,
+            // currentUser,
+            userId
+        });
     }
-
-    // @UseGuards(GqlAuthAccessGuard)
-    // @Query(() => [Payment])
-    // async fetchUglyPaymentsByUser(
-    //     @CurrentUser() currentUser: ICurrentUser,
-    // ) {
-    //   return await this.paymentService.findUglyByUser({currentUser});
-    // }
-
-    // @UseGuards(GqlAuthAccessGuard)
-    // @Query(() => [Payment])
-    // async fetchDirectPaymentsByUser(
-    //     @CurrentUser() currentUser: ICurrentUser,
-    // ) {
-    //   return await this.paymentService.findDirectByUser({currentUser});
-    // }
 
     @Mutation(() => Payment)
     updateInvoice(
@@ -148,19 +185,50 @@ export class PaymentResolver {
         return this.paymentService.invoice({ paymentId, invoiceNum });
     }
 
-    @UseGuards(GqlAuthAccessGuard)
+    // @UseGuards(GqlAuthAccessGuard)
     @Query(() => [Payment])
-    fetchCompletePayments(
-        @CurrentUser() currentUser: ICurrentUser,
+    fetchCompletedPaymentsOfUser(
+        // @CurrentUser() currentUser: ICurrentUser,
+        @Args('userId') userId: string
     ) {
-        return this.paymentService.findCompletePayments(currentUser);
+        return this.paymentService.findCompletedPayments(userId);
     }
 
-    @UseGuards(GqlAuthAccessGuard)
+    // @UseGuards(GqlAuthAccessGuard)
     @Query(() => [Payment])
-    fetchCanceledPayments(
-        @CurrentUser() currentUser: ICurrentUser,
+    fetchCanceledPaymentsOfUser(
+        // @CurrentUser() currentUser: ICurrentUser,
+        @Args('userId') userId: string
     ) {
-        return this.paymentService.findCanceledPayments(currentUser);
+        // return this.paymentService.findCanceledPayments(currentUser);
+        return this.paymentService.findCanceledPayments(userId);
+    }
+
+    @Query(() => [Payment])
+    fetchCompletedPaymentsForSeller(
+        @Args('sellerId') sellerId: string
+    ) {
+        return this.paymentService.findPaymentsForSeller(sellerId);
+    }
+
+    @Query(() => [Payment])
+    fetchCanceledPaymentsForSeller(
+        @Args('sellerId') sellerId: string
+    ) {
+        return this.paymentService.findCancellationsForSeller(sellerId);
+    }
+
+    @Query(() => [Payment])
+    fetchCompletedPaymentsForAdmin(
+        @Args('adminId') adminId: string
+    ) {
+        return this.paymentService.findPaymentsForAdmin(adminId);
+    }
+
+    @Query(() => [Payment])
+    fetchCanceledPaymentsForAdmin(
+        @Args('adminId') adminId: string
+    ) {
+        return this.paymentService.findCancellationsForAdmin(adminId);
     }
 }

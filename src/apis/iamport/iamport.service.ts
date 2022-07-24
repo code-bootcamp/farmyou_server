@@ -1,6 +1,7 @@
 import { ConflictException, HttpException, Injectable, UnprocessableEntityException } from "@nestjs/common";
 import axios from 'axios';
 import 'dotenv/config';
+import { resourceLimits } from "worker_threads";
 
 // 지영누나 파일
 // @Injectable()
@@ -57,7 +58,7 @@ export class IamportService {
             imp_secret: process.env.IAMPORT_REST_API_SECRET,
             // imp_secret: "123", //에러 테스트용 비밀번호
           })
-          return result.data.response.access_token
+          return result.data.response.access_token;
           } catch(error){
             // console.log(error)
             throw new HttpException(
@@ -95,20 +96,25 @@ export class IamportService {
     }
 
     // import 에서 실제로 결제 취소를 등록하기
-    async cancel({impUid, token}) {
+    async cancel({impUid, token, requestedAmount}) {
         try{
-            const result = await axios.post('https://api.iamport.kr/payments/cancel', 
-            {imp_uid: impUid,}, 
-            {headers: {Authorization: token}}
-            );
-            console.log('============================')
-            console.log(result)
-            console.log('============================')
-            console.log(result.data)
-            console.log('============================')
-            console.log(result.data.response)
-            console.log('============================')
-            return result.data?.response?.cancel_amount; 
+            // const result = await axios.post('https://api.iamport.kr/payments/cancel', 
+            //     {imp_uid: impUid,},
+            //     {headers: {Authorization: token}},
+            // );
+            // return result.data?.response?.cancel_amount; 
+            const result = await axios({
+                url: "https://api.iamport.kr/payments/cancel",
+                method: "post",
+                headers: {
+                    "Authorization": token
+                },
+                data: {
+                    imp_uid: impUid,
+                    amount: requestedAmount
+                }
+            });
+            return result.data?.response?.cancel_amount;
         }catch(error){
             // 만약 에러 메세지가 있거나 없을때 조건
             if(error?.response?.data?.message){
