@@ -273,7 +273,7 @@ export class ProductDirectService {
         content,
         price,
         quantity,
-        category,
+        categoryId,
         isDeleted,
         isSoldout,
         // imageUrl,
@@ -285,7 +285,7 @@ export class ProductDirectService {
             where: { id: productId },
         });
 
-        console.log(theProduct.admin);
+        // console.log(theProduct.admin);
 
         if (currentUser.id !== theProduct.admin.id) {
             throw new UnprocessableEntityException('권한이 없습니다.');
@@ -310,8 +310,8 @@ export class ProductDirectService {
             }
         }
 
-        if (category) {
-            theProduct.category = category;
+        if (categoryId) {
+            theProduct.category.id = categoryId;
         }
 
         if (isDeleted) {
