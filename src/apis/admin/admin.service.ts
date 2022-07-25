@@ -63,6 +63,22 @@ export class AdminService {
         }
     }
 
+    async update({
+        password,
+        currentUser
+    }) {
+        const loggedAdmin = await this.adminRepository.findOne({
+            relations: ['directStore', 'files'],
+            where: {id: currentUser.id},
+        });
+
+        if (password) {
+            loggedAdmin.password = await bcrypt.hash(password, 10.2);
+        }
+
+        return await this.adminRepository.save(loggedAdmin);
+    }
+
     async findAll() {
         return await this.adminRepository.find({
             relations: ['directStore'],

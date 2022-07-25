@@ -163,8 +163,6 @@ export class PaymentService {
             throw new ConflictException('Something is wrong.');
         }
 
-        console.log('the product: ', theProduct);
-
         const newCanceledPayment = await this.create({
             impUid: payment.impUid,
             amount: -payment.amount,
@@ -181,7 +179,7 @@ export class PaymentService {
         theProduct.isSoldout = false;
 
         await this.paymentRepository.softRemove(payment);
-        // await this.userRepository.update
+        
         return await this.paymentRepository.save(newCanceledPayment);
     }
 
@@ -203,124 +201,134 @@ export class PaymentService {
     }
 
     async findCompletedPayments(userId) {
-        const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
-            // where: { id: currentUser.id },
-            where: { id: userId },
-        });
-        return await this.paymentRepository.find({
-            relations: [
-                'user',
-                'seller',
-                'admin',
-                'productDirect',
-                'productUgly',
-            ],
-            where: {
-                user: theUser,
-                paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
-            },
-        });
+        return await this.paymentRepository
+            .createQueryBuilder('payment')
+            .orderBy('payment.createdAt', 'DESC')
+            .leftJoinAndSelect('payment.user', 'user')
+            .leftJoinAndSelect('payment.seller', 'seller')
+            .leftJoinAndSelect('payment.admin', 'admin')
+            .leftJoinAndSelect('payment.productDirect', 'productDirect')
+            .leftJoinAndSelect('productDirect.category', 'category')
+            .leftJoinAndSelect('productDirect.directStore', 'directStore')
+            .leftJoinAndSelect('productDirect.files', 'file1')
+            .leftJoinAndSelect('payment.productUgly', 'productUgly')
+            .leftJoinAndSelect('productUgly.files', 'file2')
+            .where('payment.user = :id', {
+                id: userId
+            })
+            .andWhere('payment.paymentComplete = :paymentComplete', {
+                paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT
+            })
+            .getMany();
     }
 
     async findCanceledPayments(userId) {
-        const theUser = await this.userRepository.findOne({
-            relations: ['sellers', 'directProducts', 'uglyProducts'],
-            // where: { id: currentUser.id },
-            where: { id: userId },
-        });
-        return await this.paymentRepository.find({
-            relations: [
-                'user',
-                'seller',
-                'admin',
-                'productDirect',
-                'productUgly',
-            ],
-            where: {
-                user: theUser,
-                paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
-            },
-        });
+        return await this.paymentRepository
+        .createQueryBuilder('payment')
+        .orderBy('payment.createdAt', 'DESC')
+        .leftJoinAndSelect('payment.user', 'user')
+        .leftJoinAndSelect('payment.seller', 'seller')
+        .leftJoinAndSelect('payment.admin', 'admin')
+        .leftJoinAndSelect('payment.productDirect', 'productDirect')
+        .leftJoinAndSelect('productDirect.category', 'category')
+        .leftJoinAndSelect('productDirect.directStore', 'directStore')
+        .leftJoinAndSelect('productDirect.files', 'file1')
+        .leftJoinAndSelect('payment.productUgly', 'productUgly')
+        .leftJoinAndSelect('productUgly.files', 'file2')
+        .where('payment.user = :id', {
+            id: userId
+        })
+        .andWhere('payment.paymentComplete = :paymentComplete', {
+            paymentComplete: PAYMENT_STATUS_ENUM.CANCEL
+        })
+        .getMany();
     }
 
     async findPaymentsForSeller(sellerId) {
-        const theSeller = await this.sellerRepository.findOne({
-            relations: ['users'],
-            where: { id: sellerId },
-        });
-        return await this.paymentRepository.find({
-            relations: [
-                'user',
-                'seller',
-                'admin',
-                'productDirect',
-                'productUgly',
-            ],
-            where: {
-                seller: theSeller,
-                paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
-            },
-        });
+        return await this.paymentRepository
+        .createQueryBuilder('payment')
+        .orderBy('payment.createdAt', 'DESC')
+        .leftJoinAndSelect('payment.user', 'user')
+        .leftJoinAndSelect('payment.seller', 'seller')
+        .leftJoinAndSelect('payment.admin', 'admin')
+        .leftJoinAndSelect('payment.productDirect', 'productDirect')
+        .leftJoinAndSelect('productDirect.category', 'category')
+        .leftJoinAndSelect('productDirect.directStore', 'directStore')
+        .leftJoinAndSelect('productDirect.files', 'file1')
+        .leftJoinAndSelect('payment.productUgly', 'productUgly')
+        .leftJoinAndSelect('productUgly.files', 'file2')
+        .where('payment.seller = :id', {
+            id: sellerId
+        })
+        .andWhere('payment.paymentComplete = :paymentComplete', {
+            paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT
+        })
+        .getMany();
     }
 
     async findCancellationsForSeller(sellerId) {
-        const theSeller = await this.sellerRepository.findOne({
-            relations: ['users'],
-            where: { id: sellerId },
-        });
-        return await this.paymentRepository.find({
-            relations: [
-                'user',
-                'seller',
-                'admin',
-                'productDirect',
-                'productUgly',
-            ],
-            where: {
-                seller: theSeller,
-                paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
-            },
-        });
+        return await this.paymentRepository
+        .createQueryBuilder('payment')
+        .orderBy('payment.createdAt', 'DESC')
+        .leftJoinAndSelect('payment.user', 'user')
+        .leftJoinAndSelect('payment.seller', 'seller')
+        .leftJoinAndSelect('payment.admin', 'admin')
+        .leftJoinAndSelect('payment.productDirect', 'productDirect')
+        .leftJoinAndSelect('productDirect.category', 'category')
+        .leftJoinAndSelect('productDirect.directStore', 'directStore')
+        .leftJoinAndSelect('productDirect.files', 'file1')
+        .leftJoinAndSelect('payment.productUgly', 'productUgly')
+        .leftJoinAndSelect('productUgly.files', 'file2')
+        .where('payment.seller = :id', {
+            id: sellerId
+        })
+        .andWhere('payment.paymentComplete = :paymentComplete', {
+            paymentComplete: PAYMENT_STATUS_ENUM.CANCEL
+        })
+        .getMany();
     }
 
     async findPaymentsForAdmin(adminId) {
-        const theAdmin = await this.adminRepository.findOne({
-            relations: ['directStore'],
-            where: { id: adminId },
-        });
-        return await this.paymentRepository.find({
-            relations: [
-                'user',
-                'seller',
-                'admin',
-                'productDirect',
-                'productUgly',
-            ],
-            where: {
-                admin: theAdmin,
-                paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT,
-            },
-        });
+        return await this.paymentRepository
+        .createQueryBuilder('payment')
+        .orderBy('payment.createdAt', 'DESC')
+        .leftJoinAndSelect('payment.user', 'user')
+        .leftJoinAndSelect('payment.seller', 'seller')
+        .leftJoinAndSelect('payment.admin', 'admin')
+        .leftJoinAndSelect('payment.productDirect', 'productDirect')
+        .leftJoinAndSelect('productDirect.category', 'category')
+        .leftJoinAndSelect('productDirect.directStore', 'directStore')
+        .leftJoinAndSelect('productDirect.files', 'file1')
+        .leftJoinAndSelect('payment.productUgly', 'productUgly')
+        .leftJoinAndSelect('productUgly.files', 'file2')
+        .where('payment.admin = :id', {
+            id: adminId
+        })
+        .andWhere('payment.paymentComplete = :paymentComplete', {
+            paymentComplete: PAYMENT_STATUS_ENUM.PAYMENT
+        })
+        .getMany();
     }
 
     async findCancellationsForAdmin(adminId) {
-        const theAdmin = await this.adminRepository.findOne({
-            relations: ['directStore'],
-            where: { id: adminId },
-        });
-        return await this.paymentRepository.find({
-            relations: [
-                'user',
-                'seller',
-                'admin',
-                'productDirect',
-                'productUgly',
-            ],
-            where: {
-                admin: theAdmin,
-                paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
-            },
-        });
+        return await this.paymentRepository
+        .createQueryBuilder('payment')
+        .orderBy('payment.createdAt', 'DESC')
+        .leftJoinAndSelect('payment.user', 'user')
+        .leftJoinAndSelect('payment.seller', 'seller')
+        .leftJoinAndSelect('payment.admin', 'admin')
+        .leftJoinAndSelect('payment.productDirect', 'productDirect')
+        .leftJoinAndSelect('productDirect.category', 'category')
+        .leftJoinAndSelect('productDirect.directStore', 'directStore')
+        .leftJoinAndSelect('productDirect.files', 'file1')
+        .leftJoinAndSelect('payment.productUgly', 'productUgly')
+        .leftJoinAndSelect('productUgly.files', 'file2')
+        .where('payment.admin = :id', {
+            id: adminId
+        })
+        .andWhere('payment.paymentComplete = :paymentComplete', {
+            paymentComplete: PAYMENT_STATUS_ENUM.CANCEL
+        })
+        .getMany();
     }
 }

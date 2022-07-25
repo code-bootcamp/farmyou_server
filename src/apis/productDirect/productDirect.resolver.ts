@@ -1,5 +1,11 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, registerEnumType, Resolver } from '@nestjs/graphql';
+import {
+    Args,
+    Mutation,
+    Query,
+    registerEnumType,
+    Resolver,
+} from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
@@ -22,10 +28,8 @@ export class ProductDirectResolver {
     constructor(private readonly productDirectService: ProductDirectService) {}
 
     @Query(() => [ProductDirect])
-    fetchDirectProducts(
-        @Args('productId') productId: string
-    ) {
-        return this.productDirectService.findAll({productId});
+    fetchDirectProducts(@Args('productId') productId: string) {
+        return this.productDirectService.findAll({ productId });
     }
 
     @Query(() => ProductDirect)
@@ -44,23 +48,39 @@ export class ProductDirectResolver {
 
     @Query(() => [ProductDirect])
     fetchDirectProductsSorted(
-        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
-        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
-        @Args({name: 'categoryId', nullable: true}) categoryId: string,
-        @Args({name: 'page', nullable: true}) page: number
+        @Args({
+            name: 'sortBy',
+            nullable: true,
+            defaultValue: SORT_CONDITION_ENUM.MOST_RECENT,
+        })
+        sortBy: SORT_CONDITION_ENUM,
+        @Args({ name: 'directStoreId', nullable: true }) directStoreId: string,
+        @Args({ name: 'categoryId', nullable: true }) categoryId: string,
+        @Args({ name: 'page', nullable: true }) page: number,
     ) {
-        return this.productDirectService.findSorted({sortBy, directStoreId, categoryId}, page);
+        return this.productDirectService.findSorted(
+            { sortBy, directStoreId, categoryId },
+            page,
+        );
     }
 
     @Query(() => [ProductDirect])
     fetchDirectProductsSortedByTitle(
-        @Args({name: 'title', nullable: true}) title: string,
-        @Args({name: 'sortBy', nullable: true, defaultValue: SORT_CONDITION_ENUM.MOST_RECENT}) sortBy: SORT_CONDITION_ENUM,
-        @Args({name: 'directStoreId', nullable: true}) directStoreId: string,
-        @Args({name: 'categoryId', nullable: true}) categoryId: string,
-        @Args({name: 'page', nullable: true}) page: number
+        @Args({ name: 'title', nullable: true }) title: string,
+        @Args({
+            name: 'sortBy',
+            nullable: true,
+            defaultValue: SORT_CONDITION_ENUM.MOST_RECENT,
+        })
+        sortBy: SORT_CONDITION_ENUM,
+        @Args({ name: 'directStoreId', nullable: true }) directStoreId: string,
+        @Args({ name: 'categoryId', nullable: true }) categoryId: string,
+        @Args({ name: 'page', nullable: true }) page: number,
     ) {
-        return this.productDirectService.findSortedByTitle({ title, sortBy, directStoreId, categoryId }, page);
+        return this.productDirectService.findSortedByTitle(
+            { title, sortBy, directStoreId, categoryId },
+            page,
+        );
     }
 
     // 7월 14일 승원 타이틀 조회 테스트
@@ -82,8 +102,9 @@ export class ProductDirectResolver {
         @Args('categoryId') categoryId: string,
         @Args('directStoreId') directStoreId: string,
         // @Args({ name: 'imageUrl', nullable: true }) imageUrl: string,
-        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductDirectInput,
-        @CurrentUser() currentUser: ICurrentUser
+        @Args({ name: 'createFileInput', nullable: true })
+        createFileInput: CreateProductDirectInput,
+        @CurrentUser() currentUser: ICurrentUser,
     ) {
         return this.productDirectService.create({
             title,
@@ -93,7 +114,7 @@ export class ProductDirectResolver {
             categoryId,
             directStoreId,
             createFileInput,
-            currentUser
+            currentUser,
         });
     }
 
@@ -118,11 +139,12 @@ export class ProductDirectResolver {
         @Args({ name: 'content', nullable: true }) content: string,
         @Args({ name: 'price', nullable: true }) price: number,
         @Args({ name: 'quantity', nullable: true }) quantity: number,
-        @Args({ name: 'category', nullable: true }) category: string,
+        @Args({ name: 'categoryId', nullable: true }) categoryId: string,
         @Args({ name: 'isDeleted', nullable: true }) isDeleted: boolean,
         @Args({ name: 'isSoldout', nullable: true }) isSoldout: boolean,
-        @Args({name: 'createFileInput', nullable: true}) createFileInput: CreateProductDirectInput,
-        @CurrentUser() currentUser: ICurrentUser
+        @Args({ name: 'createFileInput', nullable: true })
+        createFileInput: CreateProductDirectInput,
+        @CurrentUser() currentUser: ICurrentUser,
     ) {
         return this.productDirectService.update({
             productId,
@@ -130,11 +152,11 @@ export class ProductDirectResolver {
             content,
             price,
             quantity,
-            category,
+            categoryId,
             isDeleted,
             isSoldout,
             createFileInput,
-            currentUser
+            currentUser,
         });
     }
 }
