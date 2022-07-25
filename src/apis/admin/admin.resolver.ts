@@ -35,12 +35,24 @@ export class AdminResolver {
         @Args({ name: 'directStoreId', nullable: true }) directStoreId: string,
     ) {
         const hashedPassword = await bcrypt.hash(password, 10.2);
-        // console.log(hashedPassword);
+
         return this.adminService.create({
             email,
             hashedPassword,
             directStoreId,
-            // files
+        });
+    }
+
+    // 관리자 정보 수정하기
+    @UseGuards(GqlAuthAccessGuard)
+    @Mutation(() => Admin)
+    async updateAdmin(
+        @Args({name: 'password', nullable: true}) password: string,
+        @CurrentUser() currentUser: ICurrentUser,
+    ) {
+        return this.adminService.update({
+            password,
+            currentUser
         });
     }
 
