@@ -59,11 +59,6 @@ export class Inquiry {
     @Field(() => INQUIRY_STATUS_ENUM)
     status: string;
 
-    // 회원
-    @ManyToOne(() => User)
-    @Field(() => User, {nullable: true})
-    user: User;
-
     // 삭제여부
     @Column({default: false})
     @Field(() => Boolean)
@@ -73,6 +68,11 @@ export class Inquiry {
     @DeleteDateColumn()
     @Field(() => Date, {nullable: true})
     deletedAt: Date;
+
+    // 회원
+    @ManyToOne(() => User)
+    @Field(() => User, {nullable: true})
+    user: User;
 
     // 직매장상품
     @ManyToOne(() => ProductDirect)
