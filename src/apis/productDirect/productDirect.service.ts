@@ -331,6 +331,10 @@ export class ProductDirectService {
 
             await this.fileRepository.save(theImage);
 
+            const toDelete = theProduct.files[0].id;
+            await this.fileRepository.findOne({id: toDelete});
+            await this.fileRepository.delete(toDelete);
+
             theProduct.files.push(theImage);
         }
 

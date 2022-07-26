@@ -148,6 +148,10 @@ export class UserService {
 
             await this.fileRepository.save(theImage);
 
+            const toDelete = loggedUser.files[0].id;
+            await this.fileRepository.findOne({id: toDelete});
+            await this.fileRepository.delete(toDelete);
+            
             loggedUser.files.push(theImage);
         }
 
