@@ -95,6 +95,10 @@ export class SellerService {
 
             await this.fileRepository.save(theImage);
 
+            const toDelete = loggedSeller.files[0].id;
+            await this.fileRepository.findOne({id: toDelete});
+            await this.fileRepository.delete(toDelete);
+
             loggedSeller.files.push(theImage);
         }
 
