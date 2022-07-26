@@ -143,10 +143,12 @@ export class ProductUglyService {
             });
 
             await this.fileRepository.save(theImage);
-            // await theProduct.files.push(theImage);
+
+            const toDelete = theProduct.files[0].id;
+            await this.fileRepository.findOne({id: toDelete});
+            await this.fileRepository.delete(toDelete);
 
             theProduct.files.push(theImage);
-            // await this.productUglyRepository.save(theProduct);
         }
 
         return await this.productUglyRepository.save(theProduct);

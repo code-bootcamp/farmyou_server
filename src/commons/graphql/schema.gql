@@ -126,9 +126,9 @@ type Inquiry {
   answer: String
   createdAt: DateTime!
   status: INQUIRY_STATUS_ENUM!
-  user: User
   isDeleted: Boolean!
   deletedAt: DateTime
+  user: User
   productDirect: ProductDirect
   productUgly: ProductUgly
 }
