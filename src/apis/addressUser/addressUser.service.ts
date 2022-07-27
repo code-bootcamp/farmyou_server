@@ -9,6 +9,9 @@ export class AddressUserService {
     constructor(
         @InjectRepository(AddressUser)
         private readonly addressUserRepository: Repository<AddressUser>,
+        @InjectRepository(User)
+
+        private readonly userRepository: Repository<User>,
     ) {}
 
     async findAll(userId) {
@@ -34,7 +37,7 @@ export class AddressUserService {
                 await this.addressUserRepository.save(address);
             });
         }
-        // 1. 데이터를 등록하는 로직 => DB에 접속해서 데이터 저장하기
+
         const result = await this.addressUserRepository.save({
             address,
             detailedAddress,
@@ -43,8 +46,6 @@ export class AddressUserService {
             isMain: isMain,
         });
 
-        // 2. 저장 결과 응답 주기
-        // return '게시물 등록에 성공하였습니다!!';
         return result;
     }
 
@@ -55,6 +56,7 @@ export class AddressUserService {
 
     async update({ addressId, updateAddressUserInput }) {
         const theaddress = await this.addressUserRepository.findOne({
+            relations: ['user'],
             where: { id: addressId },
         });
 
