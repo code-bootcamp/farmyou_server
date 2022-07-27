@@ -14,7 +14,8 @@ export class InquiryResolver {
         return this.inquiryService.findOne({ id });
     }
 
-    @Query(() => [Inquiry])
+    @Query(() => [Inquiry],
+    { description: '해당 상품의 문의 조회' },)
     fetchInquiriesByProduct(
         @Args('productId') productId: string
     ) {
@@ -28,7 +29,8 @@ export class InquiryResolver {
 
     // Inquiry (문의) 생성은 User (구매자)만 가능
     @UseGuards(GqlAuthAccessGuard)
-    @Mutation(() => String)
+    @Mutation(() => String,
+    { description: '문의 생성 (로그인 필요)' },)
     createInquiry(
         @Args('title') title: string,
         @Args('question') question: string,
@@ -47,7 +49,8 @@ export class InquiryResolver {
     }
 
     @UseGuards(GqlAuthAccessGuard)
-    @Mutation(() => String)
+    @Mutation(() => String,
+    { description: '답글 작성 (로그인필요)' },)
     postResponse(
         @Args('inquiryId') inquiryId: string,
         @Args('answerTitle') answerTitle: string,
@@ -63,7 +66,8 @@ export class InquiryResolver {
     }
 
     @UseGuards(GqlAuthAccessGuard)
-    @Mutation(() => Inquiry)
+    @Mutation(() => Inquiry,
+    { description: '문의 수정 (로그인 필요)' },)
     editInquiry(
         @Args('inquiryId') inquiryId: string,
         @Args('title') title: string,
@@ -79,7 +83,8 @@ export class InquiryResolver {
     }
 
     @UseGuards(GqlAuthAccessGuard)
-    @Mutation(() => String)
+    @Mutation(() => String,
+    { description: '문의 삭제 (로그인 필요)' },)
     deleteInquiry(
         @Args('inquiryId') inquiryId: string,
         @CurrentUser() currentUser: ICurrentUser,
