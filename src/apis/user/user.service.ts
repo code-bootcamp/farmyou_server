@@ -20,13 +20,6 @@ export enum PRODUCT_TYPE_ENUM {
     DIRECT_PRODUCT = 'DIRECT_PRODUCT',
 }
 
-// const productInCart = {
-//     // "productType": PRODUCT_TYPE_ENUM,
-//     // "productId": String,
-//     "product": ProductDirect || ProductUgly,
-//     "quantity": Number
-// }
-
 @Injectable()
 export class UserService {
     constructor(
@@ -98,7 +91,7 @@ export class UserService {
             files: [],
         });
 
-        await this.addressUserService.create(
+        const theAddress = await this.addressUserService.create(
             addressUser.address,
             addressUser.detailedAddress,
             addressUser.postalCode,
