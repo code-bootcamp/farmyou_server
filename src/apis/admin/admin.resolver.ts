@@ -28,7 +28,8 @@ export class AdminResolver {
     ) {}
 
     // 관리자 생성하기
-    @Mutation(() => Admin)
+    @Mutation(() => Admin,
+    { description: '관리자 계성 생성' },)
     async createAdmin(
         @Args('email') email: string,
         @Args('password') password: string,
@@ -45,7 +46,8 @@ export class AdminResolver {
 
     // 관리자 정보 수정하기
     @UseGuards(GqlAuthAccessGuard)
-    @Mutation(() => Admin)
+    @Mutation(() => Admin,
+    { description: '관리자 정보 수정 (로그인필요)' })
     async updateAdmin(
         @Args({name: 'password', nullable: true}) password: string,
         @CurrentUser() currentUser: ICurrentUser,

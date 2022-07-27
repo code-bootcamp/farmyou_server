@@ -39,7 +39,8 @@ export class PaymentResolver {
         private readonly paymentRepository: Repository<Payment>,
     ) {}
     @UseGuards(GqlAuthAccessGuard)
-    @Mutation(() => Payment)
+    @Mutation(() => Payment,
+    { description: '결제 생성 (로그인 필요)' },)
     async createPayment(
         @Args('impUid') impUid: string,
         @Args('amount') amount: number,
@@ -71,7 +72,8 @@ export class PaymentResolver {
     }
 
     @UseGuards(GqlAuthAccessGuard)
-    @Mutation(() => Payment)
+    @Mutation(() => Payment,
+    { description: '결제 취소 (로그인 필요)' },)
     async cancelPayment(
         @Args('paymentId') paymentId: string,
         @CurrentUser() currentUser: ICurrentUser,
@@ -114,7 +116,8 @@ export class PaymentResolver {
         });
     }
 
-    @Mutation(() => Payment)
+    @Mutation(() => Payment,
+    { description: '송장번호 업데이트' },)
     updateInvoice(
         @Args('paymentId') paymentId: string,
         @Args('invoiceNum') invoiceNum: string,
@@ -123,7 +126,8 @@ export class PaymentResolver {
     }
 
     // @UseGuards(GqlAuthAccessGuard)
-    @Query(() => [Payment])
+    @Query(() => [Payment],
+    { description: '구매자의 결제 완료 조회' },)
     fetchCompletedPaymentsOfUser(
         // @CurrentUser() currentUser: ICurrentUser,
         @Args('userId') userId: string
@@ -132,7 +136,8 @@ export class PaymentResolver {
     }
 
     // @UseGuards(GqlAuthAccessGuard)
-    @Query(() => [Payment])
+    @Query(() => [Payment],
+    { description: '구매자의 결제 취소 조회' },)
     fetchCanceledPaymentsOfUser(
         // @CurrentUser() currentUser: ICurrentUser,
         @Args('userId') userId: string

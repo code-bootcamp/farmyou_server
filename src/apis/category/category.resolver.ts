@@ -6,17 +6,20 @@ import { CategoryService } from './category.service';
 export class CategoryResolver {
     constructor(private readonly categoryService: CategoryService) {}
 
-    @Query(() => Category)
+    @Query(() => Category,
+    { description: '카테고리 이름의 id 조회' },)
     fetchCategory(@Args('name') name: string) {
         return this.categoryService.findOne({ name });
     }
 
-    @Query(() => [Category])
+    @Query(() => [Category],
+    { description: '생성한 카테고리 id, name 전부 조회' },)
     fetchCategories() {
         return this.categoryService.findAll();
     }
 
-    @Mutation(() => Category)
+    @Mutation(() => Category,
+    { description: '카테고리 생성' },)
     createCategory(
         @Args('name') name: string, //
     ) {
