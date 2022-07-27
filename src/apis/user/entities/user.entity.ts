@@ -12,6 +12,7 @@ import {
     ManyToMany,
     OneToMany,
 } from 'typeorm';
+import { AddressUser } from 'src/apis/addressUser/entities/addressUser.entity';
 
 @Entity()
 @ObjectType()
@@ -51,7 +52,11 @@ export class User {
     @Field(() => Date)
     createdAt: Date;
 
-    //   @JoinTable()
+    // 유저 주소
+    @OneToMany(() => AddressUser, (address) => address.user)
+    @Field((type) => [AddressUser], {nullable: true})
+    address: AddressUser[];
+
     @ManyToMany(() => Seller, (sellers) => sellers.users)
     @Field(() => [Seller], { nullable: true })
     sellers: Seller[];
