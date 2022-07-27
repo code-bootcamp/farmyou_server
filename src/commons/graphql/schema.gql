@@ -96,19 +96,6 @@ type ProductDirect {
   files: [File!]
 }
 
-type User {
-  id: String!
-  name: String!
-  email: String!
-  phone: String!
-  type: String!
-  createdAt: DateTime!
-  sellers: [Seller!]
-  directProducts: [ProductDirect!]
-  uglyProducts: [ProductUgly!]
-  files: [File!]
-}
-
 type AddressUser {
   id: String!
   address: String!
@@ -116,6 +103,20 @@ type AddressUser {
   postalCode: String!
   isMain: Boolean!
   user: User
+}
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  type: String!
+  createdAt: DateTime!
+  address: [AddressUser!]
+  sellers: [Seller!]
+  directProducts: [ProductDirect!]
+  uglyProducts: [ProductUgly!]
+  files: [File!]
 }
 
 type Inquiry {
