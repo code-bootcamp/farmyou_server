@@ -88,8 +88,9 @@ export class PaymentResolver {
         }
 
         // 취소하기전 검증로직
+        // 부분취소때 이미 취소되면 다른취소가 안돼서 임시로 주석처리 7월 28일 
         // 1. 이미 취소된 건인지 확인
-        await this.paymentService.checkCanceled({ impUid: thePayment.impUid });
+        // await this.paymentService.checkCanceled({ impUid: thePayment.impUid });
 
         // 2. 본인의 결제건이 맞는지 체크
         await this.paymentService.checkUserPayment({
