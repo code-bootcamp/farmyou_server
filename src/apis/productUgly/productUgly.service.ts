@@ -1,5 +1,4 @@
 import {
-    BadRequestException,
     Injectable,
     NotFoundException,
     UnprocessableEntityException,
@@ -29,8 +28,6 @@ export class ProductUglyService {
 
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
-
-        private readonly fileResolver: FileResolver,
     ) {}
 
     async findAll({ productId }) {
@@ -145,7 +142,7 @@ export class ProductUglyService {
             await this.fileRepository.save(theImage);
 
             const toDelete = theProduct.files[0].id;
-            await this.fileRepository.findOne({id: toDelete});
+            await this.fileRepository.findOne({ id: toDelete });
             await this.fileRepository.delete(toDelete);
 
             theProduct.files.push(theImage);
@@ -186,21 +183,17 @@ export class ProductUglyService {
             orderDirection = 'DESC';
         }
 
+        const result = await this.productUglyRepository
+            .createQueryBuilder('productUgly')
+            .orderBy(orderBy, orderDirection)
+            .leftJoinAndSelect('productUgly.users', 'users')
+            .leftJoinAndSelect('productUgly.seller', 'seller')
+            .leftJoinAndSelect('productUgly.files', 'files');
+
         if (!page) {
-            return await this.productUglyRepository
-                .createQueryBuilder('productUgly')
-                .orderBy(orderBy, orderDirection)
-                .leftJoinAndSelect('productUgly.users', 'users')
-                .leftJoinAndSelect('productUgly.seller', 'seller')
-                .leftJoinAndSelect('productUgly.files', 'files')
-                .getMany();
+            return result.getMany();
         } else {
-            return await this.productUglyRepository
-                .createQueryBuilder('productUgly')
-                .orderBy(orderBy, orderDirection)
-                .leftJoinAndSelect('productUgly.users', 'users')
-                .leftJoinAndSelect('productUgly.seller', 'seller')
-                .leftJoinAndSelect('productUgly.files', 'files')
+            return result
                 .skip((page - 1) * ELM_PER_PAGE)
                 .take(ELM_PER_PAGE)
                 .getMany();
@@ -208,12 +201,42 @@ export class ProductUglyService {
     }
 
     async findSortedByTitle({ title, sortBy }, page) {
-        const result = await this.findSorted({ sortBy }, page);
+        // const result = await this.findSorted({ sortBy }, page);
 
         if (title) {
-            return result.filter((word) => word.title.includes(title));
+            let orderBy;
+            let orderDirection;
+
+            if (sortBy === SORT_CONDITION_ENUM.MOST_RECENT) {
+                orderBy = 'productUgly.createdAt';
+                orderDirection = 'DESC';
+            } else if (sortBy === SORT_CONDITION_ENUM.PRICE_ASC) {
+                orderBy = 'productUgly.price';
+                orderDirection = 'ASC';
+            } else if (sortBy === SORT_CONDITION_ENUM.PRICE_DESC) {
+                orderBy = 'productUgly.price';
+                orderDirection = 'DESC';
+            }
+
+            const result = await this.productUglyRepository
+                .createQueryBuilder('productUgly')
+                .orderBy(orderBy, orderDirection)
+                .leftJoinAndSelect('productUgly.users', 'users')
+                .leftJoinAndSelect('productUgly.seller', 'seller')
+                .leftJoinAndSelect('productUgly.files', 'files')
+                .where(`productUgly.title LIKE '%${title}%'`);
+
+            if (!page) {
+                return result
+                    .getMany();
+            } else {
+                return result
+                    .skip((page - 1) * ELM_PER_PAGE)
+                    .take(ELM_PER_PAGE)
+                    .getMany();
+            }
         } else {
-            return result;
+            return await this.findSorted({ sortBy }, page);
         }
     }
 
@@ -227,33 +250,28 @@ export class ProductUglyService {
     }
 
     async findBySeller({ currentUser }) {
-        // const theProducts = await this.productUglyRepository.find({
-        //     relations: ['users', 'seller', 'files'],
-        //     where: { seller: { id: currentUser.id } },
-        // });
-        
         return await this.productUglyRepository
-        .createQueryBuilder('productUgly')
-        .leftJoinAndSelect('productUgly.users', 'users1')
-        .leftJoinAndSelect('users1.address', 'address')
-        .leftJoinAndSelect('users1.sellers', 'sellers')
-        .leftJoinAndSelect('users1.directProducts', 'directProducts')
-        .leftJoinAndSelect('users1.uglyProducts', 'uglyProducts')
-        .leftJoinAndSelect('users1.files', 'files1')
-        .leftJoinAndSelect('productUgly.seller', 'seller1')
-        .leftJoinAndSelect('seller1.users', 'users2')
-        .leftJoinAndSelect('seller1.productUgly', 'productUgly1')
-        .leftJoinAndSelect('seller1.files', 'files2')
-        .leftJoinAndSelect('productUgly.files', 'files3')
-        .leftJoinAndSelect('files3.productUgly', 'productUgly2')
-        .leftJoinAndSelect('files3.productDirect', 'productDirect')
-        .leftJoinAndSelect('files3.user', 'user')
-        .leftJoinAndSelect('files3.seller', 'seller2')
-        .leftJoinAndSelect('files3.admin', 'admin')
-        .where('productUgly.seller = :id', {
-            id: currentUser.id
-        })
-        .getMany();
+            .createQueryBuilder('productUgly')
+            .leftJoinAndSelect('productUgly.users', 'users1')
+            .leftJoinAndSelect('users1.address', 'address')
+            .leftJoinAndSelect('users1.sellers', 'sellers')
+            .leftJoinAndSelect('users1.directProducts', 'directProducts')
+            .leftJoinAndSelect('users1.uglyProducts', 'uglyProducts')
+            .leftJoinAndSelect('users1.files', 'files1')
+            .leftJoinAndSelect('productUgly.seller', 'seller1')
+            .leftJoinAndSelect('seller1.users', 'users2')
+            .leftJoinAndSelect('seller1.productUgly', 'productUgly1')
+            .leftJoinAndSelect('seller1.files', 'files2')
+            .leftJoinAndSelect('productUgly.files', 'files3')
+            .leftJoinAndSelect('files3.productUgly', 'productUgly2')
+            .leftJoinAndSelect('files3.productDirect', 'productDirect')
+            .leftJoinAndSelect('files3.user', 'user')
+            .leftJoinAndSelect('files3.seller', 'seller2')
+            .leftJoinAndSelect('files3.admin', 'admin')
+            .where('productUgly.seller = :id', {
+                id: currentUser.id,
+            })
+            .getMany();
 
         // return theProducts.filter((product) => product.quantitySold > 0);
     }
