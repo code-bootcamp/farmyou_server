@@ -1,11 +1,9 @@
 import {
-    BadRequestException,
     Injectable,
     UnprocessableEntityException,
 } from '@nestjs/common';
-import { registerEnumType } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, createConnection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Admin } from '../admin/entities/admin.entity';
 import { Category } from '../category/entities/category.entity';
 import { DirectStore } from '../directStore/entities/directStore.entity';
@@ -37,8 +35,6 @@ export class ProductDirectService {
 
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
-
-        private readonly fileResolver: FileResolver,
     ) {}
 
     async findAll({ productId }) {
@@ -81,13 +77,13 @@ export class ProductDirectService {
         }
 
         const thisQuery = await this.productDirectRepository
-        .createQueryBuilder('productDirect')
-        .orderBy(orderBy, orderDirection)
-        .leftJoinAndSelect('productDirect.directStore', 'directStore')
-        .leftJoinAndSelect('productDirect.category', 'category')
-        .leftJoinAndSelect('productDirect.files', 'files')
-        .leftJoinAndSelect('productDirect.admin', 'admin')
-        .leftJoinAndSelect('productDirect.users', 'users');
+            .createQueryBuilder('productDirect')
+            .orderBy(orderBy, orderDirection)
+            .leftJoinAndSelect('productDirect.directStore', 'directStore')
+            .leftJoinAndSelect('productDirect.category', 'category')
+            .leftJoinAndSelect('productDirect.files', 'files')
+            .leftJoinAndSelect('productDirect.admin', 'admin')
+            .leftJoinAndSelect('productDirect.users', 'users');
 
         if (!page) {
             if (!directStoreId && categoryId) {
@@ -112,8 +108,7 @@ export class ProductDirectService {
                     })
                     .getMany();
             } else {
-                return thisQuery
-                    .getMany();
+                return thisQuery.getMany();
             }
         } else {
             if (!directStoreId && categoryId) {
@@ -156,15 +151,97 @@ export class ProductDirectService {
         { title, sortBy, directStoreId, categoryId },
         page,
     ) {
-        const result = await this.findSorted(
-            { sortBy, directStoreId, categoryId },
-            page,
-        );
-
         if (title) {
-            return result.filter((word) => word.title.includes(title));
+            // return result.filter((word) => word.title.includes(title));
+            let orderBy;
+            let orderDirection;
+
+            if (sortBy === SORT_CONDITION_ENUM.MOST_RECENT) {
+                orderBy = 'productDirect.createdAt';
+                orderDirection = 'DESC';
+            } else if (sortBy === SORT_CONDITION_ENUM.PRICE_ASC) {
+                orderBy = 'productDirect.price';
+                orderDirection = 'ASC';
+            } else if (sortBy === SORT_CONDITION_ENUM.PRICE_DESC) {
+                orderBy = 'productDirect.price';
+                orderDirection = 'DESC';
+            }
+
+            const thisQuery = await this.productDirectRepository
+                .createQueryBuilder('productDirect')
+                .orderBy(orderBy, orderDirection)
+                .leftJoinAndSelect('productDirect.directStore', 'directStore')
+                .leftJoinAndSelect('productDirect.category', 'category')
+                .leftJoinAndSelect('productDirect.files', 'files')
+                .leftJoinAndSelect('productDirect.admin', 'admin')
+                .leftJoinAndSelect('productDirect.users', 'users')
+                .where(`productDirect.title LIKE '%${title}%'`);
+
+            if (!page) {
+                if (!directStoreId && categoryId) {
+                    return thisQuery
+                        .where('productDirect.category = :category', {
+                            category: categoryId,
+                        })
+                        .getMany();
+                } else if (directStoreId && !categoryId) {
+                    return thisQuery
+                        .where('productDirect.directStore = :directStore', {
+                            directStore: directStoreId,
+                        })
+                        .getMany();
+                } else if (directStoreId && categoryId) {
+                    return thisQuery
+                        .where('productDirect.directStore = :directStore', {
+                            directStore: directStoreId,
+                        })
+                        .andWhere('productDirect.category = :category', {
+                            category: categoryId,
+                        })
+                        .getMany();
+                } else {
+                    return thisQuery.getMany();
+                }
+            } else {
+                if (!directStoreId && categoryId) {
+                    return thisQuery
+                        .where('productDirect.category = :category', {
+                            category: categoryId,
+                        })
+                        .skip((page - 1) * ELM_PER_PAGE)
+                        .take(ELM_PER_PAGE)
+                        .getMany();
+                } else if (directStoreId && !categoryId) {
+                    return thisQuery
+                        .where('productDirect.directStore = :directStore', {
+                            directStore: directStoreId,
+                        })
+                        .skip((page - 1) * ELM_PER_PAGE)
+                        .take(ELM_PER_PAGE)
+                        .getMany();
+                } else if (directStoreId && categoryId) {
+                    return thisQuery
+                        .where('productDirect.directStore = :directStore', {
+                            directStore: directStoreId,
+                        })
+                        .andWhere('productDirect.category = :category', {
+                            category: categoryId,
+                        })
+                        .skip((page - 1) * ELM_PER_PAGE)
+                        .take(ELM_PER_PAGE)
+                        .getMany();
+                } else {
+                    return thisQuery
+                        .skip((page - 1) * ELM_PER_PAGE)
+                        .take(ELM_PER_PAGE)
+                        .getMany();
+                }
+            }
         } else {
-            return result;
+            return await this.findSorted(
+                { sortBy, directStoreId, categoryId },
+                page,
+            );
         }
     }
 
@@ -215,7 +292,7 @@ export class ProductDirectService {
                 directStore: theStore,
                 users: [],
                 admin: theAdmin,
-                files: []
+                files: [],
             });
 
             if (createFileInput) {
@@ -332,7 +409,7 @@ export class ProductDirectService {
             await this.fileRepository.save(theImage);
 
             const toDelete = theProduct.files[0].id;
-            await this.fileRepository.findOne({id: toDelete});
+            await this.fileRepository.findOne({ id: toDelete });
             await this.fileRepository.delete(toDelete);
 
             theProduct.files.push(theImage);
