@@ -58,7 +58,7 @@ export class AuthResolver {
 
         // 4. refreshToken(=JWT)을 만들어서 프론트엔드(쿠키)에 보내주기
         context.res;
-        this.authService.setRefreshToken({ user, res: context.req.res });
+        this.authService.setRefreshToken({ user, res: context.req.res, req: context.req });
 
         // 4. 일치하는 유저가 있으면?! accessToken(=JWT)을 만들어서 브라우저에 전달하기
         return this.authService.getAccessToken({ user });
@@ -88,6 +88,7 @@ export class AuthResolver {
         this.authService.setRefreshToken({
             user: seller,
             res: context.req.res,
+            req: context.req,
         });
 
         // 4. 일치하는 유저가 있으면?! accessToken(=JWT)을 만들어서 브라우저에 전달하기
@@ -114,7 +115,7 @@ export class AuthResolver {
 
         // 4. refreshToken(=JWT)을 만들어서 프론트엔드(쿠키)에 보내주기
         context.res;
-        this.authService.setRefreshToken({ user: admin, res: context.req.res });
+        this.authService.setRefreshToken({ user: admin, res: context.req.res, req: context.req });
 
         // 4. 일치하는 유저가 있으면?! accessToken(=JWT)을 만들어서 브라우저에 전달하기
         return this.authService.getAccessToken({ user: admin });
