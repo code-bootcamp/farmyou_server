@@ -18,6 +18,7 @@ type Seller {
   type: String!
   createdAt: DateTime!
   users: [User!]
+  productUgly: [ProductUgly!]
   files: [File!]
 }
 

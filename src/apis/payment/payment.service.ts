@@ -103,9 +103,9 @@ export class PaymentService {
     }
 
     // 취소된 건인지 확인
-    async checkCanceled({ impUid }) {
+    async checkCanceled({ paymentId }) {
         const payment = await this.paymentRepository.findOne({
-            impUid,
+            id: paymentId,
             paymentComplete: PAYMENT_STATUS_ENUM.CANCEL,
         });
         // 이미 취소된 건이면 오류 던지기
