@@ -88,19 +88,19 @@ export class ProductDirectService {
         if (!page) {
             if (!directStoreId && categoryId) {
                 return thisQuery
-                    .where('productDirect.category = :category', {
+                    .andWhere('productDirect.category = :category', {
                         category: categoryId,
                     })
                     .getMany();
             } else if (directStoreId && !categoryId) {
                 return thisQuery
-                    .where('productDirect.directStore = :directStore', {
+                    .andWhere('productDirect.directStore = :directStore', {
                         directStore: directStoreId,
                     })
                     .getMany();
             } else if (directStoreId && categoryId) {
                 return thisQuery
-                    .where('productDirect.directStore = :directStore', {
+                    .andWhere('productDirect.directStore = :directStore', {
                         directStore: directStoreId,
                     })
                     .andWhere('productDirect.category = :category', {
@@ -113,7 +113,7 @@ export class ProductDirectService {
         } else {
             if (!directStoreId && categoryId) {
                 return thisQuery
-                    .where('productDirect.category = :category', {
+                    .andWhere('productDirect.category = :category', {
                         category: categoryId,
                     })
                     .skip((page - 1) * ELM_PER_PAGE)
@@ -121,7 +121,7 @@ export class ProductDirectService {
                     .getMany();
             } else if (directStoreId && !categoryId) {
                 return thisQuery
-                    .where('productDirect.directStore = :directStore', {
+                    .andWhere('productDirect.directStore = :directStore', {
                         directStore: directStoreId,
                     })
                     .skip((page - 1) * ELM_PER_PAGE)
@@ -129,7 +129,7 @@ export class ProductDirectService {
                     .getMany();
             } else if (directStoreId && categoryId) {
                 return thisQuery
-                    .where('productDirect.directStore = :directStore', {
+                    .andWhere('productDirect.directStore = :directStore', {
                         directStore: directStoreId,
                     })
                     .andWhere('productDirect.category = :category', {
@@ -180,19 +180,19 @@ export class ProductDirectService {
             if (!page) {
                 if (!directStoreId && categoryId) {
                     return thisQuery
-                        .where('productDirect.category = :category', {
+                        .andWhere('productDirect.category = :category', {
                             category: categoryId,
                         })
                         .getMany();
                 } else if (directStoreId && !categoryId) {
                     return thisQuery
-                        .where('productDirect.directStore = :directStore', {
+                        .andWhere('productDirect.directStore = :directStore', {
                             directStore: directStoreId,
                         })
                         .getMany();
                 } else if (directStoreId && categoryId) {
                     return thisQuery
-                        .where('productDirect.directStore = :directStore', {
+                        .andWhere('productDirect.directStore = :directStore', {
                             directStore: directStoreId,
                         })
                         .andWhere('productDirect.category = :category', {
@@ -205,7 +205,7 @@ export class ProductDirectService {
             } else {
                 if (!directStoreId && categoryId) {
                     return thisQuery
-                        .where('productDirect.category = :category', {
+                        .andWhere('productDirect.category = :category', {
                             category: categoryId,
                         })
                         .skip((page - 1) * ELM_PER_PAGE)
@@ -213,7 +213,7 @@ export class ProductDirectService {
                         .getMany();
                 } else if (directStoreId && !categoryId) {
                     return thisQuery
-                        .where('productDirect.directStore = :directStore', {
+                        .andWhere('productDirect.directStore = :directStore', {
                             directStore: directStoreId,
                         })
                         .skip((page - 1) * ELM_PER_PAGE)
@@ -221,7 +221,7 @@ export class ProductDirectService {
                         .getMany();
                 } else if (directStoreId && categoryId) {
                     return thisQuery
-                        .where('productDirect.directStore = :directStore', {
+                        .andWhere('productDirect.directStore = :directStore', {
                             directStore: directStoreId,
                         })
                         .andWhere('productDirect.category = :category', {
