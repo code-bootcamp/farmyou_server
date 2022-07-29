@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://farmback.shop/graphql" target="blank"><img src="https://storage.googleapis.com/pukkukim/1491846347516.jpg
+  <a href="https://farmback.shop/graphql" target="blank"><img src="http://storage.googleapis.com/pukkukim/1491846347516.jpg
 " width="320" alt="뿌꾸" /></a>
 </p>
 
