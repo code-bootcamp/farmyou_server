@@ -30,7 +30,7 @@ export class AuthService {
         private readonly adminRepository: Repository<Admin>,
     ) {}
 
-    setRefreshToken({ user, res }) {
+    setRefreshToken({ user, res, req}) {
         const refreshToken = this.jwtService.sign(
             { email: user.email, sub: user.id },
             { secret: 'myRefreshKey', expiresIn: '2w' },
@@ -39,7 +39,14 @@ export class AuthService {
         // 개발환경
         // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
         // cors 오류
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+        // 여러 주소 사용 할때
+        const allowedOrigins = ['https://farmyou.shop', 'http://localhost:3000'];
+        const origin = req.headers.origin;
+        if (allowedOrigins.includes(origin)) {
+            res.setHeader('Access-Control-Allow-Origin', origin);
+        }
+        // 한 주소만 사용 할때
+        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
         res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.setHeader(
             'Access-Control-Allow-Methods',
@@ -105,7 +112,7 @@ export class AuthService {
         }
 
         //3. 로그인
-        await this.setRefreshToken({ user, res });
+        await this.setRefreshToken({ user, res, req});
 
         res.redirect('http://localhost:5500/frontTest/social-login.test.html');
     }
