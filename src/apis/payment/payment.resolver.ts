@@ -91,7 +91,6 @@ export class PaymentResolver {
             throw new UnprocessableEntityException('권한이 없습니다');
         }
 
-        // 취소하기전 검증로직
         // 1. 이미 취소된 건인지 확인
         await this.paymentService.checkCanceled({ paymentId });
 
