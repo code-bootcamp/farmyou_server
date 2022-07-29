@@ -83,14 +83,16 @@ export class PaymentResolver {
             where: {id: paymentId}
         });
 
+        if (!thePayment) {
+            throw new UnprocessableEntityException('존재하지 않거나 이미 취소된 결제건입니다');
+        }
+
         if (thePayment.user.id !== currentUser.id) {
             throw new UnprocessableEntityException('권한이 없습니다');
         }
 
-        // 취소하기전 검증로직
-        // 부분취소때 이미 취소되면 다른취소가 안돼서 임시로 주석처리 7월 28일 
         // 1. 이미 취소된 건인지 확인
-        // await this.paymentService.checkCanceled({ impUid: thePayment.impUid });
+        await this.paymentService.checkCanceled({ paymentId });
 
         // 2. 본인의 결제건이 맞는지 체크
         await this.paymentService.checkUserPayment({

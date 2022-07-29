@@ -1,5 +1,6 @@
 import { Field,  ObjectType } from '@nestjs/graphql';
 import { File } from 'src/apis/file/entities/file.entity';
+import { ProductUgly } from 'src/apis/productUgly/entities/productUgly.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
     Column,
@@ -63,6 +64,11 @@ export class Seller {
     @ManyToMany(() => User, (users) => users.sellers)
     @Field(() => [User], { nullable: true })
     users: User[];
+
+    // 이미지 url
+    @OneToMany(() => ProductUgly, (productUgly) => productUgly.seller)
+    @Field((type) => [ProductUgly], {nullable: true})
+    productUgly: ProductUgly[];
 
     // 이미지 url
     @OneToMany(() => File, (file) => file.seller)
