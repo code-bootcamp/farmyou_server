@@ -227,11 +227,34 @@ export class ProductUglyService {
     }
 
     async findBySeller({ currentUser }) {
-        const theProducts = await this.productUglyRepository.find({
-            relations: ['users', 'seller', 'files'],
-            where: { seller: { id: currentUser.id } },
-        });
+        // const theProducts = await this.productUglyRepository.find({
+        //     relations: ['users', 'seller', 'files'],
+        //     where: { seller: { id: currentUser.id } },
+        // });
+        
+        return await this.productUglyRepository
+        .createQueryBuilder('productUgly')
+        .leftJoinAndSelect('productUgly.users', 'users1')
+        .leftJoinAndSelect('users1.address', 'address')
+        .leftJoinAndSelect('users1.sellers', 'sellers')
+        .leftJoinAndSelect('users1.directProducts', 'directProducts')
+        .leftJoinAndSelect('users1.uglyProducts', 'uglyProducts')
+        .leftJoinAndSelect('users1.files', 'files1')
+        .leftJoinAndSelect('productUgly.seller', 'seller1')
+        .leftJoinAndSelect('seller1.users', 'users2')
+        .leftJoinAndSelect('seller1.productUgly', 'productUgly1')
+        .leftJoinAndSelect('seller1.files', 'files2')
+        .leftJoinAndSelect('productUgly.files', 'files3')
+        .leftJoinAndSelect('files3.productUgly', 'productUgly2')
+        .leftJoinAndSelect('files3.productDirect', 'productDirect')
+        .leftJoinAndSelect('files3.user', 'user')
+        .leftJoinAndSelect('files3.seller', 'seller2')
+        .leftJoinAndSelect('files3.admin', 'admin')
+        .where('productUgly.seller = :id', {
+            id: currentUser.id
+        })
+        .getMany();
 
-        return theProducts.filter((product) => product.quantitySold > 0);
+        // return theProducts.filter((product) => product.quantitySold > 0);
     }
 }
