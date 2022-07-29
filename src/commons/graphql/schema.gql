@@ -163,24 +163,43 @@ enum PAYMENT_STATUS_ENUM {
 }
 
 type Query {
+  """주소 조회"""
   fetchAddress(addressId: String!): AddressUser!
   fetchAddressesOfTheUser(userId: String!): [AddressUser!]!
   fetchAdminOfTheStore(directStoreId: String!): Admin!
   fetchAdmins: [Admin!]!
+
+  """id를 입력한 이미지의 정보 조회"""
   fetchFile(fileId: String!): File!
+
+  """모든 이미지의 정보 조회"""
   fetchFiles: [File!]!
   fetchFilesByProductUglyId(productUglyId: String!): [File!]!
   fetchSellers: [Seller!]!
   fetchSellerByEmail(email: String!): Seller!
   fetchTypeOfUserLoggedIn: String!
   fetchUserLoggedIn: Admin!
+
+  """카테고리 이름의 id 조회"""
   fetchCategory(name: String!): Category!
+
+  """생성한 카테고리 id, name 전부 조회"""
   fetchCategories: [Category!]!
+
+  """입력한 직매장의 id, name 조회"""
   fetchDirectStore(name: String!): DirectStore!
+
+  """생성한 직매장의 id, name 전부 조회"""
   fetchDirectStores: [DirectStore!]!
   fetchInquiry(id: String!): Inquiry!
+
+  """해당 상품의 문의 조회"""
   fetchInquiriesByProduct(productId: String!): [Inquiry!]!
+
+  """구매자의 결제 완료 조회"""
   fetchCompletedPaymentsOfUser(userId: String!): [Payment!]!
+
+  """구매자의 결제 취소 조회"""
   fetchCanceledPaymentsOfUser(userId: String!): [Payment!]!
   fetchCompletedPaymentsForSeller(sellerId: String!): [Payment!]!
   fetchCanceledPaymentsForSeller(sellerId: String!): [Payment!]!
@@ -210,30 +229,67 @@ type Query {
 }
 
 type Mutation {
+  """주소 만들기"""
   createAddress(address: String!, detailedAddress: String, postalCode: String!, userId: String!, isMain: Boolean!): AddressUser!
+
+  """주소 삭제"""
   deleteAddress(id: String!): Boolean!
+
+  """주소 업데이트"""
   updateAddress(addressId: String!, updateAddressUserInput: UpdateAddressUserInput!): AddressUser!
   assignMain(userId: String!, addressId: String!): AddressUser!
+
+  """관리자 계성 생성"""
   createAdmin(email: String!, password: String!, directStoreId: String): Admin!
+
+  """관리자 정보 수정 (로그인필요)"""
   updateAdmin(password: String): Admin!
+
+  """이미지 업로드"""
   uploadFile(files: [Upload!]): [String!]!
   createSeller(name: String!, email: String!, password: String!, phone: String!, createFileInput: CreateSellerInput): Seller!
   updateSeller(name: String, password: String, phone: String, createFileInput: CreateSellerInput): Seller!
   checkIfLoggedSeller(password: String!): Boolean!
   updateSellerPassword(email: String!, newPassword: String!): Seller!
+
+  """사용자 로그인"""
   loginUser(email: String!, password: String!): String!
+
+  """판매자 로그인"""
   loginSeller(email: String!, password: String!): String!
+
+  """관리자 로그인"""
   loginAdmin(email: String!, password: String!): String!
+
+  """로그아웃 (로그인 필요)"""
   logout: String!
   restoreAccessToken: String!
+
+  """카테고리 생성"""
   createCategory(name: String!): Category!
+
+  """직매장 생성"""
   createDirectStore(name: String!): DirectStore!
+
+  """문의 생성 (로그인 필요)"""
   createInquiry(title: String!, question: String!, productDirectId: String, productUglyId: String): String!
+
+  """답글 작성 (로그인필요)"""
   postResponse(inquiryId: String!, answerTitle: String!, answer: String!): String!
+
+  """문의 수정 (로그인 필요)"""
   editInquiry(inquiryId: String!, title: String!, question: String!): Inquiry!
+
+  """문의 삭제 (로그인 필요)"""
   deleteInquiry(inquiryId: String!): String!
+
+  """결제 생성 (로그인 필요)"""
   createPayment(impUid: String!, amount: Float!, productType: String!, productId: String!, quantity: Float!): Payment!
+
+  """결제 취소 (로그인 필요)"""
   cancelPayment(paymentId: String!): Payment!
+
+  """송장번호 업데이트"""
   updateInvoice(paymentId: String!, invoiceNum: String!): Payment!
   sendToken(phone: String!): String!
   checkToken(phone: String!, token: String!): String!

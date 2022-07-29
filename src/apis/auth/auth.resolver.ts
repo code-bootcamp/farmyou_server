@@ -35,7 +35,8 @@ export class AuthResolver {
         private readonly cacheManager: Cache,
     ) {}
 
-    @Mutation(() => String)
+    @Mutation(() => String,
+    { description: '사용자 로그인' },)
     async loginUser(
         @Args('email') email: string, //
         @Args('password') password: string,
@@ -63,7 +64,8 @@ export class AuthResolver {
         return this.authService.getAccessToken({ user });
     }
 
-    @Mutation(() => String)
+    @Mutation(() => String,
+    { description: '판매자 로그인' },)
     async loginSeller(
         @Args('email') email: string, //
         @Args('password') password: string,
@@ -92,7 +94,8 @@ export class AuthResolver {
         return this.authService.getAccessToken({ user: seller });
     }
 
-    @Mutation(() => String)
+    @Mutation(() => String,
+    { description: '관리자 로그인' },)
     async loginAdmin(
         @Args('email') email: string, //'myAccessKey
         @Args('password') password: string,
@@ -187,7 +190,8 @@ export class AuthResolver {
     // }
 
     @UseGuards(GqlAuthRefreshGuard)
-    @Mutation(() => String)
+    @Mutation(() => String,
+    { description: '로그아웃 (로그인 필요)' },)
     async logout(
         @Context() context: any, //
     ) {

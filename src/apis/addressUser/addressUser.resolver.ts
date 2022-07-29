@@ -7,7 +7,8 @@ import { AddressUser } from './entities/addressUser.entity';
 export class AddressUserResolver {
     constructor(private readonly addressUserService: AddressUserService) {}
 
-    @Query(() => AddressUser)
+    @Query(() => AddressUser,
+    { description: '주소 조회' },)
     fetchAddress(@Args('addressId') addressId: string) {
         return this.addressUserService.findOne({ addressId });
     }
@@ -17,7 +18,9 @@ export class AddressUserResolver {
         return this.addressUserService.findAll(userId);
     }
 
-    @Mutation(() => AddressUser)
+    @Mutation(() => AddressUser,
+    { description: '주소 만들기' },
+    )
     createAddress(
         @Args('address') address: string,
         @Args({name: 'detailedAddress', nullable: true}) detailedAddress: string,
@@ -34,12 +37,14 @@ export class AddressUserResolver {
         );
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => Boolean,
+    { description: '주소 삭제' },)
     deleteAddress(@Args('id') id: string) {
         return this.addressUserService.delete({ id });
     }
 
-    @Mutation(() => AddressUser)
+    @Mutation(() => AddressUser,
+    { description: '주소 업데이트' },)
     async updateAddress(
         @Args('addressId') addressId: string,
         @Args('updateAddressUserInput')
