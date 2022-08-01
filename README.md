@@ -36,6 +36,8 @@ URL: https://farmyou.shop
 
 ## 🍎기술스텍
 
+![기술스텍](https://user-images.githubusercontent.com/104861931/182105420-a4e03512-70ad-4c8c-b282-4261ffbcec22.jpg)
+
 ## Description
 
 Backend Repo of **Farm You** by 사러왔슈
