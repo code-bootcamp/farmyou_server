@@ -26,7 +26,7 @@ export class ProductUgly {
     title: string;
 
     // 내용
-    @Column()
+    @Column('text')
     @Field(() => String)
     content: string;
 
