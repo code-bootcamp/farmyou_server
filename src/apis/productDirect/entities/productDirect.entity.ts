@@ -29,7 +29,8 @@ export class ProductDirect {
     title: string;
 
     // 내용
-    @Column()
+    // 긴 텍스트 를 넣을때는 컬럼에 텍스트라고 추가하자
+    @Column('text')
     @Field(() => String)
     content: string;
 
