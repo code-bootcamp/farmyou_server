@@ -2,6 +2,8 @@
   <a href="https://farmback.shop/graphql" target="blank"><img src="https://user-images.githubusercontent.com/104861931/182098375-5aa45149-d214-4b2e-8b8c-278e17abe5eb.jpg
 " width="320" alt="뿌꾸" /></a>
 </p>
+![뿌](https://user-images.githubusercontent.com/104861931/182098375-5aa45149-d214-4b2e-8b8c-278e17abe5eb.jpg)
+
 
 # 🌽 사러왔슈
 
