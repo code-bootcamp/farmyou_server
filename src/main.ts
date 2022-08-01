@@ -29,7 +29,7 @@ async function bootstrap() {
   app.use(graphqlUploadExpress());
   // cors 오류 
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://farmyou.shop', 'https://farmback.shop'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://farmyou.shop', 'https://farmback.shop', 'https://farmyouadmin.shop'],
     credentials: true,
   });
   // app.enableCors({
