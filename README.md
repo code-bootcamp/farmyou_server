@@ -1,7 +1,4 @@
-<p align="center">
-  <a href="https://farmback.shop/graphql" target="blank">![뿌](https://user-images.githubusercontent.com/104861931/182099786-e270c694-89e3-43a3-abd3-4c36e18570d5.jpg)
-</a>
-</p>
+[![뿌](https://user-images.githubusercontent.com/104861931/182099786-e270c694-89e3-43a3-abd3-4c36e18570d5.jpg)](https://farmback.shop/graphql)
 
 
 
