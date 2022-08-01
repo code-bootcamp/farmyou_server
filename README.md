@@ -40,6 +40,12 @@ URL: https://farmyou.shop
 
 </hr>
 
+## 🍎ERD
+
+![Copy of 팜유NEW (8)](https://user-images.githubusercontent.com/104861931/182105961-022fa4bb-d590-466a-9d78-f23c3dfecd02.png)
+
+</hr>
+
 ## Description
 
 Backend Repo of **Farm You** by 사러왔슈
