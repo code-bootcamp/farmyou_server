@@ -40,7 +40,7 @@ export class AuthService {
         // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
         // cors 오류
         // 여러 주소 사용 할때
-        const allowedOrigins = ['https://farmyou.shop', 'http://localhost:3000', 'https://farmback.shop'];
+        const allowedOrigins = ['https://farmyou.shop', 'http://localhost:3000', 'https://farmback.shop', 'https://farmyouadmin.shop'];
         const origin = req.headers.origin;
         if (allowedOrigins.includes(origin)) {
             res.setHeader('Access-Control-Allow-Origin', origin);
@@ -206,3 +206,4 @@ export class AuthService {
         }
     }
 }
+// 

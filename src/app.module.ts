@@ -43,7 +43,7 @@ import { PhoneModule } from './apis/phone/phone.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({req, res}) => ({req, res}),
       cors: {
-        origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://farmyou.shop', 'https://farmback.shop' ],
+        origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://farmyou.shop', 'https://farmback.shop', 'https://farmyouadmin.shop' ],
         credentials: true,
       },
       // cors: {
@@ -82,4 +82,3 @@ import { PhoneModule } from './apis/phone/phone.module';
   controllers: [AppController],
 })
 export class AppModule {}
-// 
