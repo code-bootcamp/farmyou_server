@@ -63,8 +63,8 @@ import { PhoneModule } from './apis/phone/phone.module';
       username: 'root',
     //   password: '12345678',   //yarn start:dev  할때 사용
       password: 'root',         //docker 나 배포 할때 사용
-      database: 'farmyou_server', //인스턴스 sql ID값  배포나 yarn start:dev
-      // database: 'farmyou_docker', //도커로 띄울때
+      // database: 'farmyou_server', //인스턴스 sql ID값  배포나 yarn start:dev
+      database: 'farmyou_docker', //도커로 띄울때 // 새로운 배포때 사용
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
