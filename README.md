@@ -1,9 +1,8 @@
 [![뿌](https://user-images.githubusercontent.com/104861931/182099786-e270c694-89e3-43a3-abd3-4c36e18570d5.jpg)](https://farmback.shop/graphql)
 
-
 # 🌽 사러왔슈
 
-## 🍎**기획의도**
+## 🍎 **기획의도**
 
 Farm You
 
@@ -26,19 +25,19 @@ Farm You 서비스 이용자에게 매장 주변의 농산물을 상품으로 �
 
 </hr>
 
-## 🍎배포주소
+## 🍎 배포주소
 
 URL: https://farmyou.shop
 
 </hr>
 
-## 🍎기술스텍
+## 🍎 백엔드 기술스텍
 
 ![기술스텍](https://user-images.githubusercontent.com/104861931/182105420-a4e03512-70ad-4c8c-b282-4261ffbcec22.jpg)
 
 </hr>
 
-## 🍎ERD
+## 🍎 ERD
 
 ![Copy of 팜유NEW (8)](https://user-images.githubusercontent.com/104861931/182105961-022fa4bb-d590-466a-9d78-f23c3dfecd02.png)
 
