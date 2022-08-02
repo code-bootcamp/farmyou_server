@@ -114,7 +114,6 @@ export class ProductUglyResolver {
         return this.productUglyService.findByUser({ currentUser });
     }
 
-    // 8월 2일 생성순으로 조회 하게 변경
     @UseGuards(GqlAuthAccessGuard)
     @Query(() => [ProductUgly],
     { description: '판매자가 판매하는 못난이 상품 조회' },)

@@ -188,7 +188,8 @@ export class ProductUglyService {
             .orderBy(orderBy, orderDirection)
             .leftJoinAndSelect('productUgly.users', 'users')
             .leftJoinAndSelect('productUgly.seller', 'seller')
-            .leftJoinAndSelect('productUgly.files', 'files');
+            .leftJoinAndSelect('productUgly.files', 'files')
+            .leftJoinAndSelect('files.url', 'url');
 
         if (!page) {
             return result.getMany();
@@ -271,8 +272,6 @@ export class ProductUglyService {
             .where('productUgly.seller = :id', {
                 id: currentUser.id,
             })
-            // 생성순으로 조회 하게 만들기 8월 2일 추가
-            // .orderBy("productUgly.createdAt", "DESC")
             .getMany();
 
         // return theProducts.filter((product) => product.quantitySold > 0);
