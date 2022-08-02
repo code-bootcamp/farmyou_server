@@ -10,6 +10,7 @@ import {
     CreateDateColumn,
     ManyToMany,
     OneToMany,
+    DeleteDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -69,4 +70,11 @@ export class ProductUgly {
     @OneToMany(() => File, (file) => file.productUgly)
     @Field((type) => [File], {nullable: true})
     files: File[];
+
+
+    // 8월 2일 추가
+    // 삭제일자
+    @DeleteDateColumn()
+    @Field(() => Date, {nullable: true})
+    deletedAt: Date;
 }

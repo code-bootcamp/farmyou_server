@@ -39,6 +39,7 @@ type ProductUgly {
   users: [User!]
   seller: Seller
   files: [File!]
+  deletedAt: DateTime
 }
 
 type File {
