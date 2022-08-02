@@ -188,8 +188,7 @@ export class ProductUglyService {
             .orderBy(orderBy, orderDirection)
             .leftJoinAndSelect('productUgly.users', 'users')
             .leftJoinAndSelect('productUgly.seller', 'seller')
-            .leftJoinAndSelect('productUgly.files', 'files')
-            .leftJoinAndSelect('files.url', 'url');
+            .leftJoinAndSelect('productUgly.files', 'files');
 
         if (!page) {
             return result.getMany();
