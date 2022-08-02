@@ -28,7 +28,7 @@ export class File {
   id: string;
 
   // 이미지 주소
-  @Column()
+  @Column('text')
   @Field(() => String)
   url: string;
 
