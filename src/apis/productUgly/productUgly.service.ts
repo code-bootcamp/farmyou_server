@@ -151,8 +151,9 @@ export class ProductUglyService {
         return await this.productUglyRepository.save(theProduct);
     }
 
+    // 8월 2일 테스트
     async delete({ productId }) {
-        const result = await this.productUglyRepository.delete({
+        const result = await this.productUglyRepository.softDelete({
             id: productId,
         });
         return result.affected ? true : false;

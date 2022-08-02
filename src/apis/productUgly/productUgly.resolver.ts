@@ -69,6 +69,7 @@ export class ProductUglyResolver {
         });
     }
 
+    // 8월 2일 테스트
     // 수량이 0개 되었을 때
     @Mutation(() => Boolean)
     deleteProductUgly(
