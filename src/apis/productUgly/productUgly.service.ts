@@ -272,7 +272,7 @@ export class ProductUglyService {
                 id: currentUser.id,
             })
             // 생성순으로 조회 하게 만들기 8월 2일 추가
-            .orderBy("productUgly.createdAt", "DESC")
+            // .orderBy("productUgly.createdAt", "DESC")
             .getMany();
 
         // return theProducts.filter((product) => product.quantitySold > 0);
