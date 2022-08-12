@@ -22,9 +22,9 @@ export class FileService {
 
     async upload({ files }: IFile) {
         const storage = new Storage({
-            projectId: 'codecamp-355721',
-            keyFilename: 'gcp-file-storage.json',
-        }).bucket('pukkukim');
+            projectId: process.env.GCP_KEYFILENAME,
+            keyFilename: process.env.GCP_PROJECTID,
+        }).bucket(process.env.GCP_BUKET);
 
         // 프론트엔드에서 파일을 다 받을 때까지 대기!
         const waitedFiles = await Promise.all(files);
@@ -34,7 +34,7 @@ export class FileService {
                 return new Promise((resolve, reject) => {
                     el.createReadStream()
                         .pipe(storage.file(el.filename).createWriteStream())
-                        .on('finish', () => resolve(`pukkukim/${el.filename}`))
+                        .on('finish', () => resolve(`${process.env.GCP_BUKET}/${el.filename}`))
                         .on('error', (error) => reject(error));
                 });
             }),
